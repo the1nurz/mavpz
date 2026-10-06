@@ -11,10 +11,15 @@
 | Publisher | id (PK), name, country |
 | Author | id (PK), full_name, birth_year |
 | Book | id (PK), title, isbn (UK), publication_year, publisher_id (FK) |
-| Copy | id (PK), book_id (FK), inventory_number (UK), status |
+| Copy | id (PK), book_id (FK), inventory_number (UK), state |
 | Reader | id (PK), full_name, email (UK), registered_at |
 | Loan | id (PK), reader_id (FK), copy_id (FK), loaned_at, due_at, returned_at |
 | Reservation | id (PK), reader_id (FK), book_id (FK), reserved_at, status |
+
+`Copy.state` ∈ {`active`, `lost`, `written_off`} — фізичний стан примірника.
+«Доступність» **не зберігається**: примірник виданий, якщо існує `Loan` з
+`returned_at` порожнім. `Reservation.status` ∈ {`active`, `fulfilled`,
+`cancelled`, `expired`}.
 
 ## Зв'язки (словами)
 
@@ -39,7 +44,9 @@
   діаграмі з відповідною кардинальністю, **включно з мінімальною**: книга
   має ≥1 автора (`}|`), решта «багато» — з нуля (`o{`).
 - **K3 (нормалізація).** Модель у 3НФ: немає часткових і транзитивних
-  залежностей; немає похідних даних, що дублюються.
+  залежностей; немає похідних даних, що дублюються
+  (напр. доступність примірника виводиться з `Loan.returned_at`, а не
+  зберігається в `Copy`).
 - **K4 (M:N).** «Багато-до-багатьох» показано прямим зв'язком; спільних
   таблиць на кшталт `author_books` немає. Асоціативна сутність — лише коли
   є власні атрибути.
