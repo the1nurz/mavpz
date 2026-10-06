@@ -1,6 +1,6 @@
 erDiagram
     PUBLISHER ||--o{ BOOK : publishes
-    AUTHOR }o--o{ BOOK : writes
+    AUTHOR }|--o{ BOOK : writes
     BOOK ||--o{ COPY : has
     READER ||--o{ LOAN : borrows
     COPY ||--o{ LOAN : "is lent in"
