@@ -5,13 +5,34 @@
 «воронячої лапки»: нічого не додається вручну, лише те, що є в .mmd.
 Використання: python3 tools/render.py
 """
+import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "model" / "er.mmd"
+
+
+def find_dot() -> str:
+    candidates = [
+        os.environ.get("GRAPHVIZ_DOT"),
+        shutil.which("dot"),
+        r"C:\Program Files\Graphviz\bin\dot.exe",
+        r"C:\Program Files (x86)\Graphviz\bin\dot.exe",
+    ]
+    for candidate in candidates:
+        if not candidate:
+            continue
+        path = Path(candidate).expanduser()
+        if path.exists():
+            return str(path)
+    raise SystemExit("Graphviz 'dot' is not installed or not in PATH. Install Graphviz or set GRAPHVIZ_DOT and rerun: python tools/render.py")
+
+
+DOT = find_dot()
 text = SRC.read_text(encoding="utf8")
 
 # Маркер кардинальності Mermaid -> стиль стрілки Graphviz
@@ -57,13 +78,13 @@ dot.append("}")
 
 dot_src = "\n".join(dot)
 svg = subprocess.run(
-    ["dot", "-Tsvg"], input=dot_src, text=True, capture_output=True
+    [DOT, "-Tsvg"], input=dot_src, text=True, capture_output=True
 )
 if svg.returncode != 0:
     sys.exit("dot failed:\n" + svg.stderr)
 svg = svg.stdout
 (ROOT / "model" / "er.svg").write_text(svg, encoding="utf8")
-png = subprocess.run(["dot", "-Tpng", "-Gdpi=120"], input=dot_src.encode(), capture_output=True, check=True).stdout
+png = subprocess.run([DOT, "-Tpng", "-Gdpi=120"], input=dot_src.encode(), capture_output=True, check=True).stdout
 (ROOT / "model" / "er.png").write_bytes(png)
 (ROOT / "model" / "er.md").write_text(
     "# ER-діаграма (генерується з er.mmd, не редагувати вручну)\n\n"
