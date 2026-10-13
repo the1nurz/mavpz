@@ -1,0 +1,11 @@
+{
+  "name": "library-er-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "audit": "node tools/audit.js",
+    "test": "node --test"
+  }
+}
