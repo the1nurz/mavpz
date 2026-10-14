@@ -49,5 +49,9 @@ Node.js 22.13–22.x: `npm ci`, `npm run check`, `npm test`.
 аудит і тести: [54ea7ec](https://github.com/the1nurz/mavpz/commit/54ea7ec252c541a213cc6177e7c5249ccb74c5fb).
 AI готував файли й виконував технічні перевірки; студент приймав доменні
 рішення та переглянув PNG. [Журнал промптів](ai/prompts.md) містить
-фактичні записи й явно зазначає межі повноти. PR та Classroom залишаються
-окремими кроками перед здачею.
+фактичні записи й явно зазначає межі повноти.
+[PR #1](https://github.com/the1nurz/mavpz/pull/1) злито в main
+14.10.2026 о 18:08:45 за Києвом, що підтверджено через GitHub API;
+merge-коміт — [9e66c8f](https://github.com/the1nurz/mavpz/commit/9e66c8f6d89bc53482f374ec294cb896bbf72895).
+Завершення Classroom та внесення посилання на PR студентом
+ще не підтверджені.
