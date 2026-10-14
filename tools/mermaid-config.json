@@ -1,0 +1,9 @@
+{
+  "theme": "default",
+  "look": "classic",
+  "handDrawnSeed": 42,
+  "fontFamily": "Arial",
+  "deterministicIds": true,
+  "deterministicIDSeed": "library-er-lab",
+  "er": { "layoutDirection": "TB" }
+}

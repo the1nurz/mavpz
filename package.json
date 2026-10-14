@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": "22.x" },
+  "engines": {
+    "node": ">=22.13.0 <23"
+  },
   "scripts": {
     "audit": "node tools/audit.js",
-    "test": "node --test"
+    "test": "node --test",
+    "render": "node tools/render.js",
+    "check": "npm run audit && npm test && node tools/render.js --check"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "12.0.0"
   }
 }
