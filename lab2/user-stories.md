@@ -75,7 +75,8 @@ As a librarian, I want to issue a physically available copy only to an eligible 
 й порожнім returned_at; виконана перша Reservation атомарно стає fulfilled,
 інші незмінні. Lost, written_off, відкрита видача або пріоритет іншого читача
 спричиняють відмову. З двох одночасних коректних спроб без черги успішна
-лише одна. Некоректна хронологія відхиляється; сповіщення не обходить перевірку.
+лише одна. due_at, рівний loaned_at, дозволений; раніша дата відхиляється.
+Сповіщення не обходить перевірку.
 
 EARS: [REQ-13, REQ-15–REQ-19, REQ-24](requirements.md).
 Gherkin: [SC-19–SC-23](features/circulation.feature),
@@ -137,7 +138,7 @@ Gherkin: [SC-11–SC-13](features/catalog.feature),
 | REQ-10 | US-09 | SC-11 |
 | REQ-11 | US-05, US-09 | SC-12, SC-17, SC-19 |
 | REQ-12 | US-09 | SC-13 |
-| REQ-13 | US-06, US-07 | SC-23 |
+| REQ-13 | US-06, US-07 | SC-19, SC-23 |
 | REQ-14 | US-05 | SC-15, SC-16 |
 | REQ-15 | US-05, US-06 | SC-18, SC-20 |
 | REQ-16 | US-06 | SC-19, SC-20, SC-21, SC-27 |

@@ -27,7 +27,7 @@
 | REQ-10 | Уся ER: 7 сутностей, 30 атрибутів, 7 зв'язків; UUID PK/FK, прямий M:N; доступність не зберігається | US-09 | SC-11 | — | Структурно |
 | REQ-11 | Уся ER: обов'язковість, наявні FK, кардинальності; `LOAN.returned_at` може бути порожнім | US-05, US-09 | SC-12, SC-17, SC-19 | UC-09 | Описано |
 | REQ-12 | `COPY.state`, `RESERVATION.status`: лише погоджені множини значень | US-09 | SC-13 | UC-12 | Описано |
-| REQ-13 | `LOAN.due_at`, `LOAN.returned_at` не раніше `LOAN.loaned_at` | US-06, US-07 | SC-23 | UC-10, UC-11 | Описано |
+| REQ-13 | `LOAN.due_at`, `LOAN.returned_at` не раніше `LOAN.loaned_at` | US-06, US-07 | SC-19, SC-23 | UC-10, UC-11 | Описано |
 | REQ-14 | `RESERVATION.reader_id`, `RESERVATION.book_id`, `RESERVATION.reserved_at`, `RESERVATION.status`: окремий UUID повторної операції; бронюється Book незалежно від Copy | US-05 | SC-15, SC-16 | UC-09 | Описано |
 | REQ-15 | `RESERVATION`: лише active, порядок за reserved_at, потім канонічним UUID нижнього регістру лексикографічно | US-05, US-06 | SC-18, SC-20 | UC-14, UC-16 | Описано |
 | REQ-16 | `READER`, `BOOK`, `COPY`, `RESERVATION`: право першого читача черги; без черги — будь-який наявний читач | US-06 | SC-19, SC-20, SC-21, SC-27 | UC-10, UC-14 | Описано |
