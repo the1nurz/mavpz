@@ -1,0 +1,60 @@
+\
+erDiagram\
+&#x20;   PUBLISHER {\
+&#x20;       uuid id PK\
+&#x20;       string name\
+&#x20;       string country\
+&#x20;   }\
+\
+&#x20;   AUTHOR {\
+&#x20;       uuid id PK\
+&#x20;       string full_name\
+&#x20;       int birth_year\
+&#x20;   }\
+\
+&#x20;   BOOK {\
+&#x20;       uuid id PK\
+&#x20;       string title\
+&#x20;       string isbn UK\
+&#x20;       int publication_year\
+&#x20;       uuid publisher_id FK\
+&#x20;   }\
+\
+&#x20;   COPY {\
+&#x20;       uuid id PK\
+&#x20;       uuid book_id FK\
+&#x20;       string inventory_number UK\
+&#x20;       string state\
+&#x20;   }\
+\
+&#x20;   READER {\
+&#x20;       uuid id PK\
+&#x20;       string full_name\
+&#x20;       string email UK\
+&#x20;       datetime registered_at\
+&#x20;   }\
+\
+&#x20;   LOAN {\
+&#x20;       uuid id PK\
+&#x20;       uuid reader_id FK\
+&#x20;       uuid copy_id FK\
+&#x20;       datetime loaned_at\
+&#x20;       datetime due_at\
+&#x20;       datetime returned_at\
+&#x20;   }\
+\
+&#x20;   RESERVATION {\
+&#x20;       uuid id PK\
+&#x20;       uuid reader_id FK\
+&#x20;       uuid book_id FK\
+&#x20;       datetime reserved_at\
+&#x20;       string status\
+&#x20;   }\
+\
+&#x20;   PUBLISHER ||--o{ BOOK : publishes\
+&#x20;   AUTHOR }|--o{ BOOK : writes\
+&#x20;   BOOK ||--o{ COPY : has\
+&#x20;   READER ||--o{ LOAN : borrows\
+&#x20;   COPY ||--o{ LOAN : "is lent in"\
+&#x20;   READER ||--o{ RESERVATION : makes\
+&#x20;   BOOK ||--o{ RESERVATION : "is reserved in"\
