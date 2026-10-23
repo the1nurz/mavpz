@@ -15,12 +15,14 @@ User Stories, Gherkin і UML Use Case Diagram та простежити їх д�
 | [catalog.feature](features/catalog.feature) | Читачі, каталог і контракт цілісності |
 | [circulation.feature](features/circulation.feature) | Бронювання, видача та повернення |
 | [notifications.feature](features/notifications.feature) | Сповіщення, помилка та повторна перевірка права |
-| [use-cases.puml](diagrams/use-cases.puml) | PlantUML: 3 актори, 17 UC, 8 include, 1 extend, 3 узагальнення |
+| [use-cases.puml](diagrams/use-cases.puml) | PlantUML: 3 актори, 15 UC, 5 include, 1 extend, 2 узагальнення акторів і 3 узагальнення UC |
 | [use-cases.svg](diagrams/use-cases.svg), [use-cases.png](diagrams/use-cases.png) | Векторний та растровий рендери |
 | [traceability.md](traceability.md) | 24 рядки ER → EARS → US → Gherkin → UC |
 | [audit.md](audit.md) | Метод аудиту, одна реальна прогалина AUD-01 та fix-SHA |
 | [ADR-L2-0001](adr/0001-notification-boundary.md) | Межа зовнішньої інтеграції сповіщень |
 | [ADR-L2-0002](adr/0002-structural-contract.md) | Структурний контракт REQ-10 без штучного UC |
+| [ADR-L2-0003](adr/0003-catalogue-actors.md) | Погоджені спільні можливості ролей і межа внутрішніх кроків |
+| [Уточнення spec](spec-change-proposal.md) | Положення, які власник внесе самостійно; наразі є відомі розходження |
 | [ai-log.md](ai-log.md) | Стислий журнал технічних рішень та фактичних перевірок |
 | [check-traceability.mjs](tools/check-traceability.mjs) | Перевірка ID, посилань і покриття без зовнішніх залежностей |
 | [check-gherkin.mjs](tools/check-gherkin.mjs) | Синтаксис Gherkin, компіляція прикладів і зв'язки |
@@ -44,8 +46,8 @@ java -jar .cache/plantuml/plantuml.jar -charset UTF-8 -tpng lab2/diagrams/use-ca
 
 Якщо `dot` не в PATH, задайте `GRAPHVIZ_DOT` повним шляхом до нього.
 Перевірено з Temurin 21.0.12.1, Graphviz 16.1.0 і шрифтом Arial.
-Інші шрифти або версії можуть змінити геометрію. Рендери: SVG 1141 × 1505,
-PNG 1140 × 1504; різниця полотна в один піксель не означає втрату елементів.
+Інші шрифти або версії можуть змінити геометрію. SVG і PNG генеруються
+з одного джерела; розміри полотен можуть відрізнятися через округлення.
 
 ## Запуск перевірок
 
@@ -97,14 +99,16 @@ US-09, SC-11 та легенду; окремий UC для нього не ви�
 AUD-01 усунуто в
 [`9b02a0b3`](https://github.com/the1nurz/mavpz/commit/9b02a0b3f40c7aaf8f54e9cb46f1158aabc39192):
 критерії та SC-19 тепер явно перевіряють дозволену рівність due_at і loaned_at;
-трасування оновлено. Інших реальних розбіжностей аудит не виявив.
+трасування оновлено. Пізніші зміни після AI-CHECK і відомі розходження
+spec зафіксовані в актуальному доповненні до аудиту від 24.10.2026.
 
 ## Контрольний список здачі
 
-- [x] Специфікація: одна A4 за зазначеним профілем, люди та зовнішній сервіс.
+- [ ] Уточнення spec власником: спільна роль каталогу, сервіс як інтеграція,
+  нове формулювання AC-05; [точні пропозиції](spec-change-proposal.md).
 - [x] 24 EARS, 9 історій, 27 сценаріїв (51 конкретний випадок).
-- [x] 17 UC, include/extend/узагальнення, джерело PlantUML, SVG і PNG.
-- [x] Матриця, аудит з реальним виправленням, два ADR, журнал AI.
+- [x] 15 UC, include/extend, узагальнення акторів і UC, PlantUML, SVG і PNG.
+- [x] Матриця, аудит із виправленнями, три ADR, журнал AI.
 - [x] Тести, ER-аудит, трасування, Gherkin, синтаксис PlantUML та Git-перевірки.
 - [x] Узгодженість із моделлю та правилами №1.
 - [ ] `DEFENSE.md` — обов'язковий артефакт фінальної здачі; ще не підготовлений для №2.

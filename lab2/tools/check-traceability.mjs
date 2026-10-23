@@ -17,7 +17,18 @@ try {
   const stories = unique([...read('user-stories.md').matchAll(/^## (US-\d{2}) —/gm)].map(m => m[1]), 'US');
   const puml = read('diagrams/use-cases.puml');
   const cases = unique([...puml.matchAll(/^  usecase "(UC-\d{2})/gm)].map(m => m[1]), 'UC');
-  assert.equal(reqs.size, 24); assert.equal(stories.size, 9); assert.equal(cases.size, 17);
+  assert.equal(reqs.size, 24); assert.equal(stories.size, 9); assert.equal(cases.size, 15);
+  assert(!cases.has('UC-14') && !cases.has('UC-16'), 'Internal steps are not standalone UC');
+  const actorNames = [...puml.matchAll(/^actor "[^"]+" as (\w+)/gm)].map(m => m[1]);
+  assert.deepEqual(actorNames.sort(), ['CatalogUser', 'Librarian', 'Reader']);
+  assert(puml.includes('Reader -|> CatalogUser') && puml.includes('Librarian -|> CatalogUser'));
+  assert(puml.includes('CatalogUser -- UC07') && puml.includes('CatalogUser -- UC08'));
+  assert.equal([...puml.matchAll(/^  UC\d+ \.\.> UC\d+ : <<include>>/gm)].length, 5);
+  assert.equal([...puml.matchAll(/^  UC\d+ \.\.> UC\d+ : <<extend>>/gm)].length, 1);
+  assert.equal([...puml.matchAll(/^  UC\d+ -\|> UC\d+/gm)].length, 3);
+  assert(puml.includes('UC17 ..> UC13 : <<extend>>'));
+  assert(!/^(?:Reader|Librarian|CatalogUser) -- UC15\s*$/m.test(puml), 'UC-15 is included behaviour only');
+  assert(!/NFR-\d{2}/.test(puml), 'NFR must not be added to the diagram');
   const scenarios = new Map();
   for (const filename of readdirSync(path.join(root, 'features')).filter(n => n.endsWith('.feature'))) {
     const source = read(`features/${filename}`);
@@ -44,6 +55,7 @@ try {
   const fields = new Map([...model.matchAll(/^\s*(\w+) \{([^}]+)\}/gm)].map(m =>
     [m[1], new Set([...m[2].matchAll(/^\s*\w+ (\w+)/gm)].map(a => a[1]))]));
   const matrix = process.argv[2] ? readFileSync(path.resolve(process.argv[2]), 'utf8') : read('traceability.md');
+  assert(!/NFR-\d{2}/.test(matrix), 'NFR must not be added to the main matrix');
   const rows = matrix.split(/\r?\n/).filter(s => /^\| REQ-/.test(s)).map(s => s.split('|').slice(1, -1).map(c => c.trim()));
   assert.equal(rows.length, reqs.size, 'Expected 24 matrix rows');
   unique(rows.map(r => r[0]), 'matrix REQ rows');
@@ -76,7 +88,7 @@ try {
   for (const [prefix, definitions] of [['REQ', reqs], ['US', stories], ['SC', new Set(scenarios.keys())], ['UC', cases]]) {
     assert.equal(used[prefix].size, definitions.size, `Incomplete ${prefix} coverage`);
   }
-  console.log('PASS: 24 matrix rows; REQ 24/24, US 9/9, SC 27/27, UC 17/17.');
+  console.log('PASS: 24 matrix rows; REQ 24/24, US 9/9, SC 27/27, UC 15/15.');
   console.log('PASS: unique definitions, existing references, SC tags, UC mappings, ER fields.');
   console.log('REQ-10: structural contract in diagram legend; no standalone UC. Behaviour is not executed.');
 } catch (error) {

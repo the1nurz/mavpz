@@ -43,12 +43,16 @@ Gherkin: [SC-06, SC-07, SC-14](features/catalog.feature).
 
 ## US-04 — Пошук і фізична доступність
 
-As a reader, I want to find an edition by ISBN and inspect its copies, so that I can distinguish catalogue presence from physical availability.
+As a catalogue user (reader or librarian), I want to find an edition by ISBN and inspect its copies, so that I can distinguish catalogue presence from physical availability.
 
 Критерії прийняття: точний ISBN повертає відповідний Book або порожній
 результат. Для кожного Copy доступність істинна лише за state active
 та відсутності відкритого Loan. Книга без Copy явно показує їх відсутність.
 Фізична доступність не означає право обійти чергу бронювань.
+Погоджено 24.10.2026: бібліотекар має ці самі можливості як частину ведення
+каталогу; це уточнення обсягу ролі NFR-08 без зміни тексту NFR.
+SC-08–SC-10 формулюють приклади для читача; окремих поведінкових прикладів
+для бібліотекаря поки немає, їх не приписуємо наявним тегам.
 
 EARS: [REQ-08, REQ-09](requirements.md).
 Gherkin: [SC-08–SC-10](features/catalog.feature).
@@ -101,8 +105,10 @@ As a reader, I want to receive a notification when a copy can be offered to me a
 Критерії прийняття: зовнішньому сервісу передаються email першого читача,
 id і назва Book; помилка показується бібліотекарю з посиланням на Book.
 Передавання та помилка не змінюють Loan, Reservation, Copy чи чергу.
-Доставка не гарантує видачу: право перевіряється повторно. Сервіс — зовнішній
-актор згідно з погодженим A1, без нової сутності ER.
+Доставка не гарантує видачу: право перевіряється повторно. За уточненням,
+погодженим 24.10.2026, сервіс — зовнішня інтеграція A1, без UML-актора
+та без нової сутності ER. UC-13 описує ціль читача отримати сповіщення;
+передавання даних сервісу є внутрішнім кроком цієї взаємодії.
 
 EARS: [REQ-22–REQ-24](requirements.md).
 Gherkin: [SC-25–SC-27](features/notifications.feature),
