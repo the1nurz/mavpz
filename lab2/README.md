@@ -23,9 +23,11 @@ User Stories, Gherkin і UML Use Case Diagram та простежити їх д�
 | [ADR-L2-0002](adr/0002-structural-contract.md) | Структурний контракт REQ-10 без штучного UC |
 | [ADR-L2-0003](adr/0003-catalogue-actors.md) | Погоджені спільні можливості ролей і межа внутрішніх кроків |
 | [Уточнення spec](spec-change-proposal.md) | Положення, які власник внесе самостійно; наразі є відомі розходження |
+| [uc-10-detail.md](uc-10-detail.md) | Головний поглиблений UC: потоки, винятки, постумови, зв'язки сценаріїв, REQ і NFR |
 | [ai-log.md](ai-log.md) | Стислий журнал технічних рішень та фактичних перевірок |
 | [check-traceability.mjs](tools/check-traceability.mjs) | Перевірка ID, посилань і покриття без зовнішніх залежностей |
 | [check-gherkin.mjs](tools/check-gherkin.mjs) | Синтаксис Gherkin, компіляція прикладів і зв'язки |
+| [check-uc10.mjs](tools/check-uc10.mjs) | Перевірка структури поглиблення UC-10 та фактичних ID і тегів |
 
 ## Перегляд і рендер діаграми
 
@@ -58,6 +60,7 @@ java -jar .cache/plantuml/plantuml.jar -charset UTF-8 -tpng lab2/diagrams/use-ca
 npm test
 npm run audit
 node lab2/tools/check-traceability.mjs
+node lab2/tools/check-uc10.mjs
 git diff --check
 ```
 
@@ -108,6 +111,7 @@ spec зафіксовані в актуальному доповненні до 
   нове формулювання AC-05; [точні пропозиції](spec-change-proposal.md).
 - [x] 24 EARS, 9 історій, 27 сценаріїв (51 конкретний випадок).
 - [x] 15 UC, include/extend, узагальнення акторів і UC, PlantUML, SVG і PNG.
+- [x] Головний поглиблений UC-10 з окремим шляхом сценарії → REQ → NFR.
 - [x] Матриця, аудит із виправленнями, три ADR, журнал AI.
 - [x] Тести, ER-аудит, трасування, Gherkin, синтаксис PlantUML та Git-перевірки.
 - [x] Узгодженість із моделлю та правилами №1.
