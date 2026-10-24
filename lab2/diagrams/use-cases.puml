@@ -1,0 +1,111 @@
+@startuml
+' Render with PlantUML 1.2026.2, UTF-8; Graphviz dot.
+' java -jar .cache/plantuml/plantuml.jar -charset UTF-8 -tsvg lab2/diagrams/use-cases.puml
+' java -jar .cache/plantuml/plantuml.jar -charset UTF-8 -tpng lab2/diagrams/use-cases.puml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam packageStyle rectangle
+skinparam nodesep 35
+skinparam ranksep 55
+skinparam ArrowColor #475569
+skinparam usecaseBackgroundColor #F0F7FF
+skinparam usecaseBorderColor #334155
+skinparam actorBorderColor #334155
+skinparam noteBackgroundColor #FFFBEA
+skinparam noteBorderColor #A89455
+title Бібліотека — варіанти використання
+
+actor "Читач" as Reader
+actor "Бібліотекар" as Librarian
+actor "Користувач каталогу" as CatalogUser <<абстрактний>>
+Reader -|> CatalogUser
+Librarian -|> CatalogUser
+
+rectangle "Інформаційна система бібліотеки" {
+  usecase "UC-01\nЗареєструвати читача" as UC01
+  usecase "UC-02\nВести каталог" as UC02 <<абстрактний>>
+  usecase "UC-03\nДодати автора" as UC03
+  usecase "UC-04\nДодати видавця" as UC04
+  usecase "UC-05\nДодати видання" as UC05
+  usecase "UC-06\nДодати примірник" as UC06
+  usecase "UC-07\nЗнайти видання за ISBN" as UC07
+  usecase "UC-08\nПереглянути фізичну\nдоступність" as UC08
+  usecase "UC-09\nЗабронювати книгу" as UC09
+  usecase "UC-10\nВидати примірник" as UC10 <<головний поглиблений UC>>
+  usecase "UC-11\nЗареєструвати повернення" as UC11
+  usecase "UC-12\nЗаписати фізичний стан" as UC12
+  usecase "UC-13\nОтримати сповіщення\nпро доступність книги\n--\nТочка розширення:\nвідповідь інтеграції" as UC13
+  usecase "UC-15\nОбчислити фізичну\nдоступність" as UC15 <<включена поведінка>>
+  usecase "UC-17\nОтримати повідомлення\nпро збій сповіщення" as UC17 <<умовне розширення>>
+
+  UC03 -|> UC02
+  UC04 -|> UC02
+  UC05 -|> UC02
+
+  UC08 ..> UC15 : <<include>>
+  UC10 ..> UC15 : <<include>>
+  UC11 ..> UC15 : <<include>>
+  UC12 ..> UC15 : <<include>>
+  UC13 ..> UC15 : <<include>>
+  UC17 ..> UC13 : <<extend>>\n[сервіс повернув помилку]
+}
+
+CatalogUser -- UC07
+CatalogUser -- UC08
+Reader -- UC09
+Reader -- UC13
+Librarian -- UC01
+Librarian -- UC02
+Librarian -- UC06
+Librarian -- UC10
+Librarian -- UC11
+Librarian -- UC12
+Librarian -- UC17
+
+legend bottom left
+  Користувач каталогу узагальнює спільні можливості читача й бібліотекаря.
+  Сервіс A1 залишається зовнішньою інтеграцією, без UML-актора (погоджено 24.10.2026).
+  Узагальнення: додавання автора, видавця та видання — спеціалізації обліку каталогу.
+  include: обов'язкова включена поведінка; extend: умовне розширення в точці відповіді сервісу.
+  UC-15 не має самостійного запуску актором; UC-17 виникає лише в розширенні UC-13.
+  Перевірка права й визначення черги — внутрішні кроки видачі та сповіщення.
+  Видача: лише фізично доступний примірник; за активної черги — лише першому читачеві.
+  Не більше одного відкритого Loan; виконана перша Reservation атомарно стає fulfilled.
+  Бронюється Book за будь-якої доступності; кожне повторне бронювання має окремий UUID.
+  Черга: лише active, за reserved_at, потім лексикографічно за канонічним UUID нижнього регістру.
+  Повернення зберігає історію та Copy.state; допустима дата не раніше loaned_at.
+  Сповіщення не змінює Loan, Reservation, Copy чи чергу та не гарантує подальшу видачу.
+  US-09: цілісність — наскрізний контракт, а не окрема дія користувача.
+  Усі записи: обов'язкові поля, наявні посилання, погоджені кардинальності й допустимі стани.
+  Унікальні email, ISBN та інвентарний номер; due_at та непорожній returned_at >= loaned_at.
+  ER незмінна: 7 сутностей, 30 атрибутів, 7 зв'язків; UUID PK/FK, прямий Author–Book M:N.
+  Доступність обчислюється: Copy.state = active і немає Loan з порожнім returned_at.
+  Похідна доступність не зберігається. Зовнішній сервіс не є сутністю ER.
+endlegend
+
+' Відповідність до попередніх артефактів (не повна матриця етапу 5):
+' UC-01 | US-01 | REQ-01, REQ-02 | SC-01, SC-02
+' UC-02 | US-02 | REQ-03, REQ-04, REQ-05 | SC-03, SC-04, SC-05
+' UC-03 | US-02 | REQ-03 | SC-03
+' UC-04 | US-02 | REQ-03 | SC-03
+' UC-05 | US-02 | REQ-04, REQ-05 | SC-04, SC-05
+' UC-06 | US-03 | REQ-06, REQ-07 | SC-06, SC-07
+' UC-07 | US-04 | REQ-08 | SC-08
+' UC-08 | US-04 | REQ-09 | SC-09, SC-10
+' UC-09 | US-05 | REQ-11, REQ-14 | SC-15, SC-16, SC-17
+' UC-10 | US-06 | REQ-13, REQ-15, REQ-16, REQ-17, REQ-18, REQ-19, REQ-24 | SC-19, SC-20, SC-21, SC-22, SC-23, SC-27
+' UC-11 | US-07 | REQ-09, REQ-13, REQ-20 | SC-23, SC-24
+' UC-12 | US-03 | REQ-09, REQ-12, REQ-21 | SC-13, SC-14
+' UC-13 | US-08 | REQ-15, REQ-22, REQ-24 | SC-25, SC-26, SC-27
+' UC-15 | US-03, US-04, US-07 | REQ-09 | SC-09, SC-10, SC-14, SC-24
+' UC-17 | US-08 | REQ-23, REQ-24 | SC-26
+' Наскрізний контракт легенди | US-09 | REQ-10, REQ-11, REQ-12 | SC-11, SC-12, SC-13, SC-19
+' UC-09 не включає перевірку доступності: бронювання дозволене і без вільних Copy.
+' UC-13 не є розширенням лише повернення: можливість сповіщення виникає й за інших умов A1.
+' UC-17 -> UC-13: стрілка extend від розширення до базового варіанта.
+' UC-03/04/05 -> UC-02: порожній трикутник узагальнення вказує на загальний варіант.
+' Reader/Librarian -> CatalogUser: спільні пошук за ISBN і перегляд доступності.
+@enduml
