@@ -10,7 +10,7 @@ User Stories, Gherkin і UML Use Case Diagram та простежити їх д�
 | Файл | Зміст |
 |---|---|
 | [spec.md](spec.md) | Мета, актори, правила, A1 і критерії AC-01–AC-05 |
-| [requirements.md](requirements.md) | 24 EARS-вимоги |
+| [requirements.md](requirements.md) | 24 EARS та 12 погоджених вимірюваних NFR; NFR є цілями, а не результатами тестів |
 | [user-stories.md](user-stories.md) | 9 історій із критеріями та посиланнями |
 | [catalog.feature](features/catalog.feature) | Читачі, каталог і контракт цілісності |
 | [circulation.feature](features/circulation.feature) | Бронювання, видача та повернення |
@@ -110,7 +110,7 @@ AUD-01 усунуто в
 - [x] Уточнення spec власником: спільна роль каталогу, сервіс як інтеграція,
   нове формулювання AC-05 та головний поглиблений UC-10;
   [історія уточнень](spec-change-proposal.md).
-- [x] 24 EARS, 9 історій, 27 сценаріїв (51 конкретний випадок).
+- [x] 24 EARS, 12 NFR, 9 історій, 27 сценаріїв (51 конкретний випадок).
 - [x] 15 UC, include/extend, узагальнення акторів і UC, PlantUML, SVG і PNG.
 - [x] Головний поглиблений UC-10 з окремим шляхом сценарії → REQ → NFR.
 - [x] Матриця, аудит із виправленнями, три ADR, журнал AI.
