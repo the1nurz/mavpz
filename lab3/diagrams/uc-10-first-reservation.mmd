@@ -1,0 +1,79 @@
+sequenceDiagram
+    autonumber
+    %% D35 | UC-10 | SC-20; єдиний; A1
+    %% REQ-15, REQ-16, REQ-18 | NFR-05, NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D35 — A1: видача першому читачеві черги
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Оформлення видачі
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Queue as Активна черга
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Видати C1 читачу R1, loaned_at=2026-10-20T10:00:00Z, due_at=2026-11-03T10:00:00Z
+    activate UI
+    UI->>S: Видати C1 читачу R1, loaned_at=2026-10-20T10:00:00Z, due_at=2026-11-03T10:00:00Z
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: Перевірити обов’язкові поля та due_at >= loaned_at
+    activate S
+    S-->>S: Поля і хронологія коректні
+    deactivate S
+    S->>Store: Перевірити Reader R1, Copy C1 і Book B1
+    activate Store
+    Store-->>S: Наявні R1, C1, B1 з коректними FK
+    deactivate Store
+    S->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=active, відкритих Loan=0
+    deactivate Store
+    alt state=active і відкритих Loan немає
+    Availability-->>S: true
+    end
+    deactivate Availability
+    S->>Queue: Визначити першу активну Reservation B1
+    activate Queue
+    Queue->>Store: Прочитати active Reservation B1, порядок reserved_at ASC, id ASC
+    activate Store
+    Store-->>Queue: Активна черга: [Q1 читача R1, Q2 читача R2]
+    deactivate Store
+    Note over Queue: id порівнюється лексикографічно як канонічний UUID нижнього регістру.
+    Queue-->>S: [Q1 читача R1, Q2 читача R2]
+    deactivate Queue
+    rect rgb(235, 245, 255)
+    Note over S,Store: Єдина атомарна операція: актуальні Copy.state, відкриті Loan та голова черги Book перевіряються разом зі змінами. Конкретні блокування або СУБД не визначені.
+    S->>Store: Атомарно оформити видачу R1, C1, loaned_at, due_at
+    activate Store
+    Store->>Store: Повторно перевірити стан, відсутність відкритого Loan і право R1 за актуальною чергою
+    activate Store
+    Store-->>Store: Доступність і право підтверджені
+    deactivate Store
+    Store->>Store: Підготувати новий Loan Lnew з UUID, FK, датами та порожнім returned_at
+    activate Store
+    Store-->>Store: Loan підготовлений, ще не зафіксований
+    deactivate Store
+    opt Право визначила перша активна Reservation Q1 читача R1
+    Store->>Store: Підготувати Q1.status=fulfilled у тій самій операції
+    activate Store
+    Store-->>Store: Зміна Q1 підготовлена, Q2 та решта незмінні
+    deactivate Store
+    end
+    Store->>Store: Зафіксувати всі підготовлені зміни разом
+    activate Store
+    Store-->>Store: commit: Loan Lnew, Q1 fulfilled
+    deactivate Store
+    Store-->>S: Зафіксовано, Loan.id=Lnew
+    deactivate Store
+    end
+    Note over S,Store: Q2 очолює наступну активну чергу. Попередні Loan та Copy.state незмінні.
+    S-->>UI: Видачу оформлено, Loan.id=Lnew
+    deactivate S
+    UI-->>A: Видачу оформлено, Loan.id=Lnew
+    deactivate UI
+    Note over S,Store: Не більше одного відкритого Loan C1. Попередня історія і Copy.state незмінні.

@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D21 | UC-05 | SC-12; 4: Book з двома видавцями
+    %% REQ-11 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D21 — Відмова: два видавці Book
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Ведення каталогу
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Додати Book з двома видавцями
+    activate UI
+    UI->>S: Додати Book з двома видавцями
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: Перевірити кардинальності поданих зв’язків
+    activate S
+    S-->>S: Порушено Publisher–Book, потрібен рівно один видавець
+    deactivate S
+    alt Видавців 2
+    S-->>UI: Порушено Publisher–Book, потрібен рівно один видавець
+    end
+    deactivate S
+    UI-->>A: Порушено Publisher–Book, потрібен рівно один видавець
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

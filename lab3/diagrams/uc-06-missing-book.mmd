@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D19 | UC-06 | SC-12; 2: Copy з відсутньою Book
+    %% REQ-11 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D19 — Відмова: Copy.book_id
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Облік примірників
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Додати Copy з відсутньою Book
+    activate UI
+    UI->>S: Додати Copy з відсутньою Book
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: Перевірити Book за поданим book_id
+    activate Store
+    Store-->>S: Book відсутня
+    deactivate Store
+    alt Book відсутня
+    S-->>UI: Некоректне посилання Copy.book_id
+    end
+    deactivate S
+    UI-->>A: Некоректне посилання Copy.book_id
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

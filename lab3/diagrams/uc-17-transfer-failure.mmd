@@ -1,0 +1,51 @@
+sequenceDiagram
+    autonumber
+    %% D47 | UC-17 | SC-26; єдиний; розширення UC-13, також UC-10 X5
+    %% REQ-23, REQ-24 | NFR-09, NFR-11
+    title D47 — Помилка A1 у контексті UC-13
+    participant Flow as Передавання сповіщення
+    participant Availability as Фізична доступність
+    participant Queue as Активна черга
+    participant Store as Доменне сховище
+    participant A1 as Зовнішній сервіс A1
+    participant UI as Інтерфейс бібліотекаря
+    actor L as Бібліотекар
+    Note over Flow,A1: UC-13: система визначила можливість сповіщення. Механізм події не визначено. A1 — participant інтеграції, не нова сутність ER.
+    activate Flow
+    Flow->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=active, відкритих Loan=0
+    deactivate Store
+    alt state=active і відкритих Loan немає
+    Availability-->>Flow: true
+    end
+    deactivate Availability
+    Flow->>Queue: Знайти першу active Reservation B1
+    activate Queue
+    Queue->>Store: Прочитати active Reservation за reserved_at ASC, canonical lowercase UUID id ASC
+    activate Store
+    Store-->>Queue: Q1 читача R1 перша
+    deactivate Store
+    Queue-->>Flow: Q1, reader_id=R1
+    deactivate Queue
+    Flow->>Store: Отримати Reader.email R1, Book.id та Book.title B1
+    activate Store
+    Store-->>Flow: reader@example.org, B1, Книга
+    deactivate Store
+    Note over Flow,A1: HTTPS/TLS не нижче 1.2. Повний email передається лише A1, не стороннім читачам або журналам.
+    Flow->>A1: Передати email=reader@example.org, book_id=B1, title=Книга
+    activate A1
+    alt A1 повернув помилку передавання
+    A1-->>Flow: Помилка передавання для B1
+    end
+    deactivate A1
+    Note over Flow: UC-17 умовно розширює UC-13 у точці відповіді A1. Це також UC-10 X5, не відкат уже оформленої видачі.
+    Flow->>UI: Показати помилку сповіщення для B1
+    activate UI
+    UI-->>Flow: Помилку відображено
+    deactivate Flow
+    UI-->>L: Помилка передавання сповіщення, книга B1
+    deactivate UI
+    Note over Flow,Store: Loan, Reservation, Copy та порядок черги незмінні. Фактична доставка не гарантується, право видачі перевіряється заново.

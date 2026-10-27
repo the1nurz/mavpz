@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    %% D59 | UC-15 | SC-09; 4: written_off, 0; повторно використовується SC-14/SC-24
+    %% REQ-09 | —
+    title D59 — Внутрішня доступність: written_off, Loan 0
+    participant Caller as Сервіс-викликач
+    participant Availability as Фізична доступність
+    participant Store as Доменне сховище
+    Note over Caller,Availability: Внутрішня поведінка UC-15 для UC-08/10/11/12/13, без самостійного людського актора.
+    activate Caller
+    Caller->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=written_off, відкритих Loan=0
+    deactivate Store
+    alt state!=active або є відкритий Loan
+    Availability-->>Caller: false
+    end
+    deactivate Availability
+    deactivate Caller
+    Note over Availability,Store: Лише читання й обчислення. Жодного запису доступності або права видачі.

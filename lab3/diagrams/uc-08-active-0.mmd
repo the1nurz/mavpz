@@ -1,0 +1,45 @@
+sequenceDiagram
+    autonumber
+    %% D13 | UC-08 | SC-09; 1: active, 0
+    %% REQ-09 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D13 — Перегляд: active, відкритих Loan 0
+    actor A as Читач
+    participant UI as Вебінтерфейс
+    participant S as Перегляд каталогу
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Переглянути фізичну доступність B1
+    activate UI
+    UI->>S: Переглянути фізичну доступність B1
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: Отримати Copy книги B1
+    activate Store
+    Store-->>S: Список містить C1
+    deactivate Store
+    loop Для кожного Copy книги, у прикладі C1
+    S->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=active, відкритих Loan=0
+    deactivate Store
+    alt state=active і відкритих Loan немає
+    Availability-->>S: true
+    end
+    deactivate Availability
+    S->>S: Додати результат C1 до відповіді
+    activate S
+    S-->>S: C1: true
+    deactivate S
+    end
+    S-->>UI: C1 доступний
+    deactivate S
+    UI-->>A: C1 доступний
+    deactivate UI
+    Note over S,Store: Доступність не записувалася. Фізична доступність не визначає пріоритет черги.

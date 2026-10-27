@@ -1,0 +1,47 @@
+sequenceDiagram
+    autonumber
+    %% D43 | UC-11 | SC-24; 1: active
+    %% REQ-20, REQ-09 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D43 — Повернення: Copy active
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Повернення
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Повернути L1, returned_at=2026-10-20T10:00:00Z
+    activate UI
+    UI->>S: Повернути L1, returned_at=2026-10-20T10:00:00Z
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: Прочитати відкритий Loan L1 і Copy C1
+    activate Store
+    Store-->>S: loaned_at=2026-10-20T10:00:00Z, state=active
+    deactivate Store
+    S->>S: Перевірити returned_at >= loaned_at
+    activate S
+    S-->>S: Рівність дат допустима
+    deactivate S
+    S->>Store: Записати тільки L1.returned_at=2026-10-20T10:00:00Z
+    activate Store
+    Store-->>S: Зміну зафіксовано, L1 закритий
+    deactivate Store
+    S->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=active, відкритих Loan=0
+    deactivate Store
+    alt state=active і відкритих Loan немає
+    Availability-->>S: true
+    end
+    deactivate Availability
+    S-->>UI: Повернення зареєстровано, доступність true
+    deactivate S
+    UI-->>A: Повернення зареєстровано, доступність true
+    deactivate UI
+    Note over S,Store: Решта полів L1, історія і Copy.state=active незмінні.

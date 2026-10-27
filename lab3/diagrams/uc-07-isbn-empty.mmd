@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D12 | UC-07 | SC-08; 2: немає / порожній список
+    %% REQ-08 | NFR-04, NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D12 — Пошук: ISBN відсутній
+    actor A as Читач
+    participant UI as Вебінтерфейс
+    participant S as Пошук каталогу
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Знайти точний ISBN 9780000000001
+    activate UI
+    UI->>S: Знайти точний ISBN 9780000000001
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    Note over A,S: Бібліотекар має те саме право за ADR-L2-0003. Цей приклад Gherkin описує читача.
+    S->>Store: Знайти Book з точним ISBN 9780000000001
+    activate Store
+    Store-->>S: []
+    deactivate Store
+    alt Book відсутній
+    S-->>UI: []
+    end
+    deactivate S
+    UI-->>A: Порожній список
+    deactivate UI

@@ -1,0 +1,44 @@
+sequenceDiagram
+    autonumber
+    %% D25 | UC-12 | SC-14; 3: written_off
+    %% REQ-21, REQ-09 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D25 — Зміна стану: written_off за відкритого Loan
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Облік примірників
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Записати C1.state=written_off
+    activate UI
+    UI->>S: Записати C1.state=written_off
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    Note over S,Store: Given: C1 має відкритий Loan L1 та попередню історію.
+    S->>S: Перевірити допустимий state
+    activate S
+    S-->>S: Допустимий written_off
+    deactivate S
+    S->>Store: Змінити тільки Copy C1.state на written_off
+    activate Store
+    Store-->>S: state зафіксовано, L1 залишається відкритим
+    deactivate Store
+    S->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=written_off, відкритих Loan=1
+    deactivate Store
+    alt state!=active або є відкритий Loan
+    Availability-->>S: false
+    end
+    deactivate Availability
+    S-->>UI: Стан written_off збережено, фізична доступність false
+    deactivate S
+    UI-->>A: Стан written_off збережено, фізична доступність false
+    deactivate UI
+    Note over S,Store: Історія Loan не змінена. Запис state не закриває видачу.

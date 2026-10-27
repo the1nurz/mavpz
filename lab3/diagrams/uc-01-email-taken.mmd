@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D02 | UC-01 | SC-02; єдиний
+    %% REQ-02 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D02 — Відмова: email зайнятий
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Реєстрація читачів
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Зареєструвати іншого читача з email reader@example.org
+    activate UI
+    UI->>S: Зареєструвати іншого читача з email reader@example.org
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: Знайти Reader за email reader@example.org
+    activate Store
+    Store-->>S: Наявний Reader R1
+    deactivate Store
+    alt email вже належить іншому Reader
+    S-->>UI: email зайнятий
+    end
+    deactivate S
+    UI-->>A: email зайнятий
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

@@ -1,0 +1,37 @@
+sequenceDiagram
+    autonumber
+    %% D26 | UC-09 | SC-15; 1: є фізично доступний Copy
+    %% REQ-14 | NFR-05, NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D26 — Бронювання: є фізично доступний Copy
+    actor A as Читач
+    participant UI as Вебінтерфейс
+    participant S as Бронювання
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Забронювати B1 від власного імені R1
+    activate UI
+    UI->>S: Забронювати B1 від власного імені R1
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    Note over A,Store: Given: Є фізично доступний Copy. Це не умова відмови у бронюванні.
+    S->>S: Використати reader_id чинної сесії R1
+    activate S
+    S-->>S: Бронювання тільки від R1, без підміни читача
+    deactivate S
+    S->>Store: Перевірити наявність Reader R1 і Book B1
+    activate Store
+    Store-->>S: Reader і Book існують
+    deactivate Store
+    S->>Store: Створити Reservation Qnew з новим UUID, R1, B1, reserved_at=2026-10-20T10:00:00Z, status=active
+    activate Store
+    Store-->>S: Нову Reservation зафіксовано
+    deactivate Store
+    S-->>UI: Бронювання Qnew створено
+    deactivate S
+    UI-->>A: Бронювання Qnew створено
+    deactivate UI
+    Note over S,Store: Copy не перевіряється як передумова дозволу, бронюється Book.

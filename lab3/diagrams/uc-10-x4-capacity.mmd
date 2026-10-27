@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    %% D55 | UC-10 | —; X4
+    %% — | NFR-06, NFR-11
+    title D55 — X4: усі 50 HTTP-слотів зайняті
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant Admission as Допуск HTTP-запитів
+    Note over UI,Admission: Given: усі 50 спільних робочих HTTP-слотів зайняті. Це не ліміт зареєстрованих користувачів.
+    A->>UI: Оформити видачу
+    activate UI
+    UI->>Admission: Надіслати HTTP-запит
+    activate Admission
+    alt Усі 50 робочих слотів зайняті
+    Admission-->>UI: 503 за не більш ніж 1 с
+    end
+    deactivate Admission
+    UI-->>A: Сервер перевантажений
+    deactivate UI
+    Note over UI,Admission: Відхилений запит не займає робочого слота, LoanService і Store не викликаються. Доменних змін немає.

@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    %% D03 | UC-03 | SC-03; 1: Author
+    %% REQ-03 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D03 — Додати автора без книг
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Ведення каталогу
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Додати Author з full_name, birth_year
+    activate UI
+    UI->>S: Додати Author з full_name, birth_year
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: Перевірити обов’язкові поля Author
+    activate S
+    S-->>S: Поля коректні, книги не обов’язкові
+    deactivate S
+    S->>Store: Зберегти Author з новим UUID і поданими полями
+    activate Store
+    Store-->>S: Author зафіксований, пов’язаних книг 0
+    deactivate Store
+    S-->>UI: Author додано без книг
+    deactivate S
+    UI-->>A: Author додано без книг
+    deactivate UI

@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D22 | UC-12 | SC-13; 1: Copy / Copy.state
+    %% REQ-12 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D22 — Відмова: Copy.state unknown
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Облік примірників
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Записати Copy.state=unknown
+    activate UI
+    UI->>S: Записати Copy.state=unknown
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: Перевірити state у active, lost, written_off
+    activate S
+    S-->>S: unknown не належить множині
+    deactivate S
+    alt state недопустимий
+    S-->>UI: Недопустиме значення Copy.state: unknown
+    end
+    deactivate S
+    UI-->>A: Недопустиме значення Copy.state: unknown
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

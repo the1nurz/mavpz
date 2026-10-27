@@ -1,0 +1,33 @@
+sequenceDiagram
+    autonumber
+    %% D41 | UC-10 | SC-23; 1: due_at; A5
+    %% REQ-13 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D41 — A5: due_at раніше loaned_at
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Оформлення видачі
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Queue as Активна черга
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Видати C1 читачу R1, loaned_at=2026-10-20T10:00:00Z, due_at=2026-10-20T09:59:59Z
+    activate UI
+    UI->>S: Видати C1 читачу R1, loaned_at=2026-10-20T10:00:00Z, due_at=2026-10-20T09:59:59Z
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: Перевірити обов’язкові поля та due_at >= loaned_at
+    activate S
+    S-->>S: Хронологія некоректна
+    deactivate S
+    Note over S: Q5: SC-23 задає правило дати для Loan. Тут показано A5 створення видачі, не новий UC редагування.
+    alt due_at раніше loaned_at
+    S-->>UI: Порушення хронології due_at
+    end
+    deactivate S
+    UI-->>A: Порушення хронології due_at
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

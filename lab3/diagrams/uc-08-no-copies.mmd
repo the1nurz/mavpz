@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D17 | UC-08 | SC-10; єдиний
+    %% REQ-09 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D17 — Перегляд: книга без Copy
+    actor A as Читач
+    participant UI as Вебінтерфейс
+    participant S as Перегляд каталогу
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Переглянути фізичну доступність B1
+    activate UI
+    UI->>S: Переглянути фізичну доступність B1
+    activate S
+    S->>Access: Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: Отримати Copy B1
+    activate Store
+    Store-->>S: []
+    deactivate Store
+    alt Copy відсутні
+    S-->>UI: Немає примірників
+    end
+    deactivate S
+    UI-->>A: Немає примірників
+    deactivate UI
+    Note over S,Store: UC-15 не викликається для неіснуючого Copy.
