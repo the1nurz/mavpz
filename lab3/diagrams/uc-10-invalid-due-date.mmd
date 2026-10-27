@@ -13,13 +13,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Видати C1 читачу R1, loaned_at=2026-10-20T10:00:00Z, due_at=2026-10-20T09:59:59Z
     activate UI
-    UI->>S: Видати C1 читачу R1, loaned_at=2026-10-20T10:00:00Z, due_at=2026-10-20T09:59:59Z
+    UI->>S: issueCopy(reader_id, copy_id, loaned_at, due_at) — Видати C1 читачу R1, loaned_at=2026-10-20T10:00:00Z, due_at=2026-10-20T09:59:59Z
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>S: Перевірити обов’язкові поля та due_at >= loaned_at
+    S->>S: validateIssueData(reader_id, copy_id, loaned_at, due_at) — Перевірити обов’язкові поля та due_at >= loaned_at
     activate S
     S-->>S: Хронологія некоректна
     deactivate S

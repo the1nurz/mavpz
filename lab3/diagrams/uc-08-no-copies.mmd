@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Переглянути фізичну доступність B1
     activate UI
-    UI->>S: Переглянути фізичну доступність B1
+    UI->>S: getBookAvailability(book_id) — Переглянути фізичну доступність B1
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Отримати Copy B1
+    S->>Store: findCopiesByBookId(book_id) — Отримати Copy B1
     activate Store
     Store-->>S: []
     deactivate Store

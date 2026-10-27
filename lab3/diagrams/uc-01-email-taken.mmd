@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Зареєструвати іншого читача з email reader@example.org
     activate UI
-    UI->>S: Зареєструвати іншого читача з email reader@example.org
+    UI->>S: registerReader(full_name, email, registered_at) — Зареєструвати іншого читача з email reader@example.org
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Знайти Reader за email reader@example.org
+    S->>Store: findReaderByEmail(email) — Знайти Reader за email reader@example.org
     activate Store
     Store-->>S: Наявний Reader R1
     deactivate Store

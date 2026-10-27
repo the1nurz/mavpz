@@ -8,9 +8,9 @@ sequenceDiagram
     participant Store as Доменне сховище
     Note over Caller,Availability: Внутрішня поведінка UC-15 для UC-08/10/11/12/13, без самостійного людського актора.
     activate Caller
-    Caller->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    Caller->>Availability: computeAvailability(copy_id) — Обчислити фізичну доступність C1 (UC-15)
     activate Availability
-    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    Availability->>Store: readCopyStateAndOpenLoans(copy_id) — Прочитати Copy.state та Loan C1 з порожнім returned_at
     activate Store
     Store-->>Availability: state=active, відкритих Loan=1
     deactivate Store

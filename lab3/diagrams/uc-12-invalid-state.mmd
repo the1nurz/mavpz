@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Записати Copy.state=unknown
     activate UI
-    UI->>S: Записати Copy.state=unknown
+    UI->>S: updateCopyState(copy_id, state) — Записати Copy.state=unknown
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>S: Перевірити state у active, lost, written_off
+    S->>S: validateCopyState(state) — Перевірити state у active, lost, written_off
     activate S
     S-->>S: unknown не належить множині
     deactivate S

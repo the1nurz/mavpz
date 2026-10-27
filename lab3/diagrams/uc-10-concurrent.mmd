@@ -17,62 +17,62 @@ sequenceDiagram
     par Підготовка запиту R1
     A->>UI1: Видати C1 читачу R1
     activate UI1
-    UI1->>S1: R1, C1, коректні дати
+    UI1->>S1: issueCopy(reader_id, copy_id, loaned_at, due_at) — R1, C1, коректні дати
     activate S1
-    S1->>Access: Перевірити чинну сесію та роль бібліотекаря
+    S1->>Access: authorizeOperation(session, operation) — Перевірити чинну сесію та роль бібліотекаря
     activate Access
     Access-->>S1: Дозволено
     deactivate Access
-    S1->>Store: Перевірити Reader R1, Copy C1, Book B1
+    S1->>Store: resolveLoanReferences(reader_id, copy_id) — Перевірити Reader R1, Copy C1, Book B1
     activate Store
     Store-->>S1: Посилання існують
     deactivate Store
-    S1->>S1: Перевірити обов’язковість та due_at >= loaned_at
+    S1->>S1: validateIssueData(reader_id, copy_id, loaned_at, due_at) — Перевірити обов’язковість та due_at >= loaned_at
     activate S1
     S1-->>S1: Дані коректні
     deactivate S1
-    S1->>Availability: Обчислити UC-15 для C1
+    S1->>Availability: computeAvailability(copy_id) — Обчислити UC-15 для C1
     activate Availability
     Availability-->>S1: Попередній результат true
     deactivate Availability
-    S1->>Queue: Прочитати першу active Reservation B1
+    S1->>Queue: getFirstActiveReservation(book_id) — Прочитати першу active Reservation B1
     activate Queue
     Queue-->>S1: []
     deactivate Queue
     and Підготовка запиту R2
     B->>UI2: Видати C1 читачу R2
     activate UI2
-    UI2->>S2: R2, C1, коректні дати
+    UI2->>S2: issueCopy(reader_id, copy_id, loaned_at, due_at) — R2, C1, коректні дати
     activate S2
-    S2->>Access: Перевірити чинну сесію та роль бібліотекаря
+    S2->>Access: authorizeOperation(session, operation) — Перевірити чинну сесію та роль бібліотекаря
     activate Access
     Access-->>S2: Дозволено
     deactivate Access
-    S2->>Store: Перевірити Reader R2, Copy C1, Book B1
+    S2->>Store: resolveLoanReferences(reader_id, copy_id) — Перевірити Reader R2, Copy C1, Book B1
     activate Store
     Store-->>S2: Посилання існують
     deactivate Store
-    S2->>S2: Перевірити обов’язковість та due_at >= loaned_at
+    S2->>S2: validateIssueData(reader_id, copy_id, loaned_at, due_at) — Перевірити обов’язковість та due_at >= loaned_at
     activate S2
     S2-->>S2: Дані коректні
     deactivate S2
-    S2->>Availability: Обчислити UC-15 для C1
+    S2->>Availability: computeAvailability(copy_id) — Обчислити UC-15 для C1
     activate Availability
     Availability-->>S2: Попередній результат true
     deactivate Availability
-    S2->>Queue: Прочитати першу active Reservation B1
+    S2->>Queue: getFirstActiveReservation(book_id) — Прочитати першу active Reservation B1
     activate Queue
     Queue-->>S2: []
     deactivate Queue
     end
     Note over S1,Store: Попередні reads не гарантують успіх. Кожна наступна спроба атомарно повторно перевіряє актуальні state, відкриті Loan та чергу разом зі створенням Loan. Механізм синхронізації не визначений.
     par Атомарна спроба запиту R1
-    S1->>Store: Атомарно перевірити доступність і право R1 та за дозволу створити відкритий Loan
+    S1->>Store: issueCopyAtomically(reader_id, copy_id, loaned_at, due_at) — Атомарно перевірити доступність і право R1 та за дозволу створити відкритий Loan
     activate Store
     Store-->>S1: result1: зафіксований Loan.id або відмова через відкриту видачу
     deactivate Store
     and Атомарна спроба запиту R2
-    S2->>Store: Атомарно перевірити доступність і право R2 та за дозволу створити відкритий Loan
+    S2->>Store: issueCopyAtomically(reader_id, copy_id, loaned_at, due_at) — Атомарно перевірити доступність і право R2 та за дозволу створити відкритий Loan
     activate Store
     Store-->>S2: result2: зафіксований Loan.id або відмова через відкриту видачу
     deactivate Store

@@ -9,7 +9,7 @@ sequenceDiagram
     Note over UI,Admission: Given: усі 50 спільних робочих HTTP-слотів зайняті. Це не ліміт зареєстрованих користувачів.
     A->>UI: Оформити видачу
     activate UI
-    UI->>Admission: Надіслати HTTP-запит
+    UI->>Admission: admitRequest(request) — Надіслати HTTP-запит
     activate Admission
     alt Усі 50 робочих слотів зайняті
     Admission-->>UI: 503 за не більш ніж 1 с

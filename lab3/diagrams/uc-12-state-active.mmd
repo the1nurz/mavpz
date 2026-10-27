@@ -12,24 +12,24 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Записати C1.state=active
     activate UI
-    UI->>S: Записати C1.state=active
+    UI->>S: updateCopyState(copy_id, state) — Записати C1.state=active
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
     Note over S,Store: Given: C1 має відкритий Loan L1 та попередню історію.
-    S->>S: Перевірити допустимий state
+    S->>S: validateCopyState(state) — Перевірити допустимий state
     activate S
     S-->>S: Допустимий active
     deactivate S
-    S->>Store: Змінити тільки Copy C1.state на active
+    S->>Store: saveCopyState(copy_id, state) — Змінити тільки Copy C1.state на active
     activate Store
     Store-->>S: state зафіксовано, L1 залишається відкритим
     deactivate Store
-    S->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    S->>Availability: computeAvailability(copy_id) — Обчислити фізичну доступність C1 (UC-15)
     activate Availability
-    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    Availability->>Store: readCopyStateAndOpenLoans(copy_id) — Прочитати Copy.state та Loan C1 з порожнім returned_at
     activate Store
     Store-->>Availability: state=active, відкритих Loan=1
     deactivate Store

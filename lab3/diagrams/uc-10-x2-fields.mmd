@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Оформити видачу з неповними даними
     activate UI
-    UI->>S: Оформити видачу з неповними даними
+    UI->>S: issueCopy(reader_id, copy_id, loaned_at, due_at) — Оформити видачу з неповними даними
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>S: Перевірити обов’язкові поля команди
+    S->>S: validateRequiredFields(data) — Перевірити обов’язкові поля команди
     activate S
     S-->>S: Перелік незаповнених полів
     deactivate S

@@ -11,26 +11,28 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Додати Copy B1, inventory_number=INV-1, state=lost
     activate UI
-    UI->>S: Додати Copy B1, inventory_number=INV-1, state=lost
+    UI->>S: addCopy(book_id, inventory_number, state) — Додати Copy B1, inventory_number=INV-1, state=lost
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Перевірити Book B1 та унікальність INV-1
+    S->>Store: checkBookAndInventoryNumber(book_id, inventory_number) — Перевірити Book B1 та унікальність INV-1
     activate Store
     Store-->>S: B1 існує, номер вільний
     deactivate Store
-    S->>S: Перевірити state у active, lost, written_off
+    S->>S: validateCopyState(state) — Перевірити state у active, lost, written_off
     activate S
     S-->>S: Допустиме значення lost
     deactivate S
-    S->>Store: Зберегти Copy з UUID, book_id=B1, inventory_number=INV-1, state=lost
+    alt Book B1 існує, INV-1 вільний, state=lost допустимий (REQ-06, REQ-07, REQ-12)
+    S->>Store: insertCopy(book_id, inventory_number, state) — Зберегти Copy з UUID, book_id=B1, inventory_number=INV-1, state=lost
     activate Store
     Store-->>S: Copy зафіксований
     deactivate Store
     S-->>UI: Примірник додано
-    deactivate S
     UI-->>A: Примірник додано
+    end
+    deactivate S
     deactivate UI
     Note over S,Store: Фізичний стан не замінюється полем доступності.

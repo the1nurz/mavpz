@@ -11,27 +11,29 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Забронювати B1 від власного імені R1
     activate UI
-    UI->>S: Забронювати B1 від власного імені R1
+    UI->>S: reserveBook(session, book_id, reserved_at) — Забронювати B1 від власного імені R1
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
     Note over A,Store: Given: Немає Copy. Це не умова відмови у бронюванні.
-    S->>S: Використати reader_id чинної сесії R1
+    S->>S: getSessionReaderId(session) — Використати reader_id чинної сесії R1
     activate S
     S-->>S: Бронювання тільки від R1, без підміни читача
     deactivate S
-    S->>Store: Перевірити наявність Reader R1 і Book B1
+    S->>Store: resolveReservationReferences(reader_id, book_id) — Перевірити наявність Reader R1 і Book B1
     activate Store
     Store-->>S: Reader і Book існують
     deactivate Store
-    S->>Store: Створити Reservation Qnew з новим UUID, R1, B1, reserved_at=2026-10-20T10:00:00Z, status=active
+    alt Reader R1 і Book B1 існують, R1 діє від себе (REQ-11, REQ-14, NFR-08)
+    S->>Store: insertReservation(reader_id, book_id, reserved_at, status) — Створити Reservation Qnew з новим UUID, R1, B1, reserved_at=2026-10-20T10:00:00Z, status=active
     activate Store
     Store-->>S: Нову Reservation зафіксовано
     deactivate Store
     S-->>UI: Бронювання Qnew створено
-    deactivate S
     UI-->>A: Бронювання Qnew створено
+    end
+    deactivate S
     deactivate UI
     Note over S,Store: Copy не перевіряється як передумова дозволу, бронюється Book.

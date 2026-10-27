@@ -11,21 +11,23 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Додати Publisher з name, country
     activate UI
-    UI->>S: Додати Publisher з name, country
+    UI->>S: addPublisher(name, country) — Додати Publisher з name, country
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>S: Перевірити обов’язкові поля Publisher
+    S->>S: validateRequiredFields(data) — Перевірити обов’язкові поля Publisher
     activate S
     S-->>S: Поля коректні, книги не обов’язкові
     deactivate S
-    S->>Store: Зберегти Publisher з новим UUID і поданими полями
+    alt Publisher.name і country заповнені, пов’язаних книг може бути 0 (REQ-03, REQ-11)
+    S->>Store: insertPublisher(name, country) — Зберегти Publisher з новим UUID і поданими полями
     activate Store
     Store-->>S: Publisher зафіксований, пов’язаних книг 0
     deactivate Store
     S-->>UI: Publisher додано без книг
-    deactivate S
     UI-->>A: Publisher додано без книг
+    end
+    deactivate S
     deactivate UI

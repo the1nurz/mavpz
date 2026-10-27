@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Додати Copy з відсутньою Book
     activate UI
-    UI->>S: Додати Copy з відсутньою Book
+    UI->>S: addCopy(book_id, inventory_number, state) — Додати Copy з відсутньою Book
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Перевірити Book за поданим book_id
+    S->>Store: findBookById(book_id) — Перевірити Book за поданим book_id
     activate Store
     Store-->>S: Book відсутня
     deactivate Store

@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Зареєструвати Reader без email
     activate UI
-    UI->>S: Зареєструвати Reader без email
+    UI->>S: registerReader(full_name, email, registered_at) — Зареєструвати Reader без email
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>S: Перевірити обов’язкові поля
+    S->>S: validateRequiredFields(data) — Перевірити обов’язкові поля
     activate S
     S-->>S: Reader.email відсутній
     deactivate S

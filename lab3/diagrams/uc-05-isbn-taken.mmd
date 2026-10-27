@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Додати видання з ISBN 9780000000001
     activate UI
-    UI->>S: Додати видання з ISBN 9780000000001
+    UI->>S: addBook(title, isbn, publication_year, publisher_id, authorIds) — Додати видання з ISBN 9780000000001
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Знайти Book за ISBN
+    S->>Store: findBookByIsbn(isbn) — Знайти Book за ISBN
     activate Store
     Store-->>S: Наявний Book B1
     deactivate Store

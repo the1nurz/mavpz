@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Додати Copy з inventory_number=INV-1
     activate UI
-    UI->>S: Додати Copy з inventory_number=INV-1
+    UI->>S: addCopy(book_id, inventory_number, state) — Додати Copy з inventory_number=INV-1
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Знайти Copy за INV-1
+    S->>Store: findCopyByInventoryNumber(inventory_number) — Знайти Copy за INV-1
     activate Store
     Store-->>S: Наявний Copy C1
     deactivate Store

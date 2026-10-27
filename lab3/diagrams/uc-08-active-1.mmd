@@ -12,20 +12,20 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Переглянути фізичну доступність B1
     activate UI
-    UI->>S: Переглянути фізичну доступність B1
+    UI->>S: getBookAvailability(book_id) — Переглянути фізичну доступність B1
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Отримати Copy книги B1
+    S->>Store: findCopiesByBookId(book_id) — Отримати Copy книги B1
     activate Store
     Store-->>S: Список містить C1
     deactivate Store
     loop Для кожного Copy книги, у прикладі C1
-    S->>Availability: Обчислити фізичну доступність C1 (UC-15)
+    S->>Availability: computeAvailability(copy_id) — Обчислити фізичну доступність C1 (UC-15)
     activate Availability
-    Availability->>Store: Прочитати Copy.state та Loan C1 з порожнім returned_at
+    Availability->>Store: readCopyStateAndOpenLoans(copy_id) — Прочитати Copy.state та Loan C1 з порожнім returned_at
     activate Store
     Store-->>Availability: state=active, відкритих Loan=1
     deactivate Store
@@ -33,7 +33,7 @@ sequenceDiagram
     Availability-->>S: false
     end
     deactivate Availability
-    S->>S: Додати результат C1 до відповіді
+    S->>S: appendCopyAvailability(copy_id, result) — Додати результат C1 до відповіді
     activate S
     S-->>S: C1: false
     deactivate S

@@ -11,17 +11,17 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Повернути L1 з returned_at=2026-10-20T09:59:59Z
     activate UI
-    UI->>S: Повернути L1 з returned_at=2026-10-20T09:59:59Z
+    UI->>S: registerReturn(loan_id, returned_at) — Повернути L1 з returned_at=2026-10-20T09:59:59Z
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Прочитати відкритий Loan L1
+    S->>Store: getOpenLoan(loan_id) — Прочитати відкритий Loan L1
     activate Store
     Store-->>S: loaned_at=2026-10-20T10:00:00Z
     deactivate Store
-    S->>S: Перевірити returned_at >= loaned_at
+    S->>S: validateReturnDate(loaned_at, returned_at) — Перевірити returned_at >= loaned_at
     activate S
     S-->>S: Хронологія порушена
     deactivate S

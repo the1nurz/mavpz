@@ -8,7 +8,7 @@ sequenceDiagram
     participant Access as Перевірка доступу
     A->>UI: Запит оформлення видачі
     activate UI
-    UI->>Access: Перевірити сесію та право видачі
+    UI->>Access: authorizeOperation(session, operation) — Перевірити сесію та право видачі
     activate Access
     alt Сесія відсутня, некоректна, прострочена або анульована
     Access-->>UI: 401, потрібна чинна сесія

@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Додати Book без автора
     activate UI
-    UI->>S: Додати Book без автора
+    UI->>S: addBook(title, isbn, publication_year, publisher_id, authorIds) — Додати Book без автора
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>S: Перевірити кардинальності поданих зв’язків
+    S->>S: validateBookCardinalities(publisherIds, authorIds) — Перевірити кардинальності поданих зв’язків
     activate S
     S-->>S: Порушено Author–Book, потрібен щонайменше один автор
     deactivate S

@@ -11,13 +11,13 @@ sequenceDiagram
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
     A->>UI: Забронювати B404 від власного імені R1
     activate UI
-    UI->>S: Забронювати B404 від власного імені R1
+    UI->>S: reserveBook(session, book_id, reserved_at) — Забронювати B404 від власного імені R1
     activate S
-    S->>Access: Перевірити сесію та право операції
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
     Access-->>S: Чинна сесія, операцію дозволено
     deactivate Access
-    S->>Store: Перевірити наявність Book B404
+    S->>Store: findBookById(book_id) — Перевірити наявність Book B404
     activate Store
     Store-->>S: Book відсутня
     deactivate Store
