@@ -35,7 +35,7 @@
       "lab3/diagrams/uc-05-add-book.mmd": "8beceac5b4346e510675c43b189538b36997f52d93fb2a81db9e3ab32a67fdf3",
       "lab3/diagrams/uc-05-isbn-taken.mmd": "22b93478b7a6f9f7a43b7a814da702eeced23baea5b723219195f8e72a160880",
       "lab3/diagrams/uc-05-no-author.mmd": "b76a45b437fd096d9d224e912c6c1cafa068d260dafffc7450c95035bfe8d4a2",
-      "lab3/diagrams/uc-05-two-publishers.mmd": "06d1386bd462b13f6cb15f4eac5ff3ea80e2d74dab59ce4afabac6551fb01b1f",
+      "lab3/diagrams/uc-05-two-publishers.mmd": "e6d70525988f04fdd5ef10109b7717aa40d7ae8e0cf32c2d6f65ecae0c084e64",
       "lab3/diagrams/uc-06-add-active.mmd": "57f7fba15277b972d211cc3841ed2ee21314eec91f62e4a25ed156cc3d9f82f2",
       "lab3/diagrams/uc-06-add-lost.mmd": "7a64a47d7b77fccc153e6d9344fa28b9121640974cc52323593dfbfa1ca8ea54",
       "lab3/diagrams/uc-06-add-written-off.mmd": "d7ecc69deb614c689621250ef2a53e4e22fd4078dac9d74e66c659932dc63786",
@@ -243,18 +243,18 @@
     },
     "uc-05-two-publishers": {
       "source": "lab3/diagrams/uc-05-two-publishers.mmd",
-      "svgSha256": "337391a22c4a0afb211c404ccd96ed645f0d9835c3b95591c4490f0cf62e0e30",
-      "pngSha256": "697baa60e7b82c7882912cc8b5df1daf2c3756ca3b972625a2edc1de031d58fa",
+      "svgSha256": "2a29f0f1b3ed87e21c00398bc16dbb4e5d331305bd4037a4d04dcab8af4725bc",
+      "pngSha256": "35109d68440f9349a397488dccaf21ef4309d47544933eb8da5689cf6e95e18c",
       "svg": {
         "width": 1266,
-        "height": 1138
+        "height": 1294
       },
       "png": {
         "width": 2532,
-        "height": 2196
+        "height": 2508
       },
-      "labelsChecked": 17,
-      "textElements": 44,
+      "labelsChecked": 18,
+      "textElements": 50,
       "clipped": [],
       "overlaps": []
     },

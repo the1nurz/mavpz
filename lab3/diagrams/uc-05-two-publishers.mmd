@@ -9,9 +9,9 @@ sequenceDiagram
     participant Access as Перевірка доступу
     participant Store as Доменне сховище
     Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
-    A->>UI: Додати Book з двома видавцями
+    A->>UI: Додати Book з двома наявними видавцями P1 і P2
     activate UI
-    UI->>S: addBook(title, isbn, publication_year, publisher_id, authorIds) — Додати Book з двома видавцями
+    UI->>S: addBook(title, isbn, publication_year, publisherIds=[P1, P2], authorIds) — Передати обидва значення із сирої форми до валідації
     activate S
     S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
     activate Access
@@ -20,6 +20,7 @@ sequenceDiagram
     S->>S: validateBookCardinalities(publisherIds, authorIds) — Перевірити кардинальності поданих зв’язків
     activate S
     S-->>S: Порушено Publisher–Book, потрібен рівно один видавець
+    Note over UI,S: publisherIds — значення некоректної форми, не атрибут Book. Єдиний Book.publisher_id не зберігається до успішної валідації.
     deactivate S
     alt Видавців 2
     S-->>UI: Порушено Publisher–Book, потрібен рівно один видавець
