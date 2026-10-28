@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 const diagram = name => readFileSync(new URL('../diagrams/' + name + '.mmd', import.meta.url), 'utf8');
 
 test('SC-12 two publishers reach validation as two values, without a domain write', () => {
@@ -10,6 +10,18 @@ test('SC-12 two publishers reach validation as two values, without a domain writ
   assert(text.indexOf('validateBookCardinalities(publisherIds, authorIds)') > text.indexOf('UI->>S:'));
   assert.match(text, /Publisher–Book/);
   assert(!/S->>Store:.*(?:insert|save)/.test(text), 'Invalid Book must not be saved');
+});
+
+test('dashed replies have an inverse request; unsolicited UI output is a one-way event', () => {
+  for (const file of readdirSync(new URL('../diagrams/', import.meta.url)).filter(f => f.endsWith('.mmd'))) {
+    const text = diagram(file.slice(0, -4));
+    for (const reply of text.matchAll(/^\s*(\w+)-->>(\w+):/gm)) {
+      assert(text.includes(reply[2] + '->>' + reply[1] + ':'), file + ': reply without request ' + reply[0].trim());
+    }
+  }
+  const failure = diagram('uc-17-transfer-failure');
+  assert(failure.indexOf('UI-)L:') < failure.indexOf('UI-->>Flow:'));
+  assert(failure.includes('UI-)L:'));
 });
 
 test('UC-10 X2 carries validation fields and reasons through service and UI replies', () => {

@@ -104,6 +104,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try {
     const r = checkSources();
     console.log('PASS: ' + r.files.length + ' sources, ' + r.uc + ' UC, ' + r.scenarios +
-      ' SC, ' + r.cases + ' cases accounted, exact tags and balanced activations. Two Reservation cases remain explicitly open.');
+      ' SC, ' + r.cases + ' cases accounted, exact tags and balanced activations. Two Reservation examples are internal validation contracts, with no standalone UC.');
   } catch (error) { console.error('FAIL: ' + error.message); process.exitCode = 1; }
 }

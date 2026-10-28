@@ -57,7 +57,7 @@ export function expectedLabels(source) {
     let m;
     if ((m = line.match(/^(?:actor|participant) \w+ as (.+)$/))) labels.push(m[1]);
     else if ((m = line.match(/^title (.+)$/))) labels.push(m[1]);
-    else if ((m = line.match(/^\w+(?:->>|-->>|--x)\w+: (.+)$/))) labels.push(m[1]);
+    else if ((m = line.match(/^\w+(?:->>|-->>|--x|-\))\w+: (.+)$/))) labels.push(m[1]);
     else if ((m = line.match(/^Note (?:over|right of|left of) [^:]+: (.+)$/))) labels.push(m[1]);
     else if ((m = line.match(/^(?:alt|opt|loop|par|else|and) (.+)$/))) labels.push(m[1]);
   }

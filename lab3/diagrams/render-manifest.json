@@ -21,8 +21,8 @@
     "config": "ad86124633ba13c45ecef6dfb4242806e84fcae69aa408203e84c8aff753cacf",
     "tools": {
       "render-sequences.mjs": "68a1d1177ccdfbc22b8157f7b1b46059ad7a3e7e23e3c2bec2a026b5f11050d2",
-      "render-validation.mjs": "683a645ed2c2d97eb92f3701c4ba8b24386d5677a9ebdfffea0cefc5e510e8bd",
-      "check-sequences.mjs": "cc3c0cd8b230876788dd71be412c8134d09e8373366314dce5ac3f4f186c0235"
+      "render-validation.mjs": "f8da982857f07e64165d31a5e45685844698ab9b477c3d118a3d2b44e145249a",
+      "check-sequences.mjs": "b572609d1d8b4cec63cd2ba7af02bdc048dc573b932bf8f1a5f2ef66d17821a2"
     },
     "lock": "1d6000c6d57a5d871ec05c44e16aed2de38607a48c644fc92ea2b2de8ab263ca",
     "sources": {
@@ -84,7 +84,7 @@
       "lab3/diagrams/uc-15-active-1.mmd": "55cdab470a12ca2e2dcd30eaf4e02eeb6adad89d1dfd5dfdd40ce0bc75d2ddd3",
       "lab3/diagrams/uc-15-lost-0.mmd": "a2190dae1fd521695fbdb3bcfde5d1ddade0bd06b8bc82280dc5d7a49e5184c3",
       "lab3/diagrams/uc-15-written-off-0.mmd": "0c85b888a875d9028a4e1f2ed9b8a2cc48a676bda32b5d2b5e9cd3899af83e8e",
-      "lab3/diagrams/uc-17-transfer-failure.mmd": "44e7d3eafbbdf0cc0175fc60de47d4f2d795c3d7e78777436b6731a88ea0fe59"
+      "lab3/diagrams/uc-17-transfer-failure.mmd": "2a7c341bce5511cb4d4c3cf26188b7405c5e40c6c3ff18ee2f21389e5913fa58"
     }
   },
   "diagrams": {
@@ -1076,8 +1076,8 @@
     },
     "uc-17-transfer-failure": {
       "source": "lab3/diagrams/uc-17-transfer-failure.mmd",
-      "svgSha256": "efada786d770401c23384afcc38daee6380d4fe86ef1a63d9b7eb9cbfe5340dc",
-      "pngSha256": "aa43e8f44dbcb2fc527942603d78a256e19d3f04d0c8ca3e04c4d29fcaea0758",
+      "svgSha256": "9cda45c47e215255aed927c34ba250bb770e4b35eec3e3ba6ce07d3f00a35487",
+      "pngSha256": "7e33ce8b314fa817f71bcba08cfe41dbc4ac6c4e8b1fdc07423a81e0cd189665",
       "svg": {
         "width": 1776,
         "height": 1659

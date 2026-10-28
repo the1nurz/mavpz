@@ -44,8 +44,8 @@ sequenceDiagram
     Note over Flow: UC-17 умовно розширює UC-13 у точці відповіді A1. Це також UC-10 X5, не відкат уже оформленої видачі.
     Flow->>UI: showNotificationFailure(book_id, reason) — Показати помилку сповіщення для B1
     activate UI
+    UI-)L: Помилка передавання сповіщення, книга B1
     UI-->>Flow: Помилку відображено
-    deactivate Flow
-    UI-->>L: Помилка передавання сповіщення, книга B1
     deactivate UI
+    deactivate Flow
     Note over Flow,Store: Loan, Reservation, Copy та порядок черги незмінні. Фактична доставка не гарантується, право видачі перевіряється заново.

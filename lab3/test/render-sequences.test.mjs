@@ -45,8 +45,8 @@ test('fresh bytes detect stale or damaged artifacts without trusting timestamps'
   assert.notEqual(sha256('source v1'), sha256('source v2'));
 });
 test('expected rendered text includes actors, calls, returns, title, notes and fragment guards', () => {
-  const labels = expectedLabels('sequenceDiagram\nactor A as Читач\nparticipant S as Сервіс\ntitle Назва\nA->>S: call(id)\nS-->>A: Готово\nalt Перевірено\nNote over A,S: Умова\nend');
-  assert.deepEqual(labels, ['Читач', 'Сервіс', 'Назва', 'call(id)', 'Готово', 'Перевірено', 'Умова']);
+  const labels = expectedLabels('sequenceDiagram\nactor A as Читач\nparticipant S as Сервіс\ntitle Назва\nA->>S: call(id)\nS-->>A: Готово\nS-)A: Подія\nalt Перевірено\nNote over A,S: Умова\nend');
+  assert.deepEqual(labels, ['Читач', 'Сервіс', 'Назва', 'call(id)', 'Готово', 'Подія', 'Перевірено', 'Умова']);
 });
 test('activation analysis rejects an imbalance hidden in one alternative', () => {
   assert.throws(() => activationBalance('activate S\nalt ok\ndeactivate S\nelse no\nend', 'fixture'), /imbalance/);
