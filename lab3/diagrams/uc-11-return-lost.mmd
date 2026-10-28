@@ -1,0 +1,47 @@
+sequenceDiagram
+    autonumber
+    %% D44 | UC-11 | SC-24; 2: lost
+    %% REQ-20, REQ-09 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D44 — Повернення: Copy lost
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Повернення
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Повернути L1, returned_at=2026-10-20T10:00:00Z
+    activate UI
+    UI->>S: registerReturn(loan_id, returned_at) — Повернути L1, returned_at=2026-10-20T10:00:00Z
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: getOpenLoanWithCopy(loan_id) — Прочитати відкритий Loan L1 і Copy C1
+    activate Store
+    Store-->>S: loaned_at=2026-10-20T10:00:00Z, state=lost
+    deactivate Store
+    S->>S: validateReturnDate(loaned_at, returned_at) — Перевірити returned_at >= loaned_at
+    activate S
+    S-->>S: Рівність дат допустима
+    deactivate S
+    S->>Store: saveReturnedAt(loan_id, returned_at) — Записати тільки L1.returned_at=2026-10-20T10:00:00Z
+    activate Store
+    Store-->>S: Зміну зафіксовано, L1 закритий
+    deactivate Store
+    S->>Availability: computeAvailability(copy_id) — Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: readCopyStateAndOpenLoans(copy_id) — Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=lost, відкритих Loan=0
+    deactivate Store
+    alt state!=active або є відкритий Loan
+    Availability-->>S: false
+    end
+    deactivate Availability
+    S-->>UI: Повернення зареєстровано, доступність false
+    deactivate S
+    UI-->>A: Повернення зареєстровано, доступність false
+    deactivate UI
+    Note over S,Store: Решта полів L1, історія і Copy.state=lost незмінні.

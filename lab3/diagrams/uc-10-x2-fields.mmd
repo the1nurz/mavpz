@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D51 | UC-10 | —; X2
+    %% REQ-11 | NFR-07, NFR-08, NFR-11
+    title D51 — X2: неповні дані видачі
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Оформлення видачі
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Оформити видачу з неповними даними
+    activate UI
+    UI->>S: issueCopy(reader_id, copy_id, loaned_at, due_at) — Оформити видачу з неповними даними
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: validateRequiredFields(data) — Перевірити обов’язкові поля команди
+    activate S
+    S-->>S: fieldErrors — перелік відсутніх обов’язкових полів команди
+    deactivate S
+    alt Є незаповнене обов’язкове поле
+    S-->>UI: validationErrors(fieldErrors) — Заповніть позначені обов’язкові поля
+    end
+    deactivate S
+    UI-->>A: Заповніть обов’язкові поля зі списку fieldErrors
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

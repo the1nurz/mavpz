@@ -1,0 +1,19 @@
+sequenceDiagram
+    autonumber
+    %% D50 | UC-10 | —; X1
+    %% — | NFR-08, NFR-09, NFR-11
+    title D50 — X1: немає права видачі
+    actor A as Читач без права оформлювати видачу
+    participant UI as Вебінтерфейс
+    participant Access as Перевірка доступу
+    A->>UI: Запит оформлення видачі
+    activate UI
+    UI->>Access: authorizeOperation(session, operation) — Перевірити сесію та право видачі
+    activate Access
+    alt Сесія чинна, роль не має права видачі
+    Access-->>UI: 403, оформлення видачі заборонено
+    end
+    deactivate Access
+    UI-->>A: Недостатньо прав
+    deactivate UI
+    Note over UI,Access: LoanService і Store не викликаються. Захищені дані не розкриваються, доменних змін немає.

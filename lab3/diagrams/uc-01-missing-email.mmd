@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D18 | UC-01 | SC-12; 1: Reader без email
+    %% REQ-11 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D18 — Відмова: Reader.email обов'язковий
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Реєстрація читачів
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Зареєструвати Reader без email
+    activate UI
+    UI->>S: registerReader(full_name, email, registered_at) — Зареєструвати Reader без email
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: validateRequiredFields(data) — Перевірити обов’язкові поля
+    activate S
+    S-->>S: Reader.email відсутній
+    deactivate S
+    alt Обов’язковий email відсутній
+    S-->>UI: Заповніть Reader.email
+    end
+    deactivate S
+    UI-->>A: Заповніть Reader.email
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

@@ -1,0 +1,42 @@
+sequenceDiagram
+    autonumber
+    %% D05 | UC-05 | SC-04; єдиний
+    %% REQ-04 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D05 — Видання зі співавторами без Copy
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Ведення каталогу
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Додати Book Книга, ISBN 9780000000001, рік 2026, P1, автори A1 та A2
+    activate UI
+    UI->>S: addBook(title, isbn, publication_year, publisher_id, authorIds) — Додати Book Книга, ISBN 9780000000001, рік 2026, P1, автори A1 та A2
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: checkBookReferencesAndIsbn(publisher_id, isbn) — Перевірити ISBN та Publisher P1
+    activate Store
+    Store-->>S: ISBN вільний, P1 існує
+    deactivate Store
+    loop Кожний поданий автор A1 та A2
+    S->>Store: findAuthorById(author_id) — Перевірити наявність Author
+    activate Store
+    Store-->>S: Автор існує
+    deactivate Store
+    end
+    S->>S: validateBookCardinalities(publisherIds, authorIds) — Перевірити одного видавця і щонайменше одного автора
+    activate S
+    S-->>S: Кардинальності коректні
+    deactivate S
+    S->>Store: saveBookWithAuthors(title, isbn, publication_year, publisher_id, authorIds) — Зберегти Book з UUID, title, isbn, publication_year, publisher_id і прямими зв’язками Author–Book
+    activate Store
+    Store-->>S: Book і зв’язки зафіксовані, 0 Copy
+    deactivate Store
+    S-->>UI: Видання зі співавторами додано
+    deactivate S
+    UI-->>A: Видання зі співавторами додано
+    deactivate UI
+    Note over S,Store: Немає нової сутності BookAuthor, книга може мати 0 Copy.

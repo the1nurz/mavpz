@@ -1,0 +1,96 @@
+sequenceDiagram
+    autonumber
+    %% D40 | UC-10 | SC-22; єдиний; A4
+    %% REQ-19, REQ-17 | NFR-03, NFR-05, NFR-06, NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D40 — A4: конкурентні запити
+    actor A as Бібліотекар, запит для R1
+    actor B as Бібліотекар, запит для R2
+    participant UI1 as Інтерфейс запиту R1
+    participant UI2 as Інтерфейс запиту R2
+    participant S1 as Обробник видачі R1
+    participant S2 as Обробник видачі R2
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Queue as Активна черга
+    participant Store as Спільне доменне сховище
+    Note over S1,Store: Given: C1 active, відкритих Loan 0, активна черга B1 порожня. Два коректні конкурентні запити. Переможець не визначений.
+    par Підготовка запиту R1
+    A->>UI1: Видати C1 читачу R1
+    activate UI1
+    UI1->>S1: issueCopy(reader_id, copy_id, loaned_at, due_at) — R1, C1, коректні дати
+    activate S1
+    S1->>Access: authorizeOperation(session, operation) — Перевірити чинну сесію та роль бібліотекаря
+    activate Access
+    Access-->>S1: Дозволено
+    deactivate Access
+    S1->>Store: resolveLoanReferences(reader_id, copy_id) — Перевірити Reader R1, Copy C1, Book B1
+    activate Store
+    Store-->>S1: Посилання існують
+    deactivate Store
+    S1->>S1: validateIssueData(reader_id, copy_id, loaned_at, due_at) — Перевірити обов’язковість та due_at >= loaned_at
+    activate S1
+    S1-->>S1: Дані коректні
+    deactivate S1
+    S1->>Availability: computeAvailability(copy_id) — Обчислити UC-15 для C1
+    activate Availability
+    Availability-->>S1: Попередній результат true
+    deactivate Availability
+    S1->>Queue: getFirstActiveReservation(book_id) — Прочитати першу active Reservation B1
+    activate Queue
+    Queue-->>S1: []
+    deactivate Queue
+    and Підготовка запиту R2
+    B->>UI2: Видати C1 читачу R2
+    activate UI2
+    UI2->>S2: issueCopy(reader_id, copy_id, loaned_at, due_at) — R2, C1, коректні дати
+    activate S2
+    S2->>Access: authorizeOperation(session, operation) — Перевірити чинну сесію та роль бібліотекаря
+    activate Access
+    Access-->>S2: Дозволено
+    deactivate Access
+    S2->>Store: resolveLoanReferences(reader_id, copy_id) — Перевірити Reader R2, Copy C1, Book B1
+    activate Store
+    Store-->>S2: Посилання існують
+    deactivate Store
+    S2->>S2: validateIssueData(reader_id, copy_id, loaned_at, due_at) — Перевірити обов’язковість та due_at >= loaned_at
+    activate S2
+    S2-->>S2: Дані коректні
+    deactivate S2
+    S2->>Availability: computeAvailability(copy_id) — Обчислити UC-15 для C1
+    activate Availability
+    Availability-->>S2: Попередній результат true
+    deactivate Availability
+    S2->>Queue: getFirstActiveReservation(book_id) — Прочитати першу active Reservation B1
+    activate Queue
+    Queue-->>S2: []
+    deactivate Queue
+    end
+    Note over S1,Store: Попередні reads не гарантують успіх. Кожна наступна спроба атомарно повторно перевіряє актуальні state, відкриті Loan та чергу разом зі створенням Loan. Механізм синхронізації не визначений.
+    par Атомарна спроба запиту R1
+    S1->>Store: issueCopyAtomically(reader_id, copy_id, loaned_at, due_at) — Атомарно перевірити доступність і право R1 та за дозволу створити відкритий Loan
+    activate Store
+    Store-->>S1: result1: зафіксований Loan.id або відмова через відкриту видачу
+    deactivate Store
+    and Атомарна спроба запиту R2
+    S2->>Store: issueCopyAtomically(reader_id, copy_id, loaned_at, due_at) — Атомарно перевірити доступність і право R2 та за дозволу створити відкритий Loan
+    activate Store
+    Store-->>S2: result2: зафіксований Loan.id або відмова через відкриту видачу
+    deactivate Store
+    end
+    Note over S1,Store: Спільний інваріант SC-22: рівно один commit. Допустимі тільки пари result1/result2 = успіх/відмова або відмова/успіх. Обидва успішні чи обидва відхилені не допускаються для заданих двох запитів.
+    alt result1=успіх, result2=відмова
+    S1-->>UI1: Видачу оформлено, Loan.id
+    S2-->>UI2: Відмова, відкрита видача
+    UI1-->>A: Видачу підтверджено
+    UI2-->>B: C1 вже виданий
+    else result1=відмова, result2=успіх
+    S1-->>UI1: Відмова, відкрита видача
+    S2-->>UI2: Видачу оформлено, Loan.id
+    UI1-->>A: C1 вже виданий
+    UI2-->>B: Видачу підтверджено
+    end
+    deactivate S1
+    deactivate S2
+    deactivate UI1
+    deactivate UI2
+    Note over S1,Store: Відкритих Loan C1 рівно 1. Попередня історія незмінна, Reservation не змінювалися.

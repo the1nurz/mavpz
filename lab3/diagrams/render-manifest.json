@@ -1,0 +1,1095 @@
+{
+  "schema": 1,
+  "cli": "12.0.0",
+  "mermaid": "12.2.0",
+  "puppeteer": "25.13.0",
+  "viewport": {
+    "width": 1600,
+    "height": 1000,
+    "deviceScaleFactor": 2
+  },
+  "background": "white",
+  "fontEmbed": false,
+  "environment": {
+    "node": "22.23.3",
+    "platform": "win32",
+    "arch": "x64",
+    "browser": "Chrome/155.0.8059.39",
+    "fontFamily": "Arial"
+  },
+  "inputs": {
+    "config": "ad86124633ba13c45ecef6dfb4242806e84fcae69aa408203e84c8aff753cacf",
+    "tools": {
+      "render-sequences.mjs": "68a1d1177ccdfbc22b8157f7b1b46059ad7a3e7e23e3c2bec2a026b5f11050d2",
+      "render-validation.mjs": "f8da982857f07e64165d31a5e45685844698ab9b477c3d118a3d2b44e145249a",
+      "check-sequences.mjs": "b572609d1d8b4cec63cd2ba7af02bdc048dc573b932bf8f1a5f2ef66d17821a2"
+    },
+    "lock": "1d6000c6d57a5d871ec05c44e16aed2de38607a48c644fc92ea2b2de8ab263ca",
+    "sources": {
+      "lab3/diagrams/shared-active-queue.mmd": "bec79a1d958a719d1d5f58b80aa86e1591ac5ddfea1eef8fba572525395d36d9",
+      "lab3/diagrams/uc-01-email-taken.mmd": "7cd8d1001b1df38399d370d7f817cda3be5b38d9bc8d877c325ac90140206f45",
+      "lab3/diagrams/uc-01-missing-email.mmd": "144685cf3b99eb62893368072164792695567d87897b1329758277ab8df16a36",
+      "lab3/diagrams/uc-01-register.mmd": "2dd1e0e3165568da1ac417407c1d09422cc8aad685f641223f7497667b1c8700",
+      "lab3/diagrams/uc-03-add-author.mmd": "7aa73568fcbdaaca468e14a51a6b91556eb4cf68a6e85b771f3d1feac6479a6a",
+      "lab3/diagrams/uc-04-add-publisher.mmd": "af7bbea0043af50b55892855af2f8792faeb80ed5ae5e56402eb4d68d89d8082",
+      "lab3/diagrams/uc-05-add-book.mmd": "8beceac5b4346e510675c43b189538b36997f52d93fb2a81db9e3ab32a67fdf3",
+      "lab3/diagrams/uc-05-isbn-taken.mmd": "22b93478b7a6f9f7a43b7a814da702eeced23baea5b723219195f8e72a160880",
+      "lab3/diagrams/uc-05-no-author.mmd": "b76a45b437fd096d9d224e912c6c1cafa068d260dafffc7450c95035bfe8d4a2",
+      "lab3/diagrams/uc-05-two-publishers.mmd": "e6d70525988f04fdd5ef10109b7717aa40d7ae8e0cf32c2d6f65ecae0c084e64",
+      "lab3/diagrams/uc-06-add-active.mmd": "57f7fba15277b972d211cc3841ed2ee21314eec91f62e4a25ed156cc3d9f82f2",
+      "lab3/diagrams/uc-06-add-lost.mmd": "7a64a47d7b77fccc153e6d9344fa28b9121640974cc52323593dfbfa1ca8ea54",
+      "lab3/diagrams/uc-06-add-written-off.mmd": "d7ecc69deb614c689621250ef2a53e4e22fd4078dac9d74e66c659932dc63786",
+      "lab3/diagrams/uc-06-inventory-taken.mmd": "79a00b95fed9fd4b9f1a7f390cba953574a6983f1b677f74cad86aa0ace7b22d",
+      "lab3/diagrams/uc-06-missing-book.mmd": "d4c857e2122ecaeb14e848a5869f5fe7b43eeaac5f88abe91e1bb5c0fc83b02f",
+      "lab3/diagrams/uc-07-isbn-empty.mmd": "d4e7a74749ba0e81967d22697eca501668118bfa16655b9de3b0f3f436675342",
+      "lab3/diagrams/uc-07-isbn-found.mmd": "7d50ead30a55e4b0244610d4c5502f6c897ca1350fee98b2bc3f7f29c672388d",
+      "lab3/diagrams/uc-08-active-0.mmd": "cdcdfd3c9b933d88074c807b80a4aab40d3990d6d0a32e8c01e824485e345a0f",
+      "lab3/diagrams/uc-08-active-1.mmd": "642639577144236b2f8b274e61d579ea0486d26973988e947578c5c0d3e393d4",
+      "lab3/diagrams/uc-08-lost-0.mmd": "89d363de888e005d6e4d446b4ef96fbadf328466c69c5099c37285a8bf0c05c0",
+      "lab3/diagrams/uc-08-no-copies.mmd": "bfb3e4abad7ecb04d061df95ca72d8bd58e320d5c1ef79123b46268bfc28a229",
+      "lab3/diagrams/uc-08-written-off-0.mmd": "031dd3843242edf630038ee0300b7171658cb8924975fc79387f6052986118b2",
+      "lab3/diagrams/uc-09-missing-book.mmd": "635c7ab131815a17de9e77e2cc8082a9d4f96c3f8024125dff173e9f61b9808a",
+      "lab3/diagrams/uc-09-reserve-again.mmd": "2e333cf8a7661e20753652516a955095c0ef75b8ee5dc61d35730f2258ba6449",
+      "lab3/diagrams/uc-09-reserve-available.mmd": "e68a979c42b5062596cf1988014c1f17c3fccb1a182a11cf3a2fc472ff716920",
+      "lab3/diagrams/uc-09-reserve-inactive.mmd": "298bd3d0a0e64cbfc23d648ed027f3a9b2e6824d77fbe0393b9f28d9b09aabcb",
+      "lab3/diagrams/uc-09-reserve-loaned.mmd": "f25f1ceedd758ee71b77ecb7f550c1b4c36071dd96912b98c24527a14ba1d134",
+      "lab3/diagrams/uc-09-reserve-no-copies.mmd": "8e6a3756d8f82fb7534751dee5872b1da556718234a840549a4f084d66b953d1",
+      "lab3/diagrams/uc-10-after-notification.mmd": "87b885ea854313c9d856001b138933e3de69415b8b5f9f011b6d4bb492e57e50",
+      "lab3/diagrams/uc-10-concurrent.mmd": "597e7edeee90c4a1752ccf2cb59ca9d34df28d8d33d22707b4826146c2a13ed9",
+      "lab3/diagrams/uc-10-deny-lost.mmd": "2c279abb9bbc927948a7d410d691c454178dc35f805beb09c8886d9eb4ec1d80",
+      "lab3/diagrams/uc-10-deny-open-loan.mmd": "7cbf3620cce05e4fb357f9a880407351eb471a5e25cf52094ba660c8674c5e0d",
+      "lab3/diagrams/uc-10-deny-queue-priority.mmd": "1167b84cd55f736bc53fd262c209c53682ef5330e2b3b8d245adb368760af925",
+      "lab3/diagrams/uc-10-deny-written-off.mmd": "545428709100d41de509b11593b904b66067d00a0312ba4849e205862b956a32",
+      "lab3/diagrams/uc-10-first-reservation.mmd": "2fb4ca56419f0b043d0d42a35860e9f2df87056cb27fb6cedd2556a9cefed2cc",
+      "lab3/diagrams/uc-10-invalid-due-date.mmd": "80328470ef590416e5613a4a0f85d541f66497cd5aa843cc2f7466c546016ead",
+      "lab3/diagrams/uc-10-issue-equal-date.mmd": "020d759846e5041fff01ef07f237d5f514e31ffd46091f4017f6e55e097aaa3f",
+      "lab3/diagrams/uc-10-issue-later-date.mmd": "ece984116a09a1654dd301b9e34c0894b0285a71c005341980b2700048b9441a",
+      "lab3/diagrams/uc-10-x1-forbidden.mmd": "d24187dfe0084a920ac00c37b75df60ebc481dd1661a31e3cb65cdf3352562b0",
+      "lab3/diagrams/uc-10-x1-session.mmd": "169d1efd1a6acf729fd2d4a0a1f3f9e2063d5ee5ac7ef61640a7e2b53c202914",
+      "lab3/diagrams/uc-10-x2-fields.mmd": "bad427fc7706dab45d612fb3f299eda691d4858c836d82e22a5601bc50fa8dbb",
+      "lab3/diagrams/uc-10-x2-references.mmd": "7501d69987845f6999d646f6951f8fd6dbd3c41ae726bee35a7267a7a456d21d",
+      "lab3/diagrams/uc-10-x3-after-commit.mmd": "fe03509c0b6b1289509f990479e7c3f54b3e9a8ba7dc7e3a9aa65d16464c3d0f",
+      "lab3/diagrams/uc-10-x3-before-commit.mmd": "013f1aca6b3ce0eb6e9e4fde68bf2e6c6c878c7bad273bcd7c3e441cd88d279c",
+      "lab3/diagrams/uc-10-x4-capacity.mmd": "9ca868ab0fb5705d399ca02238a2623773140eb10f25656ddb87bc994cf66760",
+      "lab3/diagrams/uc-11-invalid-return-date.mmd": "7920c7c7808d1a91c1f4327eab9aaeaa98f66d6241edb846d268a1fd636e3f80",
+      "lab3/diagrams/uc-11-return-active.mmd": "d0e6045d0b656fe6e969433b1c4a9b84be57625431b85e474652955156663594",
+      "lab3/diagrams/uc-11-return-lost.mmd": "477d53e1244c31fec17b7ce4910b934dc9e0af5bb3cfcfa86522cfe3988af4fc",
+      "lab3/diagrams/uc-11-return-written-off.mmd": "1b591a7cbb24c6331aa80c1ab1b85faa61978cc38c8290d9e601f09914351d91",
+      "lab3/diagrams/uc-12-invalid-state.mmd": "b1c2ab50aa557ca7f106b51230d00c2d092de79df5f8c7ce6aa697c0a695e86e",
+      "lab3/diagrams/uc-12-state-active.mmd": "4d259bbc041ca34fdf44e0a5fcd6e177a67e081e39275de66454758dab318842",
+      "lab3/diagrams/uc-12-state-lost.mmd": "97416be4137338445e87ffe31c42171c20a4bc8b75c680532d216f3dda3a8d88",
+      "lab3/diagrams/uc-12-state-written-off.mmd": "0da92fef8f80c3dc7963a92d8bd9b8298d731599e55a6672f3a1d66cf9c51839",
+      "lab3/diagrams/uc-13-transfer.mmd": "d42749183a3af443d468e46f0126dd88d1f50dab58725bb55694264a7984a4a9",
+      "lab3/diagrams/uc-15-active-0.mmd": "d8ced9270b36484bddc63999ae98beb5c6db25e9539039b8944fa27654635dc3",
+      "lab3/diagrams/uc-15-active-1.mmd": "55cdab470a12ca2e2dcd30eaf4e02eeb6adad89d1dfd5dfdd40ce0bc75d2ddd3",
+      "lab3/diagrams/uc-15-lost-0.mmd": "a2190dae1fd521695fbdb3bcfde5d1ddade0bd06b8bc82280dc5d7a49e5184c3",
+      "lab3/diagrams/uc-15-written-off-0.mmd": "0c85b888a875d9028a4e1f2ed9b8a2cc48a676bda32b5d2b5e9cd3899af83e8e",
+      "lab3/diagrams/uc-17-transfer-failure.mmd": "2a7c341bce5511cb4d4c3cf26188b7405c5e40c6c3ff18ee2f21389e5913fa58"
+    }
+  },
+  "diagrams": {
+    "shared-active-queue": {
+      "source": "lab3/diagrams/shared-active-queue.mmd",
+      "svgSha256": "47a14ad0b935ad6090a62513614c8e39403548573a08dca15c508a8ac60afe7e",
+      "pngSha256": "6e701105c720cd40dc04b453b191a768524cd97de82ee9f57d8a5f3e7b1cc28a",
+      "svg": {
+        "width": 774,
+        "height": 1661
+      },
+      "png": {
+        "width": 1548,
+        "height": 3242
+      },
+      "labelsChecked": 19,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-01-email-taken": {
+      "source": "lab3/diagrams/uc-01-email-taken.mmd",
+      "svgSha256": "f2ec2eb343b23e01aff44810492ff723044b08e93d5cea6eb1e9e05208a3eb6d",
+      "pngSha256": "bc7765ce8f659527fd5c2aaa05eeb4e335b1fb544d9433ce6e8cb4c1592ffc1a",
+      "svg": {
+        "width": 1285,
+        "height": 990
+      },
+      "png": {
+        "width": 2570,
+        "height": 1900
+      },
+      "labelsChecked": 17,
+      "textElements": 39,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-01-missing-email": {
+      "source": "lab3/diagrams/uc-01-missing-email.mmd",
+      "svgSha256": "cd4a2968ef2c06da4878d6965fde2dbdbb85799d853513e5f6a2f96cee5f2a09",
+      "pngSha256": "565b6beae6941e683af2562a92a1b67280a3630ac1cf6327dca0a8d92fd5da86",
+      "svg": {
+        "width": 1283,
+        "height": 1033
+      },
+      "png": {
+        "width": 2566,
+        "height": 1986
+      },
+      "labelsChecked": 17,
+      "textElements": 38,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-01-register": {
+      "source": "lab3/diagrams/uc-01-register.mmd",
+      "svgSha256": "719395a17d82ea398f5a2c8d6c7c5d46ef4276a75ac03acda7792225849ff557",
+      "pngSha256": "57979c9632226a9e9cc2c8bcf0e7649d84a3970e822571dd207896cfa7c9b57e",
+      "svg": {
+        "width": 1289,
+        "height": 1327
+      },
+      "png": {
+        "width": 2578,
+        "height": 2574
+      },
+      "labelsChecked": 21,
+      "textElements": 52,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-03-add-author": {
+      "source": "lab3/diagrams/uc-03-add-author.mmd",
+      "svgSha256": "ee9a02f7d6bb826dcf95b2d22cf16a9a11c799a0631627fa982bca040047f0ef",
+      "pngSha256": "f77ad8364f05396e6bfcd617e646c91f07424aa5f63aa55da251f2bd494718b9",
+      "svg": {
+        "width": 1266,
+        "height": 1126
+      },
+      "png": {
+        "width": 2532,
+        "height": 2172
+      },
+      "labelsChecked": 18,
+      "textElements": 45,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-04-add-publisher": {
+      "source": "lab3/diagrams/uc-04-add-publisher.mmd",
+      "svgSha256": "666578dc03886c88e18b2322ef5e22499f791e1830fca113e46e1df9e16c2aab",
+      "pngSha256": "7f6bddea3c908779035049c1ba6a17dd96c9f15aad8583c3ca8496dcb1dac7fe",
+      "svg": {
+        "width": 1266,
+        "height": 1109
+      },
+      "png": {
+        "width": 2532,
+        "height": 2138
+      },
+      "labelsChecked": 18,
+      "textElements": 44,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-05-add-book": {
+      "source": "lab3/diagrams/uc-05-add-book.mmd",
+      "svgSha256": "2c9eec4df3278fe3b335ff6e77589a77b3e9d5e07a27bd553d3448f90e3b88a8",
+      "pngSha256": "cfa263ec3674a49f905690edbbec74b89b0ce8015bfe291389bc7b266036b229",
+      "svg": {
+        "width": 1267,
+        "height": 1460
+      },
+      "png": {
+        "width": 2534,
+        "height": 2840
+      },
+      "labelsChecked": 23,
+      "textElements": 58,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-05-isbn-taken": {
+      "source": "lab3/diagrams/uc-05-isbn-taken.mmd",
+      "svgSha256": "08c60876ef84a9db768068a5c50c154815d0e2ebd9c37d5a1d97ab6c485081b4",
+      "pngSha256": "cb4dfac0311ca6776bb12c20eb91011968474a83b85de8070fc1764d0404a133",
+      "svg": {
+        "width": 1266,
+        "height": 959
+      },
+      "png": {
+        "width": 2532,
+        "height": 1838
+      },
+      "labelsChecked": 17,
+      "textElements": 37,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-05-no-author": {
+      "source": "lab3/diagrams/uc-05-no-author.mmd",
+      "svgSha256": "77b0ad43b13dc9237dd715b61ace7f3118aec0149bc88aadcef730883cf8db35",
+      "pngSha256": "ecd2f72a67e537e2adbf1d7e84af307a630dc81229e06c42fc7d44b16d4bf913",
+      "svg": {
+        "width": 1266,
+        "height": 1138
+      },
+      "png": {
+        "width": 2532,
+        "height": 2196
+      },
+      "labelsChecked": 17,
+      "textElements": 44,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-05-two-publishers": {
+      "source": "lab3/diagrams/uc-05-two-publishers.mmd",
+      "svgSha256": "2a29f0f1b3ed87e21c00398bc16dbb4e5d331305bd4037a4d04dcab8af4725bc",
+      "pngSha256": "35109d68440f9349a397488dccaf21ef4309d47544933eb8da5689cf6e95e18c",
+      "svg": {
+        "width": 1266,
+        "height": 1294
+      },
+      "png": {
+        "width": 2532,
+        "height": 2508
+      },
+      "labelsChecked": 18,
+      "textElements": 50,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-06-add-active": {
+      "source": "lab3/diagrams/uc-06-add-active.mmd",
+      "svgSha256": "5a5027ca410ab767ab663ce875d403967533de6bbc598560ec58c96c96b1306e",
+      "pngSha256": "5b16a00b0ae0db334ea30480e75f6a06c39f73f191a2ece9c677eb062abcc57c",
+      "svg": {
+        "width": 1282,
+        "height": 1293
+      },
+      "png": {
+        "width": 2564,
+        "height": 2506
+      },
+      "labelsChecked": 21,
+      "textElements": 50,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-06-add-lost": {
+      "source": "lab3/diagrams/uc-06-add-lost.mmd",
+      "svgSha256": "6aedc1d66cf128e8200bbf2d3de8d48552857513c15e81925c73d8e5f36fd05d",
+      "pngSha256": "0e2bb02205fc2c1f71af1e4136c2368a8803911d025d275d44c128e969da814f",
+      "svg": {
+        "width": 1282,
+        "height": 1276
+      },
+      "png": {
+        "width": 2564,
+        "height": 2472
+      },
+      "labelsChecked": 21,
+      "textElements": 49,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-06-add-written-off": {
+      "source": "lab3/diagrams/uc-06-add-written-off.mmd",
+      "svgSha256": "7dd08033aed7d09957f09832a49e1bd89657b502b2e38c56e0135270bc3388f1",
+      "pngSha256": "a41c487abadbaacb0a091c515162dd8495c68a91743799a926ff0c61599dc610",
+      "svg": {
+        "width": 1282,
+        "height": 1327
+      },
+      "png": {
+        "width": 2564,
+        "height": 2574
+      },
+      "labelsChecked": 21,
+      "textElements": 52,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-06-inventory-taken": {
+      "source": "lab3/diagrams/uc-06-inventory-taken.mmd",
+      "svgSha256": "b657c250f98b0c836501ed2c30eee2b90a4c43c5fa08599106cf42c084998fe0",
+      "pngSha256": "5729174a97f861fa63e821387c7e926ba1b5a2e9ca958cf5c92abdbf45fdc1f1",
+      "svg": {
+        "width": 1282,
+        "height": 942
+      },
+      "png": {
+        "width": 2564,
+        "height": 1804
+      },
+      "labelsChecked": 17,
+      "textElements": 36,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-06-missing-book": {
+      "source": "lab3/diagrams/uc-06-missing-book.mmd",
+      "svgSha256": "2395526b21f14168c68047a7e2b478a20eaeaeb87eb69297613ce9e25ddbc65b",
+      "pngSha256": "2122906a44304ac8e8503fbf64102271dca0edad1e87bca5d76254710d777af7",
+      "svg": {
+        "width": 1266,
+        "height": 976
+      },
+      "png": {
+        "width": 2532,
+        "height": 1872
+      },
+      "labelsChecked": 17,
+      "textElements": 38,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-07-isbn-empty": {
+      "source": "lab3/diagrams/uc-07-isbn-empty.mmd",
+      "svgSha256": "127bcd1ad553b85ace99a4b899d4038526f6efc4f5fbde700b7aaa5fa1c98b71",
+      "pngSha256": "fe816793e3abc30f9fa8ecaf91b670c8e960d6dceeae09ba1ec6b182c7400e2e",
+      "svg": {
+        "width": 1266,
+        "height": 942
+      },
+      "png": {
+        "width": 2532,
+        "height": 1804
+      },
+      "labelsChecked": 17,
+      "textElements": 36,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-07-isbn-found": {
+      "source": "lab3/diagrams/uc-07-isbn-found.mmd",
+      "svgSha256": "6689839230bb34b2d5a224e47c4715b53251f0f26aea68dbd4eb23c4c8b75956",
+      "pngSha256": "43f0f945daa8742a48bb77900be478b8e8e7794c64d7dadf42c1885597dea031",
+      "svg": {
+        "width": 1266,
+        "height": 942
+      },
+      "png": {
+        "width": 2532,
+        "height": 1804
+      },
+      "labelsChecked": 17,
+      "textElements": 36,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-08-active-0": {
+      "source": "lab3/diagrams/uc-08-active-0.mmd",
+      "svgSha256": "16d9b0785e0acf58e437904a5de0e15c9c1d32c456463e2faed0429db8fa5984",
+      "pngSha256": "8948acdd041c656b12bfed88e04dbfd381f8ed8fd26349f0a7730f0ea5874aa9",
+      "svg": {
+        "width": 1537,
+        "height": 1460
+      },
+      "png": {
+        "width": 3074,
+        "height": 2840
+      },
+      "labelsChecked": 25,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-08-active-1": {
+      "source": "lab3/diagrams/uc-08-active-1.mmd",
+      "svgSha256": "e5a7b431025befed98b4ed1d78b9843281485fb0d614326c34b90038393ae932",
+      "pngSha256": "aff4d2df1255e1ec72455f9ad0780a0d9af8ef7d9a683e262530aba1a09c5913",
+      "svg": {
+        "width": 1537,
+        "height": 1460
+      },
+      "png": {
+        "width": 3074,
+        "height": 2840
+      },
+      "labelsChecked": 25,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-08-lost-0": {
+      "source": "lab3/diagrams/uc-08-lost-0.mmd",
+      "svgSha256": "22c7f34ca2e4d27dccdbcfb36a8e8a23774fe17f06733fcddeb06b951a5096b3",
+      "pngSha256": "5febd8ffaf77418cb637d6efe3c4e9b99f025040cfea27bf2809b2888a8db8a9",
+      "svg": {
+        "width": 1537,
+        "height": 1460
+      },
+      "png": {
+        "width": 3074,
+        "height": 2840
+      },
+      "labelsChecked": 25,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-08-no-copies": {
+      "source": "lab3/diagrams/uc-08-no-copies.mmd",
+      "svgSha256": "957a044303e7c576ba387299cdda3f6686f5ef7f9a36555e77dee1a298814bea",
+      "pngSha256": "083fa4be5120dabeb5aeaa986dc57fbd81c5b43f02dc03a70f0e89a5dcc5e7d1",
+      "svg": {
+        "width": 1277,
+        "height": 925
+      },
+      "png": {
+        "width": 2554,
+        "height": 1770
+      },
+      "labelsChecked": 17,
+      "textElements": 35,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-08-written-off-0": {
+      "source": "lab3/diagrams/uc-08-written-off-0.mmd",
+      "svgSha256": "907a9f612baf0b40b93fd8e75f4ff98498c497380dd37dbdd66ba3ff512554f3",
+      "pngSha256": "8ce5fe981d74e86accdf78f0e327f19206e66cbfd5f2d79aa0aa746b97d51ba7",
+      "svg": {
+        "width": 1537,
+        "height": 1460
+      },
+      "png": {
+        "width": 3074,
+        "height": 2840
+      },
+      "labelsChecked": 25,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-09-missing-book": {
+      "source": "lab3/diagrams/uc-09-missing-book.mmd",
+      "svgSha256": "8c742d02de6aeb71729d3aefd6a8c3bee322e91faefd926acf4019a30527377b",
+      "pngSha256": "bd568264e3e7d86541f139ea10b5e8132161c555c3677078092861210562726e",
+      "svg": {
+        "width": 1268,
+        "height": 993
+      },
+      "png": {
+        "width": 2536,
+        "height": 1906
+      },
+      "labelsChecked": 17,
+      "textElements": 39,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-09-reserve-again": {
+      "source": "lab3/diagrams/uc-09-reserve-again.mmd",
+      "svgSha256": "4b57d9624614bab925dd851832546f183544eccc0a8ce7b5df2130d81b3fba7c",
+      "pngSha256": "cc74cdb5d7d843af1f0654094b5732d9b5430233790518d0247a62baddd0353d",
+      "svg": {
+        "width": 1266,
+        "height": 1398
+      },
+      "png": {
+        "width": 2532,
+        "height": 2716
+      },
+      "labelsChecked": 22,
+      "textElements": 53,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-09-reserve-available": {
+      "source": "lab3/diagrams/uc-09-reserve-available.mmd",
+      "svgSha256": "1f3ce70b30ff668572739332b0e46fd4a6dce32494919d650c31468937aa53da",
+      "pngSha256": "e4a7cadfdd66a03def3b4895e4c754868d9486383e5863c997381cfe8e8a29af",
+      "svg": {
+        "width": 1266,
+        "height": 1398
+      },
+      "png": {
+        "width": 2532,
+        "height": 2716
+      },
+      "labelsChecked": 22,
+      "textElements": 53,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-09-reserve-inactive": {
+      "source": "lab3/diagrams/uc-09-reserve-inactive.mmd",
+      "svgSha256": "ab7ad77b054a2709c2ec5b5db9b485f361602e2b2931d9e9ab4a7dd9a6af829f",
+      "pngSha256": "0be551b06f51d55f0133a512123891a6bad0e399f54f6ed8648f292febd42d60",
+      "svg": {
+        "width": 1266,
+        "height": 1398
+      },
+      "png": {
+        "width": 2532,
+        "height": 2716
+      },
+      "labelsChecked": 22,
+      "textElements": 53,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-09-reserve-loaned": {
+      "source": "lab3/diagrams/uc-09-reserve-loaned.mmd",
+      "svgSha256": "5cf92609fbb4a580546e330083c9f0d599ca80b6f0a1ce7a56aabe19c923b753",
+      "pngSha256": "fdfee6d38b5c470117d20dd834b3a7a590505ac51ae8a95e06abfcd7a0eff3ca",
+      "svg": {
+        "width": 1266,
+        "height": 1398
+      },
+      "png": {
+        "width": 2532,
+        "height": 2716
+      },
+      "labelsChecked": 22,
+      "textElements": 53,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-09-reserve-no-copies": {
+      "source": "lab3/diagrams/uc-09-reserve-no-copies.mmd",
+      "svgSha256": "9b5e1164304c4f71bafc904d0c6c7160e2897087f8a75018b1564efd09ba0641",
+      "pngSha256": "25de71e3196301d2f9d73b8fa8a470f38b425952d4d84c6c69f7a2dff94311e9",
+      "svg": {
+        "width": 1266,
+        "height": 1398
+      },
+      "png": {
+        "width": 2532,
+        "height": 2716
+      },
+      "labelsChecked": 22,
+      "textElements": 53,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-after-notification": {
+      "source": "lab3/diagrams/uc-10-after-notification.mmd",
+      "svgSha256": "266e4de1d82b4e49e2192af007138d813dccc54339a1a91cd7a0e2142195cf1a",
+      "pngSha256": "c045fff657a1b3293af8cfea1949f451d6fccb4be600b446b6c76404a48d6637",
+      "svg": {
+        "width": 1790,
+        "height": 1776
+      },
+      "png": {
+        "width": 3580,
+        "height": 3472
+      },
+      "labelsChecked": 28,
+      "textElements": 72,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-concurrent": {
+      "source": "lab3/diagrams/uc-10-concurrent.mmd",
+      "svgSha256": "c6431573358715c5ea1e5223fd9633cd548da3797dfbf76039c173c01bbf4078",
+      "pngSha256": "aa0b45c187ad47b2f3a308c7124c873e089b2abb5ac71ffc7b11175b6300e2a8",
+      "svg": {
+        "width": 2516,
+        "height": 3053
+      },
+      "png": {
+        "width": 5032,
+        "height": 6026
+      },
+      "labelsChecked": 57,
+      "textElements": 128,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-deny-lost": {
+      "source": "lab3/diagrams/uc-10-deny-lost.mmd",
+      "svgSha256": "ec28d8ac0454fa3ff8b6f910a7b09a8a53272e31b260a191fe5a11f91c486c4d",
+      "pngSha256": "e0b6f9581b13bf7bd5eddf326911e7a40a73351c3ef36b04577c6a79c1e3744f",
+      "svg": {
+        "width": 1790,
+        "height": 1688
+      },
+      "png": {
+        "width": 3580,
+        "height": 3296
+      },
+      "labelsChecked": 27,
+      "textElements": 70,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-deny-open-loan": {
+      "source": "lab3/diagrams/uc-10-deny-open-loan.mmd",
+      "svgSha256": "421bbaad321074d73274b2c6e9454a0c3f087f458433e9f942e3b4110be1ae48",
+      "pngSha256": "5ea4bed56248a84b4da9e87a74a12b9eca8e7230fdcdabc90ee1872402c8884d",
+      "svg": {
+        "width": 1790,
+        "height": 1688
+      },
+      "png": {
+        "width": 3580,
+        "height": 3296
+      },
+      "labelsChecked": 27,
+      "textElements": 70,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-deny-queue-priority": {
+      "source": "lab3/diagrams/uc-10-deny-queue-priority.mmd",
+      "svgSha256": "f455a6e74846b7b33d2d25aadcb4aec887632401472d977bbbc751152c22fff1",
+      "pngSha256": "64702c434630e0507a726b409c1d777f535baeb8c325662067a11c4d49c8cc5e",
+      "svg": {
+        "width": 1798,
+        "height": 2050
+      },
+      "png": {
+        "width": 3596,
+        "height": 4020
+      },
+      "labelsChecked": 32,
+      "textElements": 85,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-deny-written-off": {
+      "source": "lab3/diagrams/uc-10-deny-written-off.mmd",
+      "svgSha256": "e303b08da7eb8e83843311d6a463f30b06f279019ebbfd4577c0dde3bc7522bd",
+      "pngSha256": "b1e5ef03e56f61d86e57ae2ce1d6f3242390a7c75b55891f7d06f780484a294c",
+      "svg": {
+        "width": 1790,
+        "height": 1688
+      },
+      "png": {
+        "width": 3580,
+        "height": 3296
+      },
+      "labelsChecked": 27,
+      "textElements": 70,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-first-reservation": {
+      "source": "lab3/diagrams/uc-10-first-reservation.mmd",
+      "svgSha256": "66f6c66c1a7245ae2a9262178a9b6e5f8fef188bf9866309bb3baee8aa8d6a03",
+      "pngSha256": "bc133cdc8931fd30d60021da0d202dbb8a78721037bf93d94827412f423e787e",
+      "svg": {
+        "width": 1836,
+        "height": 3270
+      },
+      "png": {
+        "width": 3672,
+        "height": 6460
+      },
+      "labelsChecked": 43,
+      "textElements": 127,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-invalid-due-date": {
+      "source": "lab3/diagrams/uc-10-invalid-due-date.mmd",
+      "svgSha256": "71ef6699a2c43f8873961aaa47fa31af19989e900db039fa138884db65f63a4a",
+      "pngSha256": "01f427f1b82a18e897524290e34a5f5b6031ccc2f88df28437bdc69d28e94b69",
+      "svg": {
+        "width": 1792,
+        "height": 1277
+      },
+      "png": {
+        "width": 3584,
+        "height": 2474
+      },
+      "labelsChecked": 20,
+      "textElements": 53,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-issue-equal-date": {
+      "source": "lab3/diagrams/uc-10-issue-equal-date.mmd",
+      "svgSha256": "f49a2b6dcadbcc54185917b5e8626d1e3e8262fbf4dd0710ff3ade2d7bf3bea0",
+      "pngSha256": "9a595ba49a3cca51a027c8f664e5296b4e58032ae1bc8ddf205a4e5282db9b2f",
+      "svg": {
+        "width": 1824,
+        "height": 2757
+      },
+      "png": {
+        "width": 3648,
+        "height": 5434
+      },
+      "labelsChecked": 39,
+      "textElements": 109,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-issue-later-date": {
+      "source": "lab3/diagrams/uc-10-issue-later-date.mmd",
+      "svgSha256": "b4f21b4d4c8e1a5f50e0e127094f594ece9a6880f26a04ef52ee8158dec7a6ef",
+      "pngSha256": "e34d8728179c12af4a0ba5073449b76c6b5f8f98583bb6251385295334067963",
+      "svg": {
+        "width": 1822,
+        "height": 2757
+      },
+      "png": {
+        "width": 3644,
+        "height": 5434
+      },
+      "labelsChecked": 39,
+      "textElements": 109,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-x1-forbidden": {
+      "source": "lab3/diagrams/uc-10-x1-forbidden.mmd",
+      "svgSha256": "9de1c502e4cfc5da3df6241ec85dc54356eff89d95227c6082ad2a7dee6a78ae",
+      "pngSha256": "b5ce897009cb203ebd6bc16edc483a8eae786314f4d71e472623c5dfa4e55bdc",
+      "svg": {
+        "width": 766,
+        "height": 659
+      },
+      "png": {
+        "width": 1532,
+        "height": 1238
+      },
+      "labelsChecked": 10,
+      "textElements": 24,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-x1-session": {
+      "source": "lab3/diagrams/uc-10-x1-session.mmd",
+      "svgSha256": "8ce9fed6704b35691a9db5c5137039b23623999f3565f910af41009a72fd34b8",
+      "pngSha256": "09d2b4446db3e22fba0a36c418b13f74e80d58a753334c2d996c2efddf771603",
+      "svg": {
+        "width": 766,
+        "height": 849
+      },
+      "png": {
+        "width": 1532,
+        "height": 1618
+      },
+      "labelsChecked": 11,
+      "textElements": 32,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-x2-fields": {
+      "source": "lab3/diagrams/uc-10-x2-fields.mmd",
+      "svgSha256": "774a70b7988120e374470e8d730115c8e84710fd1f845430e6b3a3eca77543fd",
+      "pngSha256": "944986c4603e3eb0db3cd3113e1fc2c7f4ce97b2fc8bc22050e84a320b4ec7cb",
+      "svg": {
+        "width": 1274,
+        "height": 1152
+      },
+      "png": {
+        "width": 2548,
+        "height": 2224
+      },
+      "labelsChecked": 17,
+      "textElements": 45,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-x2-references": {
+      "source": "lab3/diagrams/uc-10-x2-references.mmd",
+      "svgSha256": "44ebd3bbaf909e9bd29f069e68edd65d9ac4ded2edecde084c1fade6479074a4",
+      "pngSha256": "4b2e73f4ad6398051a1ffefcf90c30311ea831a81fe451d1852786bc53879194",
+      "svg": {
+        "width": 1268,
+        "height": 1149
+      },
+      "png": {
+        "width": 2536,
+        "height": 2218
+      },
+      "labelsChecked": 18,
+      "textElements": 45,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-x3-after-commit": {
+      "source": "lab3/diagrams/uc-10-x3-after-commit.mmd",
+      "svgSha256": "0099a0d9f9be207c6509896ef744eac316f3c2797009bef66d08b636b0e739cb",
+      "pngSha256": "9607df776245ab4d2275170baeeb591ec45bfaae562445d25b108a7c8134a8e8",
+      "svg": {
+        "width": 1822,
+        "height": 3016
+      },
+      "png": {
+        "width": 3644,
+        "height": 5952
+      },
+      "labelsChecked": 41,
+      "textElements": 119,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-x3-before-commit": {
+      "source": "lab3/diagrams/uc-10-x3-before-commit.mmd",
+      "svgSha256": "a178e132b96e884d65e6280029a4eb2af17533b55c4e427a3469779b63cdb4bb",
+      "pngSha256": "1b8fc5a174391fbbfa6bcfde420258b30edb401725033931b731eb6b2c6440d1",
+      "svg": {
+        "width": 1836,
+        "height": 3305
+      },
+      "png": {
+        "width": 3672,
+        "height": 6530
+      },
+      "labelsChecked": 43,
+      "textElements": 130,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-10-x4-capacity": {
+      "source": "lab3/diagrams/uc-10-x4-capacity.mmd",
+      "svgSha256": "12a1773b937841a55e264f19bcda9ae756b11296dd8f5af29a8f45f4a7d77d08",
+      "pngSha256": "337f811cd45c672a10ddd907c3377fc00d72da7f075b0b6881db46f3cded0c7b",
+      "svg": {
+        "width": 757,
+        "height": 764
+      },
+      "png": {
+        "width": 1514,
+        "height": 1448
+      },
+      "labelsChecked": 11,
+      "textElements": 25,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-11-invalid-return-date": {
+      "source": "lab3/diagrams/uc-11-invalid-return-date.mmd",
+      "svgSha256": "2eabab266cf610480bb8191e65ce92a5780690ed873d516b1f463300ed947d0b",
+      "pngSha256": "913c2000061b1c343ae76a17c1e18a940dce408d747efd704d500dde3602b833",
+      "svg": {
+        "width": 1284,
+        "height": 1163
+      },
+      "png": {
+        "width": 2568,
+        "height": 2246
+      },
+      "labelsChecked": 19,
+      "textElements": 44,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-11-return-active": {
+      "source": "lab3/diagrams/uc-11-return-active.mmd",
+      "svgSha256": "66af8ec1d6fdd3c0d40d338bfc38fa89757626743fabaff64a8fafff75b2e6b2",
+      "pngSha256": "d84416c24d0c4f020ea1b958365e9f25ca0d81f125c4e357cbaca02d92b92968",
+      "svg": {
+        "width": 1544,
+        "height": 1522
+      },
+      "png": {
+        "width": 3088,
+        "height": 2964
+      },
+      "labelsChecked": 26,
+      "textElements": 62,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-11-return-lost": {
+      "source": "lab3/diagrams/uc-11-return-lost.mmd",
+      "svgSha256": "fac22638c0f146bed4f3c4a8609d75478a35a5914497cbe36e6659d1de78bd40",
+      "pngSha256": "55931b2d9238714a979d7db3b59e0cd5b5c494801a032ff3007d78c0b7e63d0a",
+      "svg": {
+        "width": 1544,
+        "height": 1522
+      },
+      "png": {
+        "width": 3088,
+        "height": 2964
+      },
+      "labelsChecked": 26,
+      "textElements": 62,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-11-return-written-off": {
+      "source": "lab3/diagrams/uc-11-return-written-off.mmd",
+      "svgSha256": "86035a0f104b27d82e3beaa8e0c8e8b70bbea1bc3849e5d3bb0572a8ab509af5",
+      "pngSha256": "5df881f3696fb796027df68ede8ac3489ce2f0f555ce7fc70f077f090ad38ab2",
+      "svg": {
+        "width": 1544,
+        "height": 1522
+      },
+      "png": {
+        "width": 3088,
+        "height": 2964
+      },
+      "labelsChecked": 26,
+      "textElements": 62,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-12-invalid-state": {
+      "source": "lab3/diagrams/uc-12-invalid-state.mmd",
+      "svgSha256": "770ad8c087dd3245757a1fbf7373be3643a3a5ad36cace8dc7dae2071df276c6",
+      "pngSha256": "392e2c635d2caf410dd3452e3e63b88f9ed17e68bf052588bb017eaf4862edd5",
+      "svg": {
+        "width": 1274,
+        "height": 1053
+      },
+      "png": {
+        "width": 2548,
+        "height": 2026
+      },
+      "labelsChecked": 17,
+      "textElements": 39,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-12-state-active": {
+      "source": "lab3/diagrams/uc-12-state-active.mmd",
+      "svgSha256": "82928ef2b9c07357178853d32a91206b578a581bdc786b7652c8bc947afe8c10",
+      "pngSha256": "3aa54ab0915987bebc4dfa1ab793d86f7e93de21f16201b6cb576fbda6fa23b6",
+      "svg": {
+        "width": 1534,
+        "height": 1446
+      },
+      "png": {
+        "width": 3068,
+        "height": 2812
+      },
+      "labelsChecked": 25,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-12-state-lost": {
+      "source": "lab3/diagrams/uc-12-state-lost.mmd",
+      "svgSha256": "36279c6333fb4498ce747f22aa305232dd4b4426a5e2f02448762085cf188bc2",
+      "pngSha256": "0c02de548f3199c86ab82feb33a504b8451cb5204ac65c649c1ac10a6e487097",
+      "svg": {
+        "width": 1534,
+        "height": 1446
+      },
+      "png": {
+        "width": 3068,
+        "height": 2812
+      },
+      "labelsChecked": 25,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-12-state-written-off": {
+      "source": "lab3/diagrams/uc-12-state-written-off.mmd",
+      "svgSha256": "02b6639fbfdaab1e9691d870aed64d23d91bfcc8a3f99191278b438418c3fa8e",
+      "pngSha256": "7e3ff7f4a1611d5fd8929d014320df2be5adb2e85a5178dbaf929cb33f76e144",
+      "svg": {
+        "width": 1534,
+        "height": 1446
+      },
+      "png": {
+        "width": 3068,
+        "height": 2812
+      },
+      "labelsChecked": 25,
+      "textElements": 56,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-13-transfer": {
+      "source": "lab3/diagrams/uc-13-transfer.mmd",
+      "svgSha256": "0911bab270559594102cbcc1a4dc173441e3d5c8bd8ceeff83ece856bb397037",
+      "pngSha256": "3454a41bb17ecd39049e289ae47afadd83ee11ffb626a82eaf9390d98261ab01",
+      "svg": {
+        "width": 1276,
+        "height": 1270
+      },
+      "png": {
+        "width": 2552,
+        "height": 2460
+      },
+      "labelsChecked": 22,
+      "textElements": 51,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-15-active-0": {
+      "source": "lab3/diagrams/uc-15-active-0.mmd",
+      "svgSha256": "54f23ca4aa7887a4c3375532ce33b494bdcd7a08d54999077290ffae3ba37cce",
+      "pngSha256": "231ad9ed32e850eb8de4c1cbf98b30a457f1d00c905de6eaa8bf11477a610c1f",
+      "svg": {
+        "width": 778,
+        "height": 798
+      },
+      "png": {
+        "width": 1556,
+        "height": 1516
+      },
+      "labelsChecked": 11,
+      "textElements": 27,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-15-active-1": {
+      "source": "lab3/diagrams/uc-15-active-1.mmd",
+      "svgSha256": "50c31778c7cd56e1260ef2e5d8911b52b263e345b704fd162a0575b962199597",
+      "pngSha256": "1caeaf98ec098a2a324f99d40df4e31fdcdaef5b57ce150f5863233ceb36f927",
+      "svg": {
+        "width": 778,
+        "height": 798
+      },
+      "png": {
+        "width": 1556,
+        "height": 1516
+      },
+      "labelsChecked": 11,
+      "textElements": 27,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-15-lost-0": {
+      "source": "lab3/diagrams/uc-15-lost-0.mmd",
+      "svgSha256": "22544362e203e7d88aa9cb424a6c5603ba80970bffe449e228d0c7374bb4d434",
+      "pngSha256": "44569ea8047493dbddd24c973b53747ce799ae0e82c0d3a023456529c7dcad2e",
+      "svg": {
+        "width": 778,
+        "height": 798
+      },
+      "png": {
+        "width": 1556,
+        "height": 1516
+      },
+      "labelsChecked": 11,
+      "textElements": 27,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-15-written-off-0": {
+      "source": "lab3/diagrams/uc-15-written-off-0.mmd",
+      "svgSha256": "184df842c713c5ca33dae36e6101a95ce6d40daed7a605ea2de65fb35e16a63e",
+      "pngSha256": "5d52387e4ba6f6ce98189832e7db2efc1c1d9545a7299681d0c4a59f97a78c2a",
+      "svg": {
+        "width": 778,
+        "height": 798
+      },
+      "png": {
+        "width": 1556,
+        "height": 1516
+      },
+      "labelsChecked": 11,
+      "textElements": 27,
+      "clipped": [],
+      "overlaps": []
+    },
+    "uc-17-transfer-failure": {
+      "source": "lab3/diagrams/uc-17-transfer-failure.mmd",
+      "svgSha256": "9cda45c47e215255aed927c34ba250bb770e4b35eec3e3ba6ce07d3f00a35487",
+      "pngSha256": "7e33ce8b314fa817f71bcba08cfe41dbc4ac6c4e8b1fdc07423a81e0cd189665",
+      "svg": {
+        "width": 1776,
+        "height": 1659
+      },
+      "png": {
+        "width": 3552,
+        "height": 3238
+      },
+      "labelsChecked": 29,
+      "textElements": 72,
+      "clipped": [],
+      "overlaps": []
+    }
+  }
+}

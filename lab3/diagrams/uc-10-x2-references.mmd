@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    %% D52 | UC-10 | —; X2
+    %% REQ-11 | NFR-07, NFR-08, NFR-11
+    title D52 — X2: відсутні посилання видачі
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Оформлення видачі
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Оформити видачу з відсутнім посиланням
+    activate UI
+    UI->>S: issueCopy(reader_id, copy_id, loaned_at, due_at) — Оформити видачу з відсутнім посиланням
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: resolveLoanReferences(reader_id, copy_id) — Перевірити Reader, Copy та Book через Copy.book_id
+    activate Store
+    Store-->>S: referenceError(field, reason) — назва порушеного посилання та причина
+    deactivate Store
+    Note over S,Store: Немає Reader — field=Loan.reader_id. Немає Copy — field=Loan.copy_id. Немає пов’язаного Book — field=Copy.book_id. Це варіанти REQ-11, не нові правила чи пріоритет помилок.
+    alt Посилання не існує
+    S-->>UI: referenceError(field, reason) — Некоректне посилання
+    end
+    deactivate S
+    UI-->>A: Некоректне посилання: referenceError.field, referenceError.reason
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

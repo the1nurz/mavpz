@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D10 | UC-06 | SC-07; єдиний
+    %% REQ-07 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D10 — Відмова: інвентарний номер зайнятий
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Облік примірників
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Додати Copy з inventory_number=INV-1
+    activate UI
+    UI->>S: addCopy(book_id, inventory_number, state) — Додати Copy з inventory_number=INV-1
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: findCopyByInventoryNumber(inventory_number) — Знайти Copy за INV-1
+    activate Store
+    Store-->>S: Наявний Copy C1
+    deactivate Store
+    alt Номер належить C1
+    S-->>UI: інвентарний номер зайнятий
+    end
+    deactivate S
+    UI-->>A: інвентарний номер зайнятий
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

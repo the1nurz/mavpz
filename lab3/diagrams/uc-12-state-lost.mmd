@@ -1,0 +1,44 @@
+sequenceDiagram
+    autonumber
+    %% D24 | UC-12 | SC-14; 2: lost
+    %% REQ-21, REQ-09 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D24 — Зміна стану: lost за відкритого Loan
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Облік примірників
+    participant Access as Перевірка доступу
+    participant Availability as Фізична доступність
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Записати C1.state=lost
+    activate UI
+    UI->>S: updateCopyState(copy_id, state) — Записати C1.state=lost
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    Note over S,Store: Given: C1 має відкритий Loan L1 та попередню історію.
+    S->>S: validateCopyState(state) — Перевірити допустимий state
+    activate S
+    S-->>S: Допустимий lost
+    deactivate S
+    S->>Store: saveCopyState(copy_id, state) — Змінити тільки Copy C1.state на lost
+    activate Store
+    Store-->>S: state зафіксовано, L1 залишається відкритим
+    deactivate Store
+    S->>Availability: computeAvailability(copy_id) — Обчислити фізичну доступність C1 (UC-15)
+    activate Availability
+    Availability->>Store: readCopyStateAndOpenLoans(copy_id) — Прочитати Copy.state та Loan C1 з порожнім returned_at
+    activate Store
+    Store-->>Availability: state=lost, відкритих Loan=1
+    deactivate Store
+    alt state!=active або є відкритий Loan
+    Availability-->>S: false
+    end
+    deactivate Availability
+    S-->>UI: Стан lost збережено, фізична доступність false
+    deactivate S
+    UI-->>A: Стан lost збережено, фізична доступність false
+    deactivate UI
+    Note over S,Store: Історія Loan не змінена. Запис state не закриває видачу.

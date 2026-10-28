@@ -1,0 +1,38 @@
+sequenceDiagram
+    autonumber
+    %% D01 | UC-01 | SC-01; єдиний
+    %% REQ-01 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D01 — Реєстрація читача
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Реєстрація читачів
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Зареєструвати Олену, reader@example.org, registered_at=2026-10-20T09:00:00Z
+    activate UI
+    UI->>S: registerReader(full_name, email, registered_at) — Зареєструвати Олену, reader@example.org, registered_at=2026-10-20T09:00:00Z
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: validateRequiredFields(data) — Перевірити обов’язкові поля Reader
+    activate S
+    S-->>S: Усі поля заповнені
+    deactivate S
+    S->>Store: isReaderEmailUnique(email) — Перевірити унікальність email reader@example.org
+    activate Store
+    Store-->>S: Email вільний
+    deactivate Store
+    alt Reader.full_name, email і registered_at коректні, email вільний (REQ-01, REQ-02, REQ-11)
+    S->>Store: insertReaderWithUniqueEmail(full_name, email, registered_at) — Зберегти Reader з новим UUID, full_name, email, registered_at
+    activate Store
+    Store-->>S: Reader зафіксований, id=Rnew
+    deactivate Store
+    S-->>UI: Читача зареєстровано, id=Rnew
+    UI-->>A: Читача зареєстровано, id=Rnew
+    end
+    deactivate S
+    deactivate UI
+    Note over S,Store: Унікальний email збережений. Читач може не мати Loan або Reservation.

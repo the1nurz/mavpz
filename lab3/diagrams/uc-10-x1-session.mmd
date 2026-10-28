@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    %% D49 | UC-10 | —; X1
+    %% — | NFR-07, NFR-09, NFR-10, NFR-11
+    title D49 — X1: немає чинної сесії
+    actor A as Користувач без чинної сесії
+    participant UI as Вебінтерфейс
+    participant Access as Перевірка доступу
+    A->>UI: Запит оформлення видачі
+    activate UI
+    UI->>Access: authorizeOperation(session, operation) — Перевірити сесію та право видачі
+    activate Access
+    alt Сесія відсутня, некоректна, прострочена або анульована
+    Access-->>UI: 401, потрібна чинна сесія
+    end
+    deactivate Access
+    UI-->>A: Увійдіть до системи
+    deactivate UI
+    Note over UI,Access: LoanService і Store не викликаються. Захищені дані не розкриваються, доменних змін немає.
+    Note over Access: За NFR-10 сесія нечинна на межі 30 хв бездіяльності та після успішного виходу. Фонове опитування її не подовжує.

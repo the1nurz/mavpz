@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    %% D21 | UC-05 | SC-12; 4: Book з двома видавцями
+    %% REQ-11 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D21 — Відмова: два видавці Book
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Ведення каталогу
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Додати Book з двома наявними видавцями P1 і P2
+    activate UI
+    UI->>S: addBook(title, isbn, publication_year, publisherIds=[P1, P2], authorIds) — Передати обидва значення із сирої форми до валідації
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>S: validateBookCardinalities(publisherIds, authorIds) — Перевірити кардинальності поданих зв’язків
+    activate S
+    S-->>S: Порушено Publisher–Book, потрібен рівно один видавець
+    Note over UI,S: publisherIds — значення некоректної форми, не атрибут Book. Єдиний Book.publisher_id не зберігається до успішної валідації.
+    deactivate S
+    alt Видавців 2
+    S-->>UI: Порушено Publisher–Book, потрібен рівно один видавець
+    end
+    deactivate S
+    UI-->>A: Порушено Publisher–Book, потрібен рівно один видавець
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

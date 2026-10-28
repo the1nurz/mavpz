@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D06 | UC-05 | SC-05; єдиний
+    %% REQ-05 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D06 — Відмова: ISBN зайнятий
+    actor A as Бібліотекар
+    participant UI as Вебінтерфейс
+    participant S as Ведення каталогу
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Додати видання з ISBN 9780000000001
+    activate UI
+    UI->>S: addBook(title, isbn, publication_year, publisher_id, authorIds) — Додати видання з ISBN 9780000000001
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: findBookByIsbn(isbn) — Знайти Book за ISBN
+    activate Store
+    Store-->>S: Наявний Book B1
+    deactivate Store
+    alt ISBN вже належить B1
+    S-->>UI: ISBN зайнятий
+    end
+    deactivate S
+    UI-->>A: ISBN зайнятий
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

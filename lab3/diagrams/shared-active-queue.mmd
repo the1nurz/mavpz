@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    %% D32 | UC-10 | SC-18; єдиний; таблиця Given — не Examples
+    %% REQ-15 | —
+    title D32 — Внутрішній крок: активна черга
+    participant Caller as Внутрішній викликач
+    participant Queue as Активна черга
+    participant Store as Доменне сховище
+    Note over Caller,Store: SC-18, US-05. Внутрішній крок UC-10 і сповіщень, не новий UC.
+    Caller->>Queue: getActiveQueue(book_id) — Визначити активну чергу B1
+    activate Queue
+    Queue->>Store: findReservationsByBookId(book_id) — Прочитати Reservation B1
+    activate Store
+    Store-->>Queue: 003 active 09:00, 002 active 10:00, 001 active 10:00, 004 fulfilled, 005 cancelled, 006 expired
+    deactivate Store
+    loop Кожне бронювання B1
+    alt status=active
+    Queue->>Queue: includeActiveReservation(reservation) — Додати бронювання до кандидатів
+    activate Queue
+    Queue-->>Queue: Кандидат включений
+    deactivate Queue
+    else status=fulfilled або cancelled або expired
+    Queue->>Queue: excludeInactiveReservation(reservation) — Виключити з активної черги
+    activate Queue
+    Queue-->>Queue: Кандидат виключений
+    deactivate Queue
+    end
+    end
+    Queue->>Queue: sortByReservedAtThenCanonicalUuid(reservations) — Впорядкувати reserved_at ASC, потім id ASC
+    activate Queue
+    Queue-->>Queue: Порядок 003, 001, 002
+    deactivate Queue
+    Note over Queue: Повні UUID — канонічні нижнього регістру, як у SC-18. Порівняння id лексикографічне.
+    Queue-->>Caller: Черга [003, 001, 002]
+    deactivate Queue

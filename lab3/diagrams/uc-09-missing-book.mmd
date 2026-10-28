@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    %% D31 | UC-09 | SC-17; єдиний
+    %% REQ-11 | NFR-07, NFR-08, NFR-09, NFR-10, NFR-11
+    title D31 — Відмова: бронювання відсутньої Book
+    actor A as Читач
+    participant UI as Вебінтерфейс
+    participant S as Бронювання
+    participant Access as Перевірка доступу
+    participant Store as Доменне сховище
+    Note over A,S: HTTPS, чинна сесія та дозволена роль. Технічні механізми сесій поза ER.
+    A->>UI: Забронювати B404 від власного імені R1
+    activate UI
+    UI->>S: reserveBook(session, book_id, reserved_at) — Забронювати B404 від власного імені R1
+    activate S
+    S->>Access: authorizeOperation(session, operation) — Перевірити сесію та право операції
+    activate Access
+    Access-->>S: Чинна сесія, операцію дозволено
+    deactivate Access
+    S->>Store: findBookById(book_id) — Перевірити наявність Book B404
+    activate Store
+    Store-->>S: Book відсутня
+    deactivate Store
+    alt Book B404 не існує
+    S-->>UI: Некоректне посилання Reservation.book_id
+    end
+    deactivate S
+    UI-->>A: Некоректне посилання Reservation.book_id
+    deactivate UI
+    Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.
