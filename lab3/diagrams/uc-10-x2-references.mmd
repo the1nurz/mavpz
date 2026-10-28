@@ -19,12 +19,13 @@ sequenceDiagram
     deactivate Access
     S->>Store: resolveLoanReferences(reader_id, copy_id) — Перевірити Reader, Copy та Book через Copy.book_id
     activate Store
-    Store-->>S: Відсутній Reader, Copy або пов’язаний Book
+    Store-->>S: referenceError(field, reason) — назва порушеного посилання та причина
     deactivate Store
+    Note over S,Store: Немає Reader — field=Loan.reader_id. Немає Copy — field=Loan.copy_id. Немає пов’язаного Book — field=Copy.book_id. Це варіанти REQ-11, не нові правила чи пріоритет помилок.
     alt Посилання не існує
-    S-->>UI: Некоректне поле або зв’язок, вказати відсутнє посилання
+    S-->>UI: referenceError(field, reason) — Некоректне посилання
     end
     deactivate S
-    UI-->>A: Некоректне поле або зв’язок, вказати відсутнє посилання
+    UI-->>A: Некоректне посилання: referenceError.field, referenceError.reason
     deactivate UI
     Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.

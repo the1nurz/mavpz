@@ -66,8 +66,8 @@
       "lab3/diagrams/uc-10-issue-later-date.mmd": "ece984116a09a1654dd301b9e34c0894b0285a71c005341980b2700048b9441a",
       "lab3/diagrams/uc-10-x1-forbidden.mmd": "d24187dfe0084a920ac00c37b75df60ebc481dd1661a31e3cb65cdf3352562b0",
       "lab3/diagrams/uc-10-x1-session.mmd": "169d1efd1a6acf729fd2d4a0a1f3f9e2063d5ee5ac7ef61640a7e2b53c202914",
-      "lab3/diagrams/uc-10-x2-fields.mmd": "530fc580d272cb00a53e78ae227b4227160d0c5bd35977137dd8d9a3a1cf2895",
-      "lab3/diagrams/uc-10-x2-references.mmd": "9e67088392fff0efc7bf8d870efb2c9bc9e7292a0416b4bc27f35263918c0aae",
+      "lab3/diagrams/uc-10-x2-fields.mmd": "bad427fc7706dab45d612fb3f299eda691d4858c836d82e22a5601bc50fa8dbb",
+      "lab3/diagrams/uc-10-x2-references.mmd": "7501d69987845f6999d646f6951f8fd6dbd3c41ae726bee35a7267a7a456d21d",
       "lab3/diagrams/uc-10-x3-after-commit.mmd": "fe03509c0b6b1289509f990479e7c3f54b3e9a8ba7dc7e3a9aa65d16464c3d0f",
       "lab3/diagrams/uc-10-x3-before-commit.mmd": "013f1aca6b3ce0eb6e9e4fde68bf2e6c6c878c7bad273bcd7c3e441cd88d279c",
       "lab3/diagrams/uc-10-x4-capacity.mmd": "9ca868ab0fb5705d399ca02238a2623773140eb10f25656ddb87bc994cf66760",
@@ -770,35 +770,35 @@
     },
     "uc-10-x2-fields": {
       "source": "lab3/diagrams/uc-10-x2-fields.mmd",
-      "svgSha256": "f477f5c18a0bdb242918c883d3bcbd0c9eb80d8b51e0338ebf19d0728e3982fe",
-      "pngSha256": "46761e9f36b2d5eecfddede21d6837fe2b7d2d65a059607b97a7ab4bc60c79ac",
+      "svgSha256": "774a70b7988120e374470e8d730115c8e84710fd1f845430e6b3a3eca77543fd",
+      "pngSha256": "944986c4603e3eb0db3cd3113e1fc2c7f4ce97b2fc8bc22050e84a320b4ec7cb",
       "svg": {
-        "width": 1266,
-        "height": 1135
+        "width": 1274,
+        "height": 1152
       },
       "png": {
-        "width": 2532,
-        "height": 2190
+        "width": 2548,
+        "height": 2224
       },
       "labelsChecked": 17,
-      "textElements": 44,
+      "textElements": 45,
       "clipped": [],
       "overlaps": []
     },
     "uc-10-x2-references": {
       "source": "lab3/diagrams/uc-10-x2-references.mmd",
-      "svgSha256": "ab2196c1c5854bbb2c68ff7ff4c4c56e80941c47b8b635486e8e224928cffe4c",
-      "pngSha256": "3a5200d4d3411c67fd52503147f636d987e567f641e14c3d65e5737d6c496270",
+      "svgSha256": "44ebd3bbaf909e9bd29f069e68edd65d9ac4ded2edecde084c1fade6479074a4",
+      "pngSha256": "4b2e73f4ad6398051a1ffefcf90c30311ea831a81fe451d1852786bc53879194",
       "svg": {
         "width": 1268,
-        "height": 1010
+        "height": 1149
       },
       "png": {
         "width": 2536,
-        "height": 1940
+        "height": 2218
       },
-      "labelsChecked": 17,
-      "textElements": 40,
+      "labelsChecked": 18,
+      "textElements": 45,
       "clipped": [],
       "overlaps": []
     },

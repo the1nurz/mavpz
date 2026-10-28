@@ -19,12 +19,12 @@ sequenceDiagram
     deactivate Access
     S->>S: validateRequiredFields(data) — Перевірити обов’язкові поля команди
     activate S
-    S-->>S: Перелік незаповнених полів
+    S-->>S: fieldErrors — перелік відсутніх обов’язкових полів команди
     deactivate S
     alt Є незаповнене обов’язкове поле
-    S-->>UI: Заповніть позначені обов’язкові поля
+    S-->>UI: validationErrors(fieldErrors) — Заповніть позначені обов’язкові поля
     end
     deactivate S
-    UI-->>A: Заповніть позначені обов’язкові поля
+    UI-->>A: Заповніть обов’язкові поля зі списку fieldErrors
     deactivate UI
     Note over S,Store: Відмовлено до фіксації. Доменні дані незмінні.
