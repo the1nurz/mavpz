@@ -52,5 +52,5 @@ erDiagram
     %% Loan.returned_at is NULL while the loan is open.
     %% At most one open Loan per Copy; historical loans remain stored.
     %% Reservations concern Book and do not require all copies to be on loan.
-    %% Reservation.id is assigned in increasing creation order.
-    %% Pending reservations for a Book are served by ascending Reservation.id.
+    %% Pending reservations for a Book are served by ascending created_at.
+    %% Equal created_at values are ordered by ascending Reservation.id.
