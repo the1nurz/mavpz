@@ -1,53 +1,56 @@
 erDiagram
-    PUBLISHER ||--o{ BOOK : publishes
-    AUTHOR }|--o{ BOOK : writes
-    BOOK ||--o{ COPY : has
-    READER ||--o{ LOAN : borrows
-    COPY ||--o{ LOAN : "is lent in"
-    READER ||--o{ RESERVATION : makes
-    BOOK ||--o{ RESERVATION : "is reserved in"
+    Publisher ||--o{ Book : publishes
+    Author }|--o{ Book : writes
+    Book ||--|{ Copy : includes
+    Reader ||--o{ Loan : receives
+    Copy ||--o{ Loan : records
+    Reader ||--o{ Reservation : places
+    Book ||--o{ Reservation : concerns
 
-    PUBLISHER {
-        uuid id PK
+    Publisher {
+        int id PK
         string name
-        string country
     }
-    AUTHOR {
-        uuid id PK
+    Author {
+        int id PK
         string full_name
-        int birth_year
     }
-    BOOK {
-        uuid id PK
+    Book {
+        int id PK
         string title
         string isbn UK
         int publication_year
-        uuid publisher_id FK
+        int publisher_id FK
     }
-    COPY {
-        uuid id PK
-        uuid book_id FK
+    Copy {
+        int id PK
+        int book_id FK
         string inventory_number UK
-        string state
+        string physical_condition
     }
-    READER {
-        uuid id PK
+    Reader {
+        int id PK
         string full_name
-        string email UK
-        datetime registered_at
+        string email
     }
-    LOAN {
-        uuid id PK
-        uuid reader_id FK
-        uuid copy_id FK
-        datetime loaned_at
+    Loan {
+        int id PK
+        int reader_id FK
+        int copy_id FK
+        datetime issued_at
         datetime due_at
         datetime returned_at
     }
-    RESERVATION {
-        uuid id PK
-        uuid reader_id FK
-        uuid book_id FK
-        datetime reserved_at
+    Reservation {
+        int id PK
+        int reader_id FK
+        int book_id FK
+        datetime created_at
         string status
     }
+
+    %% Loan.returned_at is NULL while the loan is open.
+    %% At most one open Loan per Copy; historical loans remain stored.
+    %% Reservations concern Book and do not require all copies to be on loan.
+    %% Pending reservations for a Book are served by ascending created_at.
+    %% Equal created_at values are ordered by ascending Reservation.id.

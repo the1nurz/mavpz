@@ -8,7 +8,7 @@
   },
   "scripts": {
     "audit": "node tools/audit.js",
-    "test": "node --test",
+    "test": "node --test test/audit.test.js",
     "render": "node tools/render.js",
     "check": "npm run audit && npm test && node tools/render.js --check"
   },
