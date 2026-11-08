@@ -3,219 +3,183 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const entities = ['PUBLISHER', 'AUTHOR', 'BOOK', 'COPY', 'READER', 'LOAN', 'RESERVATION'];
+// Baseline of the accepted generated artifact; these attribute choices are
+// not extra requirements attributed to the student's prose specification.
+const schema = {
+  Publisher: { id: ['int', 'PK'], name: ['string', ''] },
+  Author: { id: ['int', 'PK'], full_name: ['string', ''] },
+  Book: { id: ['int', 'PK'], title: ['string', ''], isbn: ['string', 'UK'], publication_year: ['int', ''], publisher_id: ['int', 'FK'] },
+  Copy: { id: ['int', 'PK'], book_id: ['int', 'FK'], inventory_number: ['string', 'UK'], physical_condition: ['string', ''] },
+  Reader: { id: ['int', 'PK'], full_name: ['string', ''], email: ['string', ''] },
+  Loan: { id: ['int', 'PK'], reader_id: ['int', 'FK'], copy_id: ['int', 'FK'], issued_at: ['datetime', ''], due_at: ['datetime', ''], returned_at: ['datetime', ''] },
+  Reservation: { id: ['int', 'PK'], reader_id: ['int', 'FK'], book_id: ['int', 'FK'], created_at: ['datetime', ''], status: ['string', ''] },
+};
+const foreignKeys = [
+  ['Book', 'publisher_id', 'Publisher'], ['Copy', 'book_id', 'Book'],
+  ['Loan', 'reader_id', 'Reader'], ['Loan', 'copy_id', 'Copy'],
+  ['Reservation', 'reader_id', 'Reader'], ['Reservation', 'book_id', 'Book'],
+];
+const relationships = [
+  ['K6', 'Publisher', '1..1', 'Book', '0..*'],
+  ['K1', 'Author', '1..*', 'Book', '0..*'],
+  ['K2', 'Book', '1..1', 'Copy', '1..*'],
+  ['K4', 'Reader', '1..1', 'Loan', '0..*'],
+  ['K4', 'Copy', '1..1', 'Loan', '0..*'],
+  ['K3', 'Reader', '1..1', 'Reservation', '0..*'],
+  ['K3', 'Book', '1..1', 'Reservation', '0..*'],
+];
 const leftRanges = { '||': '1..1', '|o': '0..1', '}o': '0..*', '}|': '1..*' };
 const rightRanges = { '||': '1..1', 'o|': '0..1', 'o{': '0..*', '|{': '1..*' };
-const relationshipPattern = /^(\w+)\s+(\|\||\|o|\}o|\}\|)(--|\.\.)(\|\||o\||o\{|\|\{)\s+(\w+)\s*:\s*(?:"([^"\n]+)"|([\w ]+))$/;
 
-function fail(message) {
-  throw new Error(message);
-}
-
-function relation(line, location) {
-  const match = line.match(relationshipPattern);
-  if (!match) fail(`${location}: unsupported relationship: ${line}`);
-  const [, from, left, connector, right, to, quoted, plain] = match;
-  return { from, left, connector, right, to, label: (quoted ?? plain).trim() };
-}
-
-function flags(value, location) {
-  if (value === '—' || value === '') return [];
-  const result = value.split(',').map(s => s.trim());
-  if (result.some(s => !['PK', 'FK', 'UK'].includes(s)) || new Set(result).size !== result.length) {
-    fail(`${location}: invalid or duplicate key flags: ${value}`);
-  }
-  return result.sort();
-}
-
-// Split Markdown cells without treating escaped Mermaid pipes as delimiters.
-function cells(line) {
-  return line.replace(/\\\|/g, '\u0000').split('|').slice(1, -1)
-    .map(s => s.trim().replace(/\u0000/g, '|'));
-}
-
-function table(text, header, width) {
-  const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/);
-  const starts = lines.flatMap((line, i) => line.trim() === header ? [i] : []);
-  if (starts.length !== 1) fail(`spec: expected exactly one table ${header}`);
-  const start = starts[0];
-  if (!/^\|(?:\s*:?-+:?\s*\|)+$/.test(lines[start + 1]?.trim() ?? '')) {
-    fail('spec: missing table separator');
-  }
-  const rows = [];
-  for (let i = start + 2; i < lines.length && lines[i].trim().startsWith('|'); i++) {
-    const line = lines[i].trim();
-    const row = cells(line);
-    if (!line.endsWith('|') || row.length !== width || row.some(s => !s)) {
-      fail(`spec:${i + 1}: malformed table row`);
-    }
-    rows.push(row);
-  }
-  if (!rows.length) fail('spec: empty table');
-  return rows;
-}
-
-function parseSpec(text) {
-  const attributes = table(text, '| Сутність | Атрибут | Тип | Ключ | Посилання |', 5);
-  const model = { entities: new Map(), relations: [] };
-  for (const [name, field, type, key, target] of attributes) {
-    if (!/^[A-Z][a-z]+$/.test(name) || !/^\w+$/.test(field) || !/^\w+$/.test(type)) {
-      fail(`spec: invalid entity, field or type: ${name}.${field}`);
-    }
-    const entity = name.toUpperCase();
-    if (!model.entities.has(entity)) model.entities.set(entity, new Map());
-    const fields = model.entities.get(entity);
-    if (fields.has(field)) fail(`spec: duplicate attribute ${entity}.${field}`);
-    const keys = flags(key, `spec ${name}.${field}`);
-    if (keys.includes('FK') !== (target !== '—')) fail(`spec: inconsistent FK target ${name}.${field}`);
-    if (target !== '—' && !/^[A-Z][a-z]+\.\w+$/.test(target)) fail(`spec: invalid FK target ${target}`);
-    const reference = target === '—' ? null : target.split('.');
-    fields.set(field, { type, flags: keys, target: reference ? `${reference[0].toUpperCase()}.${reference[1]}` : null });
-  }
-  const relationships = table(text,
-    '| Ліва сутність | Права сутність | Правих на одну ліву | Лівих на одну праву | Mermaid | Підпис |', 6);
-  for (const [from, to, rights, lefts, expression, label] of relationships) {
-    const r = relation(`${expression} : "${label}"`, 'spec');
-    if (r.from !== from.toUpperCase() || r.to !== to.toUpperCase()
-      || rightRanges[r.right] !== rights || leftRanges[r.left] !== lefts) {
-      fail(`spec: cardinality columns disagree with Mermaid for ${from}-${to}`);
-    }
-    model.relations.push(r);
-  }
-  return model;
-}
+// Controlled prose checks, not general NLP or execution of DB constraints.
+// Changed wording fails closed and requires a reviewed contract update.
+const criteria = {
+  K1: 'книга має принаймні одного автора; одна книга може мати кількох авторів, а один автор — кілька книг.',
+  K2: 'кожна книга повинна мати щонайменше один фізичний примірник.',
+  K3: 'читач бронює книгу, а не конкретний фізичний примірник, бронювати книгу можна незалежно від наявності вільних примірників.',
+  K4: 'один примірник може мати багато історичних видач, але одночасно допускається максимум одна активна видача. Активна видача — це Loan, у якого returned_at = NULL. Нова видача дозволяється після повернення попередньої.',
+  K5: 'бронювання однієї книги обслуговуються за зростанням created_at, а за однакового часу — за зростанням Reservation.id.',
+  K6: "кожна книга пов'язана з одним видавцем; один видавець може бути пов'язаний із кількома книгами.",
+};
+const commentRules = [
+  ['K4', 'Loan.returned_at is NULL while the loan is open.'],
+  ['K4', 'At most one open Loan per Copy; historical loans remain stored.'],
+  ['K3', 'Reservations concern Book and do not require all copies to be on loan.'],
+  ['K5', 'Pending reservations for a Book are served by ascending created_at.'],
+  ['K5', 'Equal created_at values are ordered by ascending Reservation.id.'],
+];
+const normalize = text => text.replace(/`/g, '').replace(/[’ʼ]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
+const lines = text => text.replace(/^\uFEFF/, '').split(/\r?\n/);
+const edgeKey = (a, left, b, right) => a < b ? `${a}:${left}|${b}:${right}` : `${b}:${right}|${a}:${left}`;
 
 function parseModel(text) {
-  const model = { entities: new Map(), relations: [] };
-  let current = null;
-  let header = false;
-  for (const [index, raw] of text.replace(/^\uFEFF/, '').split(/\r?\n/).entries()) {
-    const line = raw.trim();
-    const location = `model:${index + 1}`;
-    if (!line || line.startsWith('%%')) continue;
+  const entities = new Map(), relations = [], comments = [];
+  let current = null, header = false;
+  for (const [index, raw] of lines(text).entries()) {
+    const line = raw.trim(), location = `model:${index + 1}`;
+    if (!line) continue;
+    if (line.startsWith('%%')) { comments.push(line.slice(2).trim()); continue; }
     if (!header) {
-      if (line !== 'erDiagram') fail(`${location}: expected erDiagram`);
+      if (line !== 'erDiagram') throw new Error(`${location}: expected erDiagram`);
       header = true;
       continue;
     }
     if (current) {
       if (line === '}') { current = null; continue; }
-      const match = line.match(/^(\w+)\s+(\w+)(?:\s+((?:PK|FK|UK)(?:\s*,\s*(?:PK|FK|UK))*))?$/);
-      if (!match) fail(`${location}: unsupported attribute: ${line}`);
-      const [, type, name, key = ''] = match;
-      const fields = model.entities.get(current);
-      if (fields.has(name)) fail(`${location}: duplicate attribute ${current}.${name}`);
-      fields.set(name, { type, flags: flags(key, location) });
+      const match = line.match(/^(\w+)\s+(\w+)(?:\s+(.+))?$/);
+      if (!match) throw new Error(`${location}: unsupported attribute`);
+      const [, type, field, keys = ''] = match;
+      const flags = keys ? keys.split(',').map(s => s.trim()).sort() : [];
+      if (flags.some(f => !['PK', 'FK', 'UK'].includes(f)) || new Set(flags).size !== flags.length) throw new Error(`${location}: invalid or duplicate key flags`);
+      if (entities.get(current).has(field)) throw new Error(`${location}: duplicate attribute ${current}.${field}`);
+      entities.get(current).set(field, { type, flags });
     } else {
       const opening = line.match(/^(\w+)\s*\{$/);
       if (opening) {
         current = opening[1];
-        if (model.entities.has(current)) fail(`${location}: duplicate entity ${current}`);
-        model.entities.set(current, new Map());
-      } else {
-        model.relations.push(relation(line, location));
+        if (entities.has(current)) throw new Error(`${location}: duplicate entity ${current}`);
+        entities.set(current, new Map());
+        continue;
       }
+      const r = line.match(/^(\w+)\s+(\|\||\|o|\}o|\}\|)(--|\.\.)(\|\||o\||o\{|\|\{)\s+(\w+)\s*:\s*(?:"([^"\n]+)"|([\w ]+))$/);
+      if (!r) throw new Error(`${location}: unsupported relationship or syntax`);
+      relations.push({ from: r[1], left: leftRanges[r[2]], to: r[5], right: rightRanges[r[4]] });
     }
   }
-  if (!header || current) fail('model: empty diagram or unclosed entity');
-  return model;
+  if (!header || current) throw new Error('model: empty diagram or unclosed entity');
+  return { entities, relations, comments };
 }
-
-const relationKey = r => [r.from, r.left, r.connector, r.right, r.to, r.label].join('|');
 
 export function audit(specText, modelText) {
   const errors = [];
-  let spec, model;
-  try { spec = parseSpec(specText); model = parseModel(modelText); }
-  catch (error) { return { ok: false, errors: [error.message], counts: null }; }
   const check = (condition, message) => { if (!condition) errors.push(message); };
-  for (const [source, document] of [['spec', spec], ['model', model]]) {
-    check(document.entities.size === 7, `K5 ${source}: expected 7 entities, got ${document.entities.size}`);
-    for (const name of entities) check(document.entities.has(name), `K5 ${source}: missing entity ${name}`);
-    for (const [name, fields] of document.entities) {
-      check(entities.includes(name), `K4/K5 ${source}: unexpected entity ${name}`);
-      const primary = [...fields].filter(([, f]) => f.flags.includes('PK'));
-      check(primary.length === 1 && primary[0][0] === 'id', `K1 ${source}: ${name} must have exactly one id PK`);
-      for (const [field, value] of fields) {
-        if (value.flags.includes('PK') || value.flags.includes('FK')) {
-          check(value.type === 'uuid', `K1 ${source}: ${name}.${field} key type must be uuid`);
-        }
-        if (name === 'COPY') {
-          check(!['available', 'availability', 'is_available', 'status'].includes(field),
-            `K3 ${source}: forbidden derived or mixed field COPY.${field}`);
-        }
-      }
-    }
-    const total = [...document.entities.values()].reduce((n, fields) => n + fields.size, 0);
-    check(total === 30, `K5 ${source}: expected 30 attributes, got ${total}`);
-    check(document.relations.length === 7, `K2 ${source}: expected 7 relationships, got ${document.relations.length}`);
-    const pairs = new Set();
-    for (const r of document.relations) {
-      const pair = [r.from, r.to].sort().join(':');
-      check(!pairs.has(pair), `K2/K5 ${source}: duplicate relationship ${pair}`);
-      pairs.add(pair);
-      check(document.entities.has(r.from) && document.entities.has(r.to), `K2 ${source}: undeclared relationship endpoint ${pair}`);
-    }
-    check(document.relations.some(r => r.from === 'AUTHOR' && r.to === 'BOOK'
-      && r.left === '}|' && r.right === 'o{' && r.connector === '--'),
-    `K2/K4 ${source}: expected direct AUTHOR }|--o{ BOOK`);
-    for (const [entity, required] of [['LOAN', ['reader_id', 'copy_id', 'loaned_at', 'due_at', 'returned_at']],
-      ['RESERVATION', ['reader_id', 'book_id', 'reserved_at', 'status']]]) {
-      for (const field of required) check(document.entities.get(entity)?.has(field), `K4 ${source}: missing ${entity}.${field}`);
+  let model;
+  try { model = parseModel(modelText); }
+  catch (error) { return { ok: false, errors: [error.message], counts: null }; }
+  const specEntities = [], specCriteria = new Map();
+  for (const line of lines(specText)) {
+    const entity = line.trim().match(/^-\s+\*\*(\w+)\*\*\s*—/);
+    if (entity) specEntities.push(entity[1]);
+    const criterion = line.trim().match(/^-\s+\*\*(K\d+)\.[^*]*\*\*\s*(.+)$/);
+    if (criterion) {
+      const [, id, rule] = criterion;
+      check(!specCriteria.has(id), `${id} spec: duplicate criterion`);
+      specCriteria.set(id, rule);
     }
   }
-  for (const [name, expectedFields] of spec.entities) {
-    const actualFields = model.entities.get(name) ?? new Map();
-    for (const [field, expected] of expectedFields) {
-      const actual = actualFields.get(field);
-      check(Boolean(actual), `K5 model: missing attribute ${name}.${field}`);
+  check(specEntities.length === 7 && new Set(specEntities).size === 7, 'spec: expected 7 distinct entity definitions');
+  for (const name of Object.keys(schema)) check(specEntities.includes(name), `spec: missing entity ${name}`);
+  for (const name of specEntities) check(Object.hasOwn(schema, name), `spec: unexpected entity ${name}`);
+  check(specCriteria.size === 6, 'spec: expected exactly K1-K6');
+  for (const [id, expected] of Object.entries(criteria)) {
+    check(specCriteria.has(id), `${id} spec: missing criterion`);
+    if (specCriteria.has(id)) check(normalize(specCriteria.get(id)) === normalize(expected), `${id} spec: changed or unsupported rule wording; review the contract and tests`);
+  }
+  for (const id of specCriteria.keys()) check(Object.hasOwn(criteria, id), `spec: unexpected criterion ${id}`);
+
+  check(model.entities.size === 7, `structure: expected 7 entities, got ${model.entities.size}`);
+  for (const [name, expected] of Object.entries(schema)) {
+    const fields = model.entities.get(name);
+    check(Boolean(fields), `structure: missing entity ${name}`);
+    if (!fields) continue;
+    for (const [field, [type, flag]] of Object.entries(expected)) {
+      const actual = fields.get(field);
+      check(Boolean(actual), `structure: missing attribute ${name}.${field}`);
       if (actual) {
-        check(actual.type === expected.type, `K5 model: type mismatch ${name}.${field}`);
-        check(actual.flags.join(',') === expected.flags.join(','), `K1/K5 model: key flags mismatch ${name}.${field}`);
-      }
-      if (expected.target) {
-        const [parent, key] = expected.target.split('.');
-        for (const [source, document] of [['spec', spec], ['model', model]]) {
-          const target = document.entities.get(parent)?.get(key);
-          check(Boolean(target?.flags.includes('PK')) && target?.type === expected.type,
-            `K1 ${source}: invalid FK target for ${name}.${field}: ${expected.target}`);
-          check(document.relations.some(r => r.from === parent && r.to === name
-            && r.left === '||' && r.right === 'o{'), `K1/K2 ${source}: FK relationship missing ${parent}-${name}`);
-        }
+        check(actual.type === type, `structure: type mismatch ${name}.${field}: expected ${type}`);
+        check(actual.flags.join(',') === flag, `structure: key flags mismatch ${name}.${field}`);
       }
     }
-    for (const field of actualFields.keys()) check(expectedFields.has(field), `K5 model: unexpected attribute ${name}.${field}`);
+    for (const field of fields.keys()) check(Object.hasOwn(expected, field), `structure: unexpected attribute ${name}.${field}`);
+    const primary = [...fields].filter(([, f]) => f.flags.includes('PK'));
+    check(primary.length === 1 && primary[0][0] === 'id', `structure: ${name} must have exactly one id PK`);
   }
-  const expectedRelations = new Set(spec.relations.map(relationKey));
-  const actualRelations = new Set(model.relations.map(relationKey));
-  for (const key of expectedRelations) check(actualRelations.has(key), `K2/K5 model: missing or changed relationship ${key}`);
-  for (const key of actualRelations) check(expectedRelations.has(key), `K2/K5 model: unexpected relationship ${key}`);
-  return { ok: errors.length === 0, errors, counts: {
-    entities: model.entities.size,
-    attributes: [...model.entities.values()].reduce((n, fields) => n + fields.size, 0),
-    relationships: model.relations.length,
-  } };
+  for (const name of model.entities.keys()) check(Object.hasOwn(schema, name), `structure: unexpected entity ${name}`);
+  const allFields = [...model.entities.values()].flatMap(fields => [...fields.values()]);
+  const counts = { entities: model.entities.size, attributes: allFields.length, relationships: model.relations.length,
+    primaryKeys: allFields.filter(f => f.flags.includes('PK')).length,
+    foreignKeys: allFields.filter(f => f.flags.includes('FK')).length,
+    uniqueKeys: allFields.filter(f => f.flags.includes('UK')).length };
+  for (const [key, expected] of Object.entries({ attributes: 27, primaryKeys: 7, foreignKeys: 6, uniqueKeys: 2, relationships: 7 })) check(counts[key] === expected, `structure: expected ${expected} ${key}, got ${counts[key]}`);
+  for (const [child, field, parent] of foreignKeys) {
+    const fk = model.entities.get(child)?.get(field), pk = model.entities.get(parent)?.get('id');
+    check(Boolean(fk?.flags.includes('FK') && pk?.flags.includes('PK') && fk.type === pk.type && fk.type === 'int'), `FK: invalid ${child}.${field} -> ${parent}.id or key type mismatch`);
+  }
+  const pairs = new Set();
+  for (const r of model.relations) {
+    check(model.entities.has(r.from) && model.entities.has(r.to), `structure: undeclared relationship endpoint ${r.from}-${r.to}`);
+    const pair = [r.from, r.to].sort().join(':');
+    check(!pairs.has(pair), `structure: duplicate relationship ${pair}`);
+    pairs.add(pair);
+    check(relationships.some(([, a, left, b, right]) => edgeKey(a, left, b, right) === edgeKey(r.from, r.left, r.to, r.right)), `structure: unexpected relationship or cardinality ${r.from}-${r.to}`);
+  }
+  for (const [id, a, left, b, right] of relationships) check(model.relations.some(r => edgeKey(r.from, r.left, r.to, r.right) === edgeKey(a, left, b, right)), `${id} model: missing or changed relationship ${a}(${left})-${b}(${right})`);
+  const normalizedComments = model.comments.map(normalize);
+  for (const [id, rule] of commentRules) check(normalizedComments.includes(normalize(rule)), `${id} model: missing or changed rule comment: ${rule}`);
+  // Reject obsolete/additional constraint-like comments instead of accepting
+  // correct and conflicting rules together. Unrelated layout notes are allowed.
+  for (const comment of model.comments) {
+    if (/\b(loans?|cop(?:y|ies)|reservations?|returned_at|created_at)\b/i.test(comment)) check(commentRules.some(([, rule]) => normalize(rule) === normalize(comment)), `rules: unsupported or conflicting constraint comment: ${comment}`);
+  }
+  return { ok: errors.length === 0, errors, counts };
 }
 
 export function main(args = process.argv.slice(2)) {
   try {
-    let specPath = path.join(root, 'spec.md');
-    let modelPath = path.join(root, 'model', 'er.mmd');
+    let specPath = path.join(root, 'spec.md'), modelPath = path.join(root, 'model', 'er.mmd');
     for (let i = 0; i < args.length; i += 2) {
-      if (!['--spec', '--model'].includes(args[i]) || !args[i + 1] || args[i + 1].startsWith('--')) {
-        fail('Usage: node tools/audit.js [--spec path] [--model path]');
-      }
+      if (!['--spec', '--model'].includes(args[i]) || !args[i + 1] || args[i + 1].startsWith('--')) throw new Error('Usage: node tools/audit.js [--spec path] [--model path]');
       if (args[i] === '--spec') specPath = path.resolve(args[i + 1]);
       else modelPath = path.resolve(args[i + 1]);
     }
     const result = audit(readFileSync(specPath, 'utf8'), readFileSync(modelPath, 'utf8'));
     if (!result.ok) { for (const error of result.errors) console.error(`FAIL: ${error}`); return 1; }
-    console.log(`PASS: ${result.counts.entities} entities, ${result.counts.attributes} attributes, ${result.counts.relationships} relationships; K1/K2/K4/K5 structural checks.`);
-    console.log('K3: structural checks passed; functional dependencies, 3NF and operational rules require manual review. K6 is outside this audit.');
+    const c = result.counts;
+    console.log(`PASS: ${c.entities} entities, ${c.attributes} attributes, ${c.relationships} relationships; ${c.primaryKeys} PK, ${c.foreignKeys} FK, ${c.uniqueKeys} UK.`);
+    console.log('K1-K6: structural contract and supported spec/comment wording agree.');
+    console.log('K4/K5: documentation checks only; constraints on real data are NOT executed. Changed prose requires manual review. Mermaid rendering is checked separately.');
     return 0;
   } catch (error) { console.error(`FAIL: ${error.message}`); return 1; }
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  process.exitCode = main();
-}
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) process.exitCode = main();

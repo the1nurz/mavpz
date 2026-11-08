@@ -35,7 +35,7 @@ function run() {
         if (!svg.includes('<svg') || !svg.includes('</svg>')) throw new Error('Invalid SVG output');
         const modelText = readFileSync(source, 'utf8');
         const names = [...modelText.matchAll(/^\s*(\w+)\s*\{/gm)].map(match => match[1]);
-        const attributes = [...modelText.matchAll(/^\s*(uuid|string|int|datetime)\s+(\w+)/gm)];
+        const attributes = [...modelText.matchAll(/^\s*(string|int|datetime)\s+(\w+)/gm)];
         for (const token of [...names, ...attributes.flatMap(match => [match[1], match[2]]), 'PK', 'FK', 'UK']) {
           if (!svg.includes(token)) throw new Error(`SVG missing model token ${token}`);
         }
@@ -52,7 +52,13 @@ function run() {
       if (!existsSync(target) || !readFileSync(target).equals(bytes)) writeFileSync(target, bytes);
     }
     console.log(verifyOnly ? 'PASS: SVG/PNG match fresh Mermaid rendering byte for byte.' : 'PASS: model/er.svg and model/er.png generated from audited model/er.mmd.');
-  } finally { rmSync(temp, { recursive: true, force: true }); }
+  } finally {
+    const resolved = path.resolve(temp);
+    if (path.dirname(resolved) !== path.resolve(tmpdir()) || !path.basename(resolved).startsWith('library-er-render-')) {
+      throw new Error('Unexpected temporary render directory');
+    }
+    rmSync(resolved, { recursive: true, force: true });
+  }
 }
 
 try { run(); } catch (error) { console.error(`FAIL: ${error.message}`); process.exitCode = 1; }
