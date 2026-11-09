@@ -1,16 +1,30 @@
 {
-  "sourceSha256": "0b97213cbcb9fee8d3462d61ba9afd339ed7e0b39487b8fa7d8da4fde8dbce7d",
-  "validatorSha256": "26bb8c553361ab99dfa08ddb5e46602562e0def554091d5dc7d530c3dfb8c1ee",
+  "sourceSha256": "5774c6dfafd9e404eaff530f3f6058cec3276eeea234ca90d22fbb9e2092c08c",
+  "validatorSha256": "bd32e217eb1d84b9e8cb74df24dd882dc5ab3e9bd604be2798fa6bbe39cb32d2",
   "toolchainSha256": "9d0b64ef614d916eea46a02f90425ac95b4d5957fd408a2b016080f3dba82d45",
   "plantuml": "1.2026.9",
   "javaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\r\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\r\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
   "platform": "win32/x64",
-  "pngSize": {
-    "width": 2726,
-    "height": 2114
+  "pngSizes": {
+    "activity": {
+      "width": 1604,
+      "height": 1937
+    },
+    "activity-observation": {
+      "width": 891,
+      "height": 471
+    },
+    "activity-concurrency": {
+      "width": 821,
+      "height": 541
+    }
   },
   "outputs": {
-    "svg": "fd014cd650f30cf1fc01f41f69069f36d3aa22edc0822405f00f9664a6f6f734",
-    "png": "43dcb09662617c29e63409d78b3de1635a939e53cbb5fad9febc1372e99774d2"
+    "activity.svg": "4b42725ea7b289c5291d09bdb9da0bcba40ba180c369c77e42f47dcf61d81709",
+    "activity.png": "309bbb2c474d87c7b26c91b885f7b48e5c5f55e48797c1f5243f6853813fd3a8",
+    "activity-observation.svg": "44dd39b52d2c4f4dd186c458af741a2ebf1eb79e621a6c27af7b4ab7140c67cb",
+    "activity-observation.png": "59c6430ac3600926e96dcd547d3f1066f69c165402ec3ed23ebcf22b283ac75f",
+    "activity-concurrency.svg": "cb014d8efbc5377dc61d4bb0693f38fe657d22a147c902fa4e1e2c1fb3ab5b64",
+    "activity-concurrency.png": "3d03eab80b7cdcf7faef0ad97c4376b87f840a480de10177111f0899d13c79d1"
   }
 }
