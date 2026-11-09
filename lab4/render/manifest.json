@@ -1,0 +1,16 @@
+{
+  "sourceSha256": "0b97213cbcb9fee8d3462d61ba9afd339ed7e0b39487b8fa7d8da4fde8dbce7d",
+  "validatorSha256": "26bb8c553361ab99dfa08ddb5e46602562e0def554091d5dc7d530c3dfb8c1ee",
+  "toolchainSha256": "9d0b64ef614d916eea46a02f90425ac95b4d5957fd408a2b016080f3dba82d45",
+  "plantuml": "1.2026.9",
+  "javaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\r\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\r\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+  "platform": "win32/x64",
+  "pngSize": {
+    "width": 2726,
+    "height": 2114
+  },
+  "outputs": {
+    "svg": "fd014cd650f30cf1fc01f41f69069f36d3aa22edc0822405f00f9664a6f6f734",
+    "png": "43dcb09662617c29e63409d78b3de1635a939e53cbb5fad9febc1372e99774d2"
+  }
+}
