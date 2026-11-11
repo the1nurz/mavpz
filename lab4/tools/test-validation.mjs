@@ -18,8 +18,8 @@ mkdirSync(cache, { recursive: true });
 const fixture = mkdtempSync(resolve(cache, 'lab4-audit-tests-'));
 const activity = resolve(fixture, 'lab4/activity.puml');
 const original = readFileSync(resolve(root, 'lab4/activity.puml'));
-function run() {
-  return spawnSync(process.execPath, [resolve(fixture, 'lab4/tools/validate.mjs'), '--check'], {
+function run(mode = '--check') {
+  return spawnSync(process.execPath, [resolve(fixture, 'lab4/tools/validate.mjs'), mode], {
     env: { ...process.env, LAB4_JAVA: java },
     encoding: 'utf8', windowsHide: true, timeout: 120000,
   });
@@ -41,16 +41,24 @@ try {
   const positive = run();
   assert.equal(positive.status, 0, positive.stderr);
   console.log('PASS clean isolated fixture reproduces all renders');
-  for (const [name, mutate, expected] of [
+  for (const [name, mutate, expected, mode = '--check'] of [
     ['missing join', text => text.replace('end fork', ''), 'Missing join'],
     ['waiting event before join', text => text.replace('fork again', ':Чекати подію; <<acceptEvent>>\nfork again'), 'Join must not wait'],
     ['missing alternative timeout', text => text.replace(' АБО Тайм-аут', ''), 'alternative timeout trigger'],
     ['human-dependent server completion', text => text.replace(':Завершити серверну обробку', '|Бібліотекар|\n:Завершити серверну обробку'), 'depends on a human role'],
     ['second issue action', text => text.replace("' A08", ":Виконати атомарну операцію видачі повторно;\n' A08"), 'Repeated issue'],
+    ['inverted date guard', text => text.replace('due_at >= loaned_at?', 'due_at < loaned_at?'), 'Date condition must be due_at >= loaned_at', '--render'],
+    ['confirmation in failed-commit branch', text => {
+      const confirmation = text.split('\n').find(line => line.includes('<<sendSignal>>'));
+      assert(confirmation, 'Missing confirmation to mutate');
+      return text.replace(confirmation, '').replace("  ' A10", `${confirmation}\n  ' A10`);
+    }, 'Confirmation requires successful commit on its control-flow path', '--render'],
     ['stale source manifest', text => text.replace('@enduml', "' changed source\n@enduml"), 'Stale render manifest'],
   ]) {
-    writeFileSync(activity, mutate(original.toString('utf8')));
-    const result = run();
+    const mutated = mutate(original.toString('utf8'));
+    assert.notEqual(mutated, original.toString('utf8'), `${name} did not change the fixture`);
+    writeFileSync(activity, mutated);
+    const result = run(mode);
     assert.notEqual(result.status, 0, `${name} was accepted`);
     assert(result.stderr.includes(expected), result.stderr);
     console.log(`PASS rejected ${name}`);

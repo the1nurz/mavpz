@@ -76,7 +76,7 @@ function analyze(diagram) {
         counts[line]++;
         nodes.push({ kind: line });
       } else {
-        assert(/^:.+;(?: <<(?:sendSignal|acceptEvent|procedure)>>)?$/.test(line), `Unsupported action ${line}`);
+        assert(/^:.+;(?: <<(?:sendSignal|acceptEvent)>>)?$/.test(line), `Unsupported action ${line}`);
         actions.push(token);
         counts.actions++;
         nodes.push({ kind: 'action', token });
@@ -89,18 +89,29 @@ function analyze(diagram) {
   assert.equal(counts.start, 1);
   assert.equal(tree[0].kind, 'start');
   assert(counts.stop > 0 && counts.ifElse > 0);
-  function paths(nodes, incoming = [{ terminal: false, issues: 0 }]) {
+  function paths(nodes, incoming = [{ terminal: false, issues: 0, actions: [], decisions: [] }]) {
     let states = incoming;
     for (const node of nodes) {
       const completed = states.filter(state => state.terminal);
       let active = states.filter(state => !state.terminal);
       assert(active.length, 'Unreachable action after a terminating path');
       if (node.kind === 'stop') active = active.map(state => ({ ...state, terminal: true }));
-      if (node.kind === 'action' && node.token.line.includes('Виконати атомарну операцію видачі')) {
-        active = active.map(state => ({ ...state, issues: state.issues + 1 }));
+      if (node.kind === 'action') {
+        active = active.map(state => ({ ...state, actions: [...state.actions, node.token] }));
+        if (node.token.line.includes('Виконати атомарну операцію видачі')) {
+          active = active.map(state => ({ ...state, issues: state.issues + 1 }));
+        }
       }
       if (node.kind === 'if') {
-        active = [...paths(node.yes, active), ...paths(node.no, active)];
+        const yes = active.map(state => ({
+          ...state,
+          decisions: [...state.decisions, { condition: node.token.line, accepted: true }],
+        }));
+        const no = active.map(state => ({
+          ...state,
+          decisions: [...state.decisions, { condition: node.token.line, accepted: false }],
+        }));
+        active = [...paths(node.yes, yes), ...paths(node.no, no)];
       }
       if (node.kind === 'fork') {
         for (const branch of node.branches) {
@@ -140,15 +151,29 @@ assert(diagrams[1].source.includes('SignalEvent — Підтвердження(L
 assert(diagrams[1].source.includes('Події стосуються лише поточного запиту'));
 assert(observation.actions.some(item => item.line.includes('Ознайомитися')));
 assert(observation.actions.some(item => item.line.includes('Завершити спостереження після події Тайм-аут')));
-const committed = main.tokens.findIndex(item => item.line === 'if (Операцію зафіксовано?) then (так)');
-const sender = main.tokens.findIndex(item => item.line.includes('<<sendSignal>>'));
-assert(committed >= 0 && sender > committed, 'Send must follow commit');
+const dateGuard = 'if (due_at >= loaned_at?) then (так)';
+const dateChecks = main.tokens.filter(item => item.line.startsWith('if ') && /due_at|loaned_at/.test(item.line));
+assert.deepEqual(dateChecks.map(item => item.line), [dateGuard], 'Date condition must be due_at >= loaned_at');
+const commitGuard = 'if (Операцію зафіксовано?) then (так)';
+assert.equal(main.tokens.filter(item => item.line === commitGuard).length, 1, 'Expected one commit decision');
+for (const route of main.routes) {
+  const datesAccepted = route.decisions.some(decision => decision.condition === dateGuard && decision.accepted);
+  const commitAccepted = route.decisions.some(decision => decision.condition === commitGuard && decision.accepted);
+  const confirmations = route.actions.filter(item => item.line.includes('<<sendSignal>>')).length;
+  assert(route.issues === 0 || datesAccepted, 'Issue requires the accepted due_at >= loaned_at branch');
+  assert(confirmations === 0 || (commitAccepted && route.issues === 1), 'Confirmation requires successful commit on its control-flow path');
+}
+const successfulRoutes = main.routes.filter(route =>
+  route.decisions.some(decision => decision.condition === commitGuard && decision.accepted));
+assert(successfulRoutes.every(route => route.actions.includes(send[0])), 'Successful commit must send exactly one confirmation');
+const committed = main.tokens.findIndex(item => item.line === commitGuard);
 assert(main.tokens.slice(committed).every(item => item.role === 'Система'), 'Server completion depends on a human role');
 assert(!main.actions.some(item => /acceptEvent|Ознайомитися|Очікувати/.test(item.line)));
-assert.equal(concurrency.actions.filter(item => item.line.includes('<<procedure>>')).length, 2);
+assert.equal(concurrency.actions.filter(item => item.line.startsWith(':Обробити запит R')).length, 2);
 assert(concurrency.actions.some(item => item.line.includes('Обробити запит R1 за A02–A10 UC-10')));
 assert(concurrency.actions.some(item => item.line.includes('Обробити запит R2 за A02–A10 UC-10')));
 console.log('PASS event alternatives, independent server completion, D40 calls and at most one issue per server path');
+console.log('PASS date eligibility and success-only confirmation across server control-flow paths');
 
 if (!existsSync(java) || !existsSync(jar)) {
   console.error('NOT RUN PlantUML syntax, rendering and freshness. Run lab4/tools/setup.ps1 or set LAB4_JAVA.');

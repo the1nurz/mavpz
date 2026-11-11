@@ -1,6 +1,6 @@
 {
-  "sourceSha256": "5774c6dfafd9e404eaff530f3f6058cec3276eeea234ca90d22fbb9e2092c08c",
-  "validatorSha256": "bd32e217eb1d84b9e8cb74df24dd882dc5ab3e9bd604be2798fa6bbe39cb32d2",
+  "sourceSha256": "6162040e65b25df34d4e5f5574dcf00b1f51e3f670e408b204c6895e670d666f",
+  "validatorSha256": "ed2c7b87a4abd0a031e90106db9bae1ec41fad81f6e6174e4107577e29bb0a32",
   "toolchainSha256": "9d0b64ef614d916eea46a02f90425ac95b4d5957fd408a2b016080f3dba82d45",
   "plantuml": "1.2026.9",
   "javaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\r\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\r\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
@@ -24,7 +24,7 @@
     "activity.png": "309bbb2c474d87c7b26c91b885f7b48e5c5f55e48797c1f5243f6853813fd3a8",
     "activity-observation.svg": "44dd39b52d2c4f4dd186c458af741a2ebf1eb79e621a6c27af7b4ab7140c67cb",
     "activity-observation.png": "59c6430ac3600926e96dcd547d3f1066f69c165402ec3ed23ebcf22b283ac75f",
-    "activity-concurrency.svg": "cb014d8efbc5377dc61d4bb0693f38fe657d22a147c902fa4e1e2c1fb3ab5b64",
-    "activity-concurrency.png": "3d03eab80b7cdcf7faef0ad97c4376b87f840a480de10177111f0899d13c79d1"
+    "activity-concurrency.svg": "7afd5c7ac9e6b4b7bfc87cb8461f922e366de2b9e7556592d9b09e7e30d92cfe",
+    "activity-concurrency.png": "0e27c010d5b9283a0ad5bc1776e342a1a36ef82d9a8d9483356ccf2874d1f518"
   }
 }
