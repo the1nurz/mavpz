@@ -1,0 +1,29 @@
+{
+  "inputs": {
+    "lab5/component.puml": "cddf17fec0e6903e1cc58456066dab60aba7e92aa9a6c3d50a8af563b524a897",
+    "lab5/tools/render.mjs": "e266b55e7b7d1074b3ef77bda6ded3c97d8a072712e95933c3991eca432cfcf1",
+    "lab5/.gitattributes": "04d7d5cfaf19973122c91a9b77ce0dd87c069617d1d7429a728f915ac9f7cd53",
+    "lab5/spec.md": "7cca4b17b1188d5251bdd9f67951b31332f0ef22cab43790f7b62651c5165862",
+    "lab5/architecture.md": "88624c2b3255696c8b98605e974dc178537ee8ad5e8f8e5273b7a24ff219030e",
+    "lab4/tools/toolchain.json": "9d0b64ef614d916eea46a02f90425ac95b4d5957fd408a2b016080f3dba82d45"
+  },
+  "environment": {
+    "platform": "win32/x64",
+    "node": "v22.23.3",
+    "javaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\r\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\r\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+    "plantumlVersion": "PlantUML version 1.2026.9 / 18d0aae [2026-10-17 08:25:10 UTC]",
+    "dotVersion": "dot - graphviz version 16.1.0 (20260904.0139)",
+    "jarSha256": "aa4a1d06f8911c4b842beff4828dd955be431692b631a312d04c0e9fab9581de",
+    "javaSha256": "f8dc082a7dedbfd2924c3562405a5a1fd12efd2641808c92e2de819c76a58b7e",
+    "dotSha256": "97193dc802c145b6152cecc287e84e459160839964d9340f4f10b93d96087601",
+    "arialSha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a"
+  },
+  "pngSize": {
+    "width": 1287,
+    "height": 1606
+  },
+  "outputs": {
+    "component.svg": "d1e34e1473687eee75292b074fada2ef38cef5b0ccfbd306c82d1d3bc6c205de",
+    "component.png": "7e42b897a29e147253e9ff1c8be6db286b1b8e64d8a49f87f01b169535f68464"
+  }
+}

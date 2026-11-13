@@ -1,0 +1,133 @@
+@startuml component
+' Spec criteria: 9eb4dfb; architecture: c477a24. Stage 4.
+' Sources: lab5/architecture.md sections 3-9; Lab 3 D35/D40/D46-D55;
+' Lab 4 A02-A10, O01-O03 and C01-C04. Internal calls are not HTTP services.
+top to bottom direction
+skinparam componentStyle uml2
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam packageStyle rectangle
+skinparam roundcorner 8
+skinparam nodesep 35
+skinparam ranksep 45
+skinparam ArrowColor #475569
+skinparam componentBackgroundColor #F0F7FF
+skinparam componentBorderColor #334155
+skinparam interfaceBackgroundColor white
+skinparam interfaceBorderColor #334155
+skinparam packageBackgroundColor #FAFCFF
+skinparam packageBorderColor #64748B
+skinparam noteBackgroundColor #FFFBEA
+skinparam noteBorderColor #A89455
+title Бібліотека — UML Component Diagram
+
+rectangle "Інформаційна система «Бібліотека»" as Library {
+  component "C1 · Вебінтерфейс (UI)\nБраузер, українські форми" as C1
+
+  package "Один серверний вебзастосунок · Linux x64" as Server {
+    component "C2 · API/Backend\nСесії, права, HTTP-допуск" as C2
+    together {
+      component "C3 · Облік читачів" as C3
+      component "C4 · Каталог і примірники" as C4
+      component "C6 · Сповіщення" as C6
+    }
+    component "C5 · Обіг і бронювання\nДоступність та активна черга" as C5
+    component "C7 · Data Access\nДоступ до даних" as C7
+
+    interface "IBackend" as IBackend
+    interface "IReaders" as IReaders
+    interface "ICatalogue" as ICatalogue
+    interface "ICirculation" as ICirculation
+    interface "IAvailability" as IAvailability
+    interface "IQueue" as IQueue
+    interface "INotifications" as INotifications
+    interface "IStore" as IStore
+  }
+
+  component "C8 · База даних\nСпільне сховище; PK/FK — UUID" as C8
+  interface "IDatabase" as IDatabase
+}
+
+component "A1 · Зовнішній сервіс\nсповіщень" as A1 <<external>>
+interface "INotificationGateway" as INotificationGateway
+
+' Provided: solid attachment to a named lollipop interface (10 providers).
+C2 -up- IBackend
+C3 -up- IReaders
+C4 -up- ICatalogue
+C5 -up- ICirculation
+C5 -left- IAvailability
+C5 -right- IQueue
+C6 -up- INotifications
+C7 -up- IStore
+C8 -up- IDatabase
+A1 -up- INotificationGateway
+
+' Required: UML usage dependencies, consumer -> provided interface (14).
+C1 ..> IBackend
+C2 ..> IReaders
+C2 ..> ICatalogue
+C2 ..> ICirculation
+C2 ..> INotifications
+C3 ..> IStore
+C4 ..> IAvailability
+C4 ..> IStore
+C5 ..> IStore
+C6 ..> IAvailability
+C6 ..> IQueue
+C6 ..> IStore
+C6 ..> INotificationGateway
+C7 ..> IDatabase
+
+note left of C5
+  **Правила обігу · REQ-09/14–17**
+  Бронюється Book за будь-якої доступності,
+  включно з 0 Copy; повтор — новий UUID.
+  Доступність = Copy.state active
+  і немає Loan з порожнім returned_at.
+  Не зберігається як поле available.
+  Черга: лише active Reservation;
+  reserved_at ASC, потім UUID id ASC
+  (канонічний нижній регістр, лексикографічно).
+  Видача — першому читачеві;
+  без черги — будь-якому наявному Reader.
+end note
+
+note bottom of C7
+  **Атомарна видача · C5 → C7 → C8**
+  IStore.issueCopyAtomically — одна транзакція:
+  актуальні Copy.state, відкриті Loan, голова
+  черги і право → новий Loan + умовний fulfilled
+  саме першої Reservation → спільний commit.
+  Максимум один відкритий Loan на Copy.
+  Відмова до commit: без часткових змін.
+  D40: дві спроби, один успіх, одна відмова.
+  Втрачена відповідь після commit ≠ rollback.
+  A1 та очікування UI — поза транзакцією.
+  REQ-18/19; D35/D40/D53/D54; Activity A08.
+end note
+
+note right of A1
+  **A1 · REQ-22–24**
+  C6 передає Reader.email,
+  Book.id та Book.title через HTTPS/TLS ≥1.2.
+  Передавання / помилка не змінює
+  Copy, Loan, Reservation або чергу.
+  Помилка з Book.id → бібліотекарю через C2/UI.
+  Доставка не гарантується; видача
+  заново перевіряє доступність і право.
+end note
+
+legend bottom left
+  **Як читати інтерфейси**
+  Коло з назвою + суцільне приєднання до компонента = provided (постачальник).
+  Пунктирна стрілка від споживача до кола = required, UML usage (<<use>>).
+  8 внутрішніх компонентів + зовнішній A1; 10 інтерфейсів; 14 usage-зв'язків (13 пар).
+  Availability/Queue — функції C5, Access/Admission — функції C2; self-зв'язків немає.
+  C2 допускає до 50 робочих HTTP-запитів; надлишкові → 503 за ≤1 с; сесії/права → 401/403.
+  Зворотна відповідь не є новою залежністю; конкретний транспорт A1-події не визначений.
+  Детальні REQ/UC/NFR та трасування: lab5/architecture.md. Це модель, не виконуваний застосунок.
+endlegend
+@enduml
