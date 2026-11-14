@@ -10,8 +10,8 @@ skinparam shadowing false
 skinparam backgroundColor white
 skinparam packageStyle rectangle
 skinparam roundcorner 8
-skinparam nodesep 35
-skinparam ranksep 45
+skinparam nodesep 85
+skinparam ranksep 65
 skinparam ArrowColor #475569
 skinparam componentBackgroundColor #F0F7FF
 skinparam componentBorderColor #334155
@@ -27,43 +27,54 @@ rectangle "Інформаційна система «Бібліотека»" as 
   component "C1 · Вебінтерфейс (UI)\nБраузер, українські форми" as C1
 
   package "Один серверний вебзастосунок · Linux x64" as Server {
-    component "C2 · API/Backend\nСесії, права, HTTP-допуск" as C2
+    together {
+      component "C2 · API/Backend\nСесії, права, HTTP-допуск" as C2
+      interface "IBackend" as IBackend
+    }
     together {
       component "C3 · Облік читачів" as C3
-      component "C4 · Каталог і примірники" as C4
-      component "C6 · Сповіщення" as C6
+      interface "IReaders" as IReaders
     }
-    component "C5 · Обіг і бронювання\nДоступність та активна черга" as C5
-    component "C7 · Data Access\nДоступ до даних" as C7
-
-    interface "IBackend" as IBackend
-    interface "IReaders" as IReaders
-    interface "ICatalogue" as ICatalogue
-    interface "ICirculation" as ICirculation
-    interface "IAvailability" as IAvailability
-    interface "IQueue" as IQueue
-    interface "INotifications" as INotifications
-    interface "IStore" as IStore
+    together {
+      component "C4 · Каталог і примірники" as C4
+      interface "ICatalogue" as ICatalogue
+    }
+    together {
+      component "C6 · Сповіщення" as C6
+      interface "INotifications" as INotifications
+    }
+    together {
+      component "C5 · Обіг і бронювання\nДоступність та активна черга" as C5
+      interface "ICirculation" as ICirculation
+      interface "IAvailability" as IAvailability
+      interface "IQueue" as IQueue
+    }
+    together {
+      component "C7 · Data Access\nДоступ до даних" as C7
+      interface "IStore" as IStore
+    }
   }
-
-  component "C8 · База даних\nСпільне сховище; PK/FK — UUID" as C8
-  interface "IDatabase" as IDatabase
+  together {
+    component "C8 · База даних\nСпільне сховище; PK/FK — UUID" as C8
+    interface "IDatabase" as IDatabase
+  }
+}
+together {
+  component "A1 · Зовнішній сервіс\nсповіщень" as A1 <<external>>
+  interface "INotificationGateway" as INotificationGateway
 }
 
-component "A1 · Зовнішній сервіс\nсповіщень" as A1 <<external>>
-interface "INotificationGateway" as INotificationGateway
-
 ' Provided: solid attachment to a named lollipop interface (10 providers).
-C2 -up- IBackend
-C3 -up- IReaders
-C4 -up- ICatalogue
-C5 -up- ICirculation
+C2 -left- IBackend
+C3 -left- IReaders
+C4 -left- ICatalogue
+C5 -left- ICirculation
 C5 -left- IAvailability
 C5 -right- IQueue
-C6 -up- INotifications
-C7 -up- IStore
-C8 -up- IDatabase
-A1 -up- INotificationGateway
+C6 -left- INotifications
+C7 -left- IStore
+C8 -left- IDatabase
+A1 -left- INotificationGateway
 
 ' Required: UML usage dependencies, consumer -> provided interface (14).
 C1 ..> IBackend

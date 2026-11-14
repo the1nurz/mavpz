@@ -155,10 +155,10 @@ UC-13 — ціль читача, UC-17 — умовне розширення п�
 | REQ-08, US-04, UC-07, SC-08 | C4/C7 | ICatalogue, IStore | L1 Book; L2R/L2S/L2A спільні ролі; L3 D11/D12 |
 | REQ-09, US-04, UC-08/15, SC-09/10 | C4/C5/C7 | ICatalogue, IAvailability, IStore | L1 похідна доступність; L2R/L2S; L3 D13–D17/D56–D59; L4 A06 |
 | REQ-10, US-09, SC-11; без самостійного UC | C3–C8, структурний контракт | IStore, IDatabase; не окрема команда UI | L1 ER; L2A структурний ADR; L3 облік структурного випадку без нової Sequence |
-| REQ-11, US-09, SC-12; наскрізні UC-01/05/06/09/10 | C3/C4/C5/C7 | IReaders, ICatalogue, ICirculation, IStore | L1 обов'язковість/посилання; L2R/L2S; L3 D18–D21/D31/D51/D52; L4 A04 |
+| REQ-11, US-09, SC-12; також US-05/SC-17; наскрізні UC-01/05/06/09/10 | C3/C4/C5/C7 | IReaders, ICatalogue, ICirculation, IStore | L1 обов'язковість/посилання; L2R/L2S; L3 D18–D21/D31/D51/D52; L4 A04 |
 | REQ-12, US-09, SC-13; UC-12 для Copy, Reservation внутрішньо | C4/C5/C7 | ICatalogue, ICirculation, IStore | L1 множини станів; L2R/L2S; L3 D22, рішення Q3; нового UC зміни Reservation.status немає |
 | REQ-13, US-09, SC-19/23; UC-10/11 | C5/C7 | ICirculation, IStore | L1 часові правила; L2R/L2S; L3 D33/D34/D41/D42; L4 A05 |
-| REQ-14, US-05, UC-09, SC-15/16/17 | C5/C7 | ICirculation, IStore | L1 Book–Reservation; L2R/L2S; L3 D26–D31, зокрема D29 без Copy |
+| REQ-14, US-05, UC-09, SC-15/16 | C5/C7 | ICirculation, IStore | L1 Book–Reservation; L2R/L2S; L3 D26–D30, зокрема D29 без Copy. SC-17/D31 — лише суміжна негативна перевірка REQ-11, не пряме покриття REQ-14 |
 | REQ-15, US-05, SC-18; внутрішньо UC-10/13 | C5, C6 як споживач | IQueue, IStore; у C5 локальне правило | L1 порядок черги; L2R/L2S; L3 D32/D35/D39/D46/D47; L4 A07/A08 |
 | REQ-16, US-06, UC-10, SC-19/20/21 | C5/C7 | ICirculation, IStore | L1 право першого; L2U; L3 D33–D35/D39; L4 A07/A08 |
 | REQ-17, US-06, UC-10, SC-21 | C5/C7 | ICirculation, IStore | L1 стан/Loan/черга; L2R/L2S; L3 D36–D39; L4 A06–A08/A10 |
