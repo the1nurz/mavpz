@@ -1,0 +1,650 @@
+{
+  "date": "2026-11-14",
+  "baseline": "eb67f2216120f7953a4420d85f976ed4d09d8608",
+  "inputHead": "fd5c2fcafed463203074b4c60bfb6a35d9e97c1a",
+  "collectorSha256": "d02c565dd80adc2e16f7b180a9c2fc878dda4f4e1c0358445c2f5e7bada102a4",
+  "checks": [
+    {
+      "name": "audit input HEAD",
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "fd5c2fcafed463203074b4c60bfb6a35d9e97c1a",
+      "stderr": ""
+    },
+    {
+      "name": "spec commit files",
+      "command": [
+        "git",
+        "show",
+        "--format=fuller",
+        "--stat",
+        "9eb4dfb6d298d31ee7c8916104752f346153c85e"
+      ],
+      "exitCode": 0,
+      "stdout": "commit 9eb4dfb6d298d31ee7c8916104752f346153c85e\nAuthor:     the1nurz <the1nurz@users.noreply.github.com>\nAuthorDate: Fri Nov 13 18:21:26 2026 +0200\nCommit:     the1nurz <the1nurz@users.noreply.github.com>\nCommitDate: Fri Nov 13 18:21:26 2026 +0200\n\n    docs(lab5): define architecture specification\n\n lab5/spec.md | 174 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n 1 file changed, 174 insertions(+)",
+      "stderr": ""
+    },
+    {
+      "name": "first UML commit",
+      "command": [
+        "git",
+        "log",
+        "--diff-filter=A",
+        "--format=%H %s",
+        "--",
+        "lab5/component.puml"
+      ],
+      "exitCode": 0,
+      "stdout": "eb67f2216120f7953a4420d85f976ed4d09d8608 feat(lab5): add UML component diagram",
+      "stderr": ""
+    },
+    {
+      "name": "fix commit evidence",
+      "command": [
+        "git",
+        "show",
+        "--format=fuller",
+        "--stat",
+        "fd5c2fcafed463203074b4c60bfb6a35d9e97c1a"
+      ],
+      "exitCode": 0,
+      "stdout": "commit fd5c2fcafed463203074b4c60bfb6a35d9e97c1a\nAuthor:     the1nurz <the1nurz@users.noreply.github.com>\nAuthorDate: Sat Nov 14 04:53:53 2026 +0200\nCommit:     the1nurz <the1nurz@users.noreply.github.com>\nCommitDate: Sat Nov 14 04:53:53 2026 +0200\n\n    fix(lab5): clarify interfaces and harden diagram checks\n\n lab5/architecture.md           |   4 +--\n lab5/component.puml            |  67 +++++++++++++++++++---------------\n lab5/render/component.png      | Bin 184807 -> 111415 bytes\n lab5/render/component.svg      | Bin 35427 -> 35819 bytes\n lab5/render/manifest.json      |  16 +++++----\n lab5/tools/check-structure.mjs |  80 +++++++++++++++++++++++++++++++++++++++++\n lab5/tools/render.mjs          |  54 ++--------------------------\n lab5/tools/test-structure.mjs  |  48 +++++++++++++++++++++++++\n lab5/validation.md             |  18 ++++++++++\n 9 files changed, 199 insertions(+), 88 deletions(-)",
+      "stderr": ""
+    },
+    {
+      "name": "spec before first diagram",
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "9eb4dfb6d298d31ee7c8916104752f346153c85e",
+        "eb67f2216120f7953a4420d85f976ed4d09d8608"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "protected Lab1-4 unchanged",
+      "command": [
+        "git",
+        "diff",
+        "0fab560c1b06dbf7b3f7065c5ade278ce9bf0f9a",
+        "--exit-code",
+        "--",
+        ".",
+        ":(exclude)lab5"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "spec criteria unchanged",
+      "command": [
+        "git",
+        "diff",
+        "9eb4dfb",
+        "--exit-code",
+        "--",
+        "lab5/spec.md"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "ER structural audit",
+      "command": [
+        "C:\\Users\\shaqb\\AppData\\Local\\Programs\\nodejs\\node.exe",
+        "tools/audit.js"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: 7 entities, 30 attributes, 7 relationships; K1/K2/K4/K5 structural checks.\nK3: structural checks passed; functional dependencies, 3NF and operational rules require manual review. K6 is outside this audit.",
+      "stderr": ""
+    },
+    {
+      "name": "Lab2 traceability",
+      "command": [
+        "C:\\Users\\shaqb\\AppData\\Local\\Programs\\nodejs\\node.exe",
+        "lab2/tools/check-traceability.mjs"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: 24 matrix rows; REQ 24/24, US 9/9, SC 27/27, UC 15/15.\nPASS: unique definitions, existing references, SC tags, UC mappings, ER fields.\nREQ-10: structural contract in diagram legend; no standalone UC. Behaviour is not executed.",
+      "stderr": ""
+    },
+    {
+      "name": "UC10 detail",
+      "command": [
+        "C:\\Users\\shaqb\\AppData\\Local\\Programs\\nodejs\\node.exe",
+        "lab2/tools/check-uc10.mjs"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: UC-10 has 10 sections, 6 US-06 scenarios, exact scenario REQ tags and existing NFR references.\nNFR links are acceptance constraints, not executed Gherkin coverage.",
+      "stderr": ""
+    },
+    {
+      "name": "59 Sequence sources",
+      "command": [
+        "C:\\Users\\shaqb\\AppData\\Local\\Programs\\nodejs\\node.exe",
+        "lab3/tools/check-sequences.mjs"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: 59 sources, 15 UC, 27 SC, 51 cases accounted, exact tags and balanced activations. Two Reservation examples are internal validation contracts, with no standalone UC.",
+      "stderr": ""
+    },
+    {
+      "name": "diagram checker regressions 12/12",
+      "command": [
+        "C:\\Users\\shaqb\\AppData\\Local\\Programs\\nodejs\\node.exe",
+        "--test",
+        "--test-reporter=spec",
+        "lab5/tools/test-structure.mjs"
+      ],
+      "exitCode": 0,
+      "stdout": "✔ positive: current diagram and exact contracts (3.4032ms)\n✔ AUD5-02a: reproduce legacy extra-arrow false positive, reject it now (5.0957ms)\n✔ AUD5-02b: source+edge-table cannot override required consumer in spec (4.765ms)\n✔ reject implicit extra component (1.3436ms)\n✔ reject unsupported include without executing it (1.0371ms)\n✔ reject wrong provider (1.7565ms)\n✔ reject missing required interface usage (1.0864ms)\n✔ reject reversed usage syntax (0.8215ms)\n✔ reject duplicate component (1.3676ms)\n✔ reject external A1 moved into Library (1.5665ms)\n✔ reject synthetic C5 self-consumer (1.0617ms)\n✔ reject unclosed note (0.9081ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 152.7383",
+      "stderr": ""
+    },
+    {
+      "name": "fresh real PlantUML render comparison",
+      "command": [
+        "C:\\Users\\shaqb\\AppData\\Local\\Programs\\nodejs\\node.exe",
+        "lab5/tools/render.mjs",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS 8 internal components + A1; 10 provided interfaces; 14 required usages / 13 pairs; boundaries; no cycles\nPASS real PlantUML version 1.2026.9 / 18d0aae [2026-10-17 08:25:10 UTC] -checkonly, exit 0\nPASS fresh SVG/PNG byte-for-byte reproduction; no artifacts rewritten",
+      "stderr": ""
+    },
+    {
+      "name": "SVG real XML parser",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-Command",
+        "$x=New-Object System.Xml.XmlDocument; $x.Load((Join-Path (Get-Location) 'lab5/render/component.svg')); if($x.DocumentElement.LocalName -ne 'svg'){throw 'Invalid SVG'}; Write-Output ('SVG XML PASS: '+$x.SelectNodes(\"//*[local-name()='text']\").Count+' text nodes')"
+      ],
+      "exitCode": 0,
+      "stdout": "SVG XML PASS: 67 text nodes",
+      "stderr": ""
+    }
+  ],
+  "counts": {
+    "REQ": 24,
+    "US": 9,
+    "UC": 15,
+    "NFR": 12,
+    "Sequence": 59
+  },
+  "sequenceInventory": [
+    {
+      "id": "D32",
+      "path": "lab3/diagrams/shared-active-queue.mmd",
+      "sha256": "bec79a1d958a719d1d5f58b80aa86e1591ac5ddfea1eef8fba572525395d36d9",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D02",
+      "path": "lab3/diagrams/uc-01-email-taken.mmd",
+      "sha256": "7cd8d1001b1df38399d370d7f817cda3be5b38d9bc8d877c325ac90140206f45",
+      "primary": "C3",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D18",
+      "path": "lab3/diagrams/uc-01-missing-email.mmd",
+      "sha256": "144685cf3b99eb62893368072164792695567d87897b1329758277ab8df16a36",
+      "primary": "C3",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D01",
+      "path": "lab3/diagrams/uc-01-register.mmd",
+      "sha256": "2dd1e0e3165568da1ac417407c1d09422cc8aad685f641223f7497667b1c8700",
+      "primary": "C3",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D03",
+      "path": "lab3/diagrams/uc-03-add-author.mmd",
+      "sha256": "7aa73568fcbdaaca468e14a51a6b91556eb4cf68a6e85b771f3d1feac6479a6a",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D04",
+      "path": "lab3/diagrams/uc-04-add-publisher.mmd",
+      "sha256": "af7bbea0043af50b55892855af2f8792faeb80ed5ae5e56402eb4d68d89d8082",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D05",
+      "path": "lab3/diagrams/uc-05-add-book.mmd",
+      "sha256": "8beceac5b4346e510675c43b189538b36997f52d93fb2a81db9e3ab32a67fdf3",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D06",
+      "path": "lab3/diagrams/uc-05-isbn-taken.mmd",
+      "sha256": "22b93478b7a6f9f7a43b7a814da702eeced23baea5b723219195f8e72a160880",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D20",
+      "path": "lab3/diagrams/uc-05-no-author.mmd",
+      "sha256": "b76a45b437fd096d9d224e912c6c1cafa068d260dafffc7450c95035bfe8d4a2",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D21",
+      "path": "lab3/diagrams/uc-05-two-publishers.mmd",
+      "sha256": "e6d70525988f04fdd5ef10109b7717aa40d7ae8e0cf32c2d6f65ecae0c084e64",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D07",
+      "path": "lab3/diagrams/uc-06-add-active.mmd",
+      "sha256": "57f7fba15277b972d211cc3841ed2ee21314eec91f62e4a25ed156cc3d9f82f2",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D08",
+      "path": "lab3/diagrams/uc-06-add-lost.mmd",
+      "sha256": "7a64a47d7b77fccc153e6d9344fa28b9121640974cc52323593dfbfa1ca8ea54",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D09",
+      "path": "lab3/diagrams/uc-06-add-written-off.mmd",
+      "sha256": "d7ecc69deb614c689621250ef2a53e4e22fd4078dac9d74e66c659932dc63786",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D10",
+      "path": "lab3/diagrams/uc-06-inventory-taken.mmd",
+      "sha256": "79a00b95fed9fd4b9f1a7f390cba953574a6983f1b677f74cad86aa0ace7b22d",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D19",
+      "path": "lab3/diagrams/uc-06-missing-book.mmd",
+      "sha256": "d4c857e2122ecaeb14e848a5869f5fe7b43eeaac5f88abe91e1bb5c0fc83b02f",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D12",
+      "path": "lab3/diagrams/uc-07-isbn-empty.mmd",
+      "sha256": "d4e7a74749ba0e81967d22697eca501668118bfa16655b9de3b0f3f436675342",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D11",
+      "path": "lab3/diagrams/uc-07-isbn-found.mmd",
+      "sha256": "7d50ead30a55e4b0244610d4c5502f6c897ca1350fee98b2bc3f7f29c672388d",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D13",
+      "path": "lab3/diagrams/uc-08-active-0.mmd",
+      "sha256": "cdcdfd3c9b933d88074c807b80a4aab40d3990d6d0a32e8c01e824485e345a0f",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D14",
+      "path": "lab3/diagrams/uc-08-active-1.mmd",
+      "sha256": "642639577144236b2f8b274e61d579ea0486d26973988e947578c5c0d3e393d4",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D15",
+      "path": "lab3/diagrams/uc-08-lost-0.mmd",
+      "sha256": "89d363de888e005d6e4d446b4ef96fbadf328466c69c5099c37285a8bf0c05c0",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D17",
+      "path": "lab3/diagrams/uc-08-no-copies.mmd",
+      "sha256": "bfb3e4abad7ecb04d061df95ca72d8bd58e320d5c1ef79123b46268bfc28a229",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D16",
+      "path": "lab3/diagrams/uc-08-written-off-0.mmd",
+      "sha256": "031dd3843242edf630038ee0300b7171658cb8924975fc79387f6052986118b2",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D31",
+      "path": "lab3/diagrams/uc-09-missing-book.mmd",
+      "sha256": "635c7ab131815a17de9e77e2cc8082a9d4f96c3f8024125dff173e9f61b9808a",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D30",
+      "path": "lab3/diagrams/uc-09-reserve-again.mmd",
+      "sha256": "2e333cf8a7661e20753652516a955095c0ef75b8ee5dc61d35730f2258ba6449",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D26",
+      "path": "lab3/diagrams/uc-09-reserve-available.mmd",
+      "sha256": "e68a979c42b5062596cf1988014c1f17c3fccb1a182a11cf3a2fc472ff716920",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D28",
+      "path": "lab3/diagrams/uc-09-reserve-inactive.mmd",
+      "sha256": "298bd3d0a0e64cbfc23d648ed027f3a9b2e6824d77fbe0393b9f28d9b09aabcb",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D27",
+      "path": "lab3/diagrams/uc-09-reserve-loaned.mmd",
+      "sha256": "f25f1ceedd758ee71b77ecb7f550c1b4c36071dd96912b98c24527a14ba1d134",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D29",
+      "path": "lab3/diagrams/uc-09-reserve-no-copies.mmd",
+      "sha256": "8e6a3756d8f82fb7534751dee5872b1da556718234a840549a4f084d66b953d1",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D48",
+      "path": "lab3/diagrams/uc-10-after-notification.mmd",
+      "sha256": "87b885ea854313c9d856001b138933e3de69415b8b5f9f011b6d4bb492e57e50",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D40",
+      "path": "lab3/diagrams/uc-10-concurrent.mmd",
+      "sha256": "597e7edeee90c4a1752ccf2cb59ca9d34df28d8d33d22707b4826146c2a13ed9",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D36",
+      "path": "lab3/diagrams/uc-10-deny-lost.mmd",
+      "sha256": "2c279abb9bbc927948a7d410d691c454178dc35f805beb09c8886d9eb4ec1d80",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D38",
+      "path": "lab3/diagrams/uc-10-deny-open-loan.mmd",
+      "sha256": "7cbf3620cce05e4fb357f9a880407351eb471a5e25cf52094ba660c8674c5e0d",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D39",
+      "path": "lab3/diagrams/uc-10-deny-queue-priority.mmd",
+      "sha256": "1167b84cd55f736bc53fd262c209c53682ef5330e2b3b8d245adb368760af925",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D37",
+      "path": "lab3/diagrams/uc-10-deny-written-off.mmd",
+      "sha256": "545428709100d41de509b11593b904b66067d00a0312ba4849e205862b956a32",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D35",
+      "path": "lab3/diagrams/uc-10-first-reservation.mmd",
+      "sha256": "2fb4ca56419f0b043d0d42a35860e9f2df87056cb27fb6cedd2556a9cefed2cc",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D41",
+      "path": "lab3/diagrams/uc-10-invalid-due-date.mmd",
+      "sha256": "80328470ef590416e5613a4a0f85d541f66497cd5aa843cc2f7466c546016ead",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D33",
+      "path": "lab3/diagrams/uc-10-issue-equal-date.mmd",
+      "sha256": "020d759846e5041fff01ef07f237d5f514e31ffd46091f4017f6e55e097aaa3f",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D34",
+      "path": "lab3/diagrams/uc-10-issue-later-date.mmd",
+      "sha256": "ece984116a09a1654dd301b9e34c0894b0285a71c005341980b2700048b9441a",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D50",
+      "path": "lab3/diagrams/uc-10-x1-forbidden.mmd",
+      "sha256": "d24187dfe0084a920ac00c37b75df60ebc481dd1661a31e3cb65cdf3352562b0",
+      "primary": "C2",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D49",
+      "path": "lab3/diagrams/uc-10-x1-session.mmd",
+      "sha256": "169d1efd1a6acf729fd2d4a0a1f3f9e2063d5ee5ac7ef61640a7e2b53c202914",
+      "primary": "C2",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D51",
+      "path": "lab3/diagrams/uc-10-x2-fields.mmd",
+      "sha256": "bad427fc7706dab45d612fb3f299eda691d4858c836d82e22a5601bc50fa8dbb",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D52",
+      "path": "lab3/diagrams/uc-10-x2-references.mmd",
+      "sha256": "7501d69987845f6999d646f6951f8fd6dbd3c41ae726bee35a7267a7a456d21d",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D54",
+      "path": "lab3/diagrams/uc-10-x3-after-commit.mmd",
+      "sha256": "fe03509c0b6b1289509f990479e7c3f54b3e9a8ba7dc7e3a9aa65d16464c3d0f",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D53",
+      "path": "lab3/diagrams/uc-10-x3-before-commit.mmd",
+      "sha256": "013f1aca6b3ce0eb6e9e4fde68bf2e6c6c878c7bad273bcd7c3e441cd88d279c",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D55",
+      "path": "lab3/diagrams/uc-10-x4-capacity.mmd",
+      "sha256": "9ca868ab0fb5705d399ca02238a2623773140eb10f25656ddb87bc994cf66760",
+      "primary": "C2",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D42",
+      "path": "lab3/diagrams/uc-11-invalid-return-date.mmd",
+      "sha256": "7920c7c7808d1a91c1f4327eab9aaeaa98f66d6241edb846d268a1fd636e3f80",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D43",
+      "path": "lab3/diagrams/uc-11-return-active.mmd",
+      "sha256": "d0e6045d0b656fe6e969433b1c4a9b84be57625431b85e474652955156663594",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D44",
+      "path": "lab3/diagrams/uc-11-return-lost.mmd",
+      "sha256": "477d53e1244c31fec17b7ce4910b934dc9e0af5bb3cfcfa86522cfe3988af4fc",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D45",
+      "path": "lab3/diagrams/uc-11-return-written-off.mmd",
+      "sha256": "1b591a7cbb24c6331aa80c1ab1b85faa61978cc38c8290d9e601f09914351d91",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D22",
+      "path": "lab3/diagrams/uc-12-invalid-state.mmd",
+      "sha256": "b1c2ab50aa557ca7f106b51230d00c2d092de79df5f8c7ce6aa697c0a695e86e",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D23",
+      "path": "lab3/diagrams/uc-12-state-active.mmd",
+      "sha256": "4d259bbc041ca34fdf44e0a5fcd6e177a67e081e39275de66454758dab318842",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D24",
+      "path": "lab3/diagrams/uc-12-state-lost.mmd",
+      "sha256": "97416be4137338445e87ffe31c42171c20a4bc8b75c680532d216f3dda3a8d88",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D25",
+      "path": "lab3/diagrams/uc-12-state-written-off.mmd",
+      "sha256": "0da92fef8f80c3dc7963a92d8bd9b8298d731599e55a6672f3a1d66cf9c51839",
+      "primary": "C4",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D46",
+      "path": "lab3/diagrams/uc-13-transfer.mmd",
+      "sha256": "d42749183a3af443d468e46f0126dd88d1f50dab58725bb55694264a7984a4a9",
+      "primary": "C6",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D56",
+      "path": "lab3/diagrams/uc-15-active-0.mmd",
+      "sha256": "d8ced9270b36484bddc63999ae98beb5c6db25e9539039b8944fa27654635dc3",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D57",
+      "path": "lab3/diagrams/uc-15-active-1.mmd",
+      "sha256": "55cdab470a12ca2e2dcd30eaf4e02eeb6adad89d1dfd5dfdd40ce0bc75d2ddd3",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D58",
+      "path": "lab3/diagrams/uc-15-lost-0.mmd",
+      "sha256": "a2190dae1fd521695fbdb3bcfde5d1ddade0bd06b8bc82280dc5d7a49e5184c3",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D59",
+      "path": "lab3/diagrams/uc-15-written-off-0.mmd",
+      "sha256": "0c85b888a875d9028a4e1f2ed9b8a2cc48a676bda32b5d2b5e9cd3899af83e8e",
+      "primary": "C5",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    },
+    {
+      "id": "D47",
+      "path": "lab3/diagrams/uc-17-transfer-failure.mmd",
+      "sha256": "2a7c341bce5511cb4d4c3cf26188b7405c5e40c6c3ff18ee2f21389e5913fa58",
+      "primary": "C6",
+      "shared": "C1/C2 where UI/Access applies; C7/C8 for Store"
+    }
+  ],
+  "diagramManifest": {
+    "inputs": {
+      "lab5/component.puml": "9934046c19d5cef805f4c3179e748cd50fa60ee4f7218aad34ba94b71875281b",
+      "lab5/tools/render.mjs": "fb05c2a3123374c17f05417657ae3386da0c9eeaaea278a964078d946aa6b766",
+      "lab5/tools/check-structure.mjs": "2771074e8e07d63cdb2fe1822ebda9133ea8f7903b6aa9080807db7de2bf3b4b",
+      "lab5/tools/test-structure.mjs": "a6c141cfede2e148f4004029eeac1888ac9b48eadff0e697d557bab4e3ec786b",
+      "lab5/.gitattributes": "04d7d5cfaf19973122c91a9b77ce0dd87c069617d1d7429a728f915ac9f7cd53",
+      "lab5/spec.md": "7cca4b17b1188d5251bdd9f67951b31332f0ef22cab43790f7b62651c5165862",
+      "lab5/architecture.md": "23c84018b6ffea661b8a9b4092545a5279bd2d4c7aded533a38aa5e4490e2907",
+      "lab4/tools/toolchain.json": "9d0b64ef614d916eea46a02f90425ac95b4d5957fd408a2b016080f3dba82d45"
+    },
+    "environment": {
+      "platform": "win32/x64",
+      "node": "v22.23.3",
+      "javaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\r\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\r\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+      "plantumlVersion": "PlantUML version 1.2026.9 / 18d0aae [2026-10-17 08:25:10 UTC]",
+      "dotVersion": "dot - graphviz version 16.1.0 (20260904.0139)",
+      "jarSha256": "aa4a1d06f8911c4b842beff4828dd955be431692b631a312d04c0e9fab9581de",
+      "javaSha256": "f8dc082a7dedbfd2924c3562405a5a1fd12efd2641808c92e2de819c76a58b7e",
+      "dotSha256": "97193dc802c145b6152cecc287e84e459160839964d9340f4f10b93d96087601",
+      "arialSha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a"
+    },
+    "pngSize": {
+      "width": 2304,
+      "height": 1188
+    },
+    "outputs": {
+      "component.svg": "c2f3a579f6aaa59f21be51743cc8a0e2c259f4c9a56101a917c20270a4b42cf0",
+      "component.png": "e6ff472ed83c0aab3ab77d28daad017721b97c1ebeb73a47b5d52d0503842dee"
+    }
+  },
+  "browser": {
+    "status": "NOT RUN successfully",
+    "reason": "Headless browser attempt timed out; PNG visually inspected; SVG XML/path geometry checked separately"
+  },
+  "limitations": [
+    "No real application tests",
+    "Counts/structural checks do not prove all semantics",
+    "Full teacher handout not supplied",
+    "Graphviz DLL hashes not complete"
+  ]
+}
