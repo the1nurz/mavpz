@@ -1,7 +1,7 @@
 {
   "date": "2026-11-14",
   "baseline": "eb67f2216120f7953a4420d85f976ed4d09d8608",
-  "inputHead": "f881c84659c0682edbb4eb544d10a2fda722c79e",
+  "inputHead": "4fe5372ddc51dd76cdbf9386349e58d226a8d822",
   "collectorSha256": "d02c565dd80adc2e16f7b180a9c2fc878dda4f4e1c0358445c2f5e7bada102a4",
   "checks": [
     {
@@ -12,7 +12,7 @@
         "HEAD"
       ],
       "exitCode": 0,
-      "stdout": "f881c84659c0682edbb4eb544d10a2fda722c79e",
+      "stdout": "4fe5372ddc51dd76cdbf9386349e58d226a8d822",
       "stderr": ""
     },
     {
@@ -157,7 +157,7 @@
         "lab5/tools/test-structure.mjs"
       ],
       "exitCode": 0,
-      "stdout": "✔ positive: current diagram and exact contracts (3.2387ms)\n✔ AUD5-02a: reproduce legacy extra-arrow false positive, reject it now (3.1104ms)\n✔ AUD5-02b: source+edge-table cannot override required consumer in spec (2.5179ms)\n✔ reject implicit extra component (0.6583ms)\n✔ reject unsupported include without executing it (0.5366ms)\n✔ reject wrong provider (1.0506ms)\n✔ reject missing required interface usage (0.5235ms)\n✔ reject reversed usage syntax (0.4016ms)\n✔ reject duplicate component (0.5767ms)\n✔ reject external A1 moved into Library (0.6795ms)\n✔ reject synthetic C5 self-consumer (0.7473ms)\n✔ reject unclosed note (0.4355ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 190.633",
+      "stdout": "✔ positive: current diagram and exact contracts (3.7609ms)\n✔ AUD5-02a: reproduce legacy extra-arrow false positive, reject it now (4.1613ms)\n✔ AUD5-02b: source+edge-table cannot override required consumer in spec (3.1174ms)\n✔ reject implicit extra component (0.8534ms)\n✔ reject unsupported include without executing it (0.5825ms)\n✔ reject wrong provider (1.2653ms)\n✔ reject missing required interface usage (0.6047ms)\n✔ reject reversed usage syntax (0.4576ms)\n✔ reject duplicate component (0.9064ms)\n✔ reject external A1 moved into Library (0.7366ms)\n✔ reject synthetic C5 self-consumer (0.8974ms)\n✔ reject unclosed note (0.4674ms)\nℹ tests 12\nℹ suites 0\nℹ pass 12\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 221.528",
       "stderr": ""
     },
     {
