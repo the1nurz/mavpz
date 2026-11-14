@@ -1,0 +1,31 @@
+{
+  "inputs": {
+    "lab5/component.puml": "9934046c19d5cef805f4c3179e748cd50fa60ee4f7218aad34ba94b71875281b",
+    "lab5/tools/render.mjs": "fb05c2a3123374c17f05417657ae3386da0c9eeaaea278a964078d946aa6b766",
+    "lab5/tools/check-structure.mjs": "2771074e8e07d63cdb2fe1822ebda9133ea8f7903b6aa9080807db7de2bf3b4b",
+    "lab5/tools/test-structure.mjs": "a6c141cfede2e148f4004029eeac1888ac9b48eadff0e697d557bab4e3ec786b",
+    "lab5/.gitattributes": "04d7d5cfaf19973122c91a9b77ce0dd87c069617d1d7429a728f915ac9f7cd53",
+    "lab5/spec.md": "7cca4b17b1188d5251bdd9f67951b31332f0ef22cab43790f7b62651c5165862",
+    "lab5/architecture.md": "23c84018b6ffea661b8a9b4092545a5279bd2d4c7aded533a38aa5e4490e2907",
+    "lab4/tools/toolchain.json": "9d0b64ef614d916eea46a02f90425ac95b4d5957fd408a2b016080f3dba82d45"
+  },
+  "environment": {
+    "platform": "win32/x64",
+    "node": "v22.23.3",
+    "javaVersion": "openjdk version \"21.0.13\" 2026-10-20 LTS\r\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\r\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+    "plantumlVersion": "PlantUML version 1.2026.9 / 18d0aae [2026-10-17 08:25:10 UTC]",
+    "dotVersion": "dot - graphviz version 16.1.0 (20260904.0139)",
+    "jarSha256": "aa4a1d06f8911c4b842beff4828dd955be431692b631a312d04c0e9fab9581de",
+    "javaSha256": "f8dc082a7dedbfd2924c3562405a5a1fd12efd2641808c92e2de819c76a58b7e",
+    "dotSha256": "97193dc802c145b6152cecc287e84e459160839964d9340f4f10b93d96087601",
+    "arialSha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a"
+  },
+  "pngSize": {
+    "width": 2304,
+    "height": 1188
+  },
+  "outputs": {
+    "component.svg": "c2f3a579f6aaa59f21be51743cc8a0e2c259f4c9a56101a917c20270a4b42cf0",
+    "component.png": "e6ff472ed83c0aab3ab77d28daad017721b97c1ebeb73a47b5d52d0503842dee"
+  }
+}

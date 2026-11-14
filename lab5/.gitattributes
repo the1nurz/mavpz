@@ -1,0 +1,7 @@
+# Keep source/tool/manifest bytes stable; SVG/PNG are generated artifacts.
+.gitattributes text eol=lf
+component.puml text eol=lf
+tools/*.mjs text eol=lf
+render/*.json text eol=lf
+render/*.svg binary
+render/*.png binary
